@@ -16,9 +16,6 @@ import com.multi.covid.mapper.ResultMapper;
 import com.multi.covid.service.CenterService;
 import com.multi.covid.service.LiveService;
 
-
-//ai speaker test
-//두번째 주석입니다
 @Controller
 @RequestMapping("/speaker")
 public class AISpeakerController {
@@ -29,7 +26,6 @@ public class AISpeakerController {
 	@Autowired
 	private ResultMapper ResultService;
 	
-	// test 주석 입니다.
 	@ResponseBody
 	@RequestMapping("/test")
 	public String test() {
@@ -40,11 +36,9 @@ public class AISpeakerController {
 		obj.addProperty("live_date", vo.getLive_date());
 		obj.addProperty("sum", vo.getSum());
 		 
-		// test 주석2
 		return obj.toString();
 	}
-	
-	//test
+
 	@ResponseBody
 	@RequestMapping("/listtest")
 	public String listtest() {
