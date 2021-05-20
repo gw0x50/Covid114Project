@@ -36,7 +36,8 @@ public class AISpeakerController {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("live_date", vo.getLive_date());
 		obj.addProperty("sum", vo.getSum());
-		
+		 
+		// test 주석
 		return obj.toString();
 	}
 	
