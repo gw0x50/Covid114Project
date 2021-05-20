@@ -37,7 +37,7 @@ public class AISpeakerController {
 		obj.addProperty("live_date", vo.getLive_date());
 		obj.addProperty("sum", vo.getSum());
 		 
-		// test 주석
+		// test 주석2
 		return obj.toString();
 	}
 	
