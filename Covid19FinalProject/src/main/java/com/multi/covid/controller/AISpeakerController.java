@@ -29,7 +29,7 @@ public class AISpeakerController {
 	private ResultMapper ResultService;
 	
 	@ResponseBody
-	@RequestMapping("/test")
+	@RequestMapping("/test")//test
 	public String test() {
 		Date time = new Date();
 		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd ");
