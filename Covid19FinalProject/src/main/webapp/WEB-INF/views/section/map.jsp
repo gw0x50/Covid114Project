@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,10 +14,10 @@
 	<div class="map_title">
 		<h1>지도</h1>
 	</div>
-	<div class="map" id="map"></div>
+	<div class="map" id="map" style="width:500px;height:400px;"></div>
 </div>
 
- <script>
+<script>
 var mapOptions = {
     center: new naver.maps.LatLng(37.3595704, 127.105399),
     zoom: 10
@@ -23,3 +25,5 @@ var mapOptions = {
 
 var map = new naver.maps.Map('map', mapOptions);
 </script>
+</body>
+</html>
