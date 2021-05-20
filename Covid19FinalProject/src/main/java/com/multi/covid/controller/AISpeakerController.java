@@ -39,6 +39,7 @@ public class AISpeakerController {
 		return obj.toString();
 	}
 	
+	//test
 	@ResponseBody
 	@RequestMapping("/listtest")
 	public String listtest() {
