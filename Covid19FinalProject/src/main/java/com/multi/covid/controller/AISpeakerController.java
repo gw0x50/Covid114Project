@@ -1,5 +1,7 @@
 package com.multi.covid.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,9 +29,13 @@ public class AISpeakerController {
 	private ResultMapper ResultService;
 	
 	@ResponseBody
-	@RequestMapping("/test")
+	@RequestMapping("/test")//test
 	public String test() {
-		LiveVO vo = liveService.getOneLive("2021-05-18");
+		Date time = new Date();
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd ");
+		String today = format1.format(time);
+		System.out.println("오늘: "+today);
+		LiveVO vo = liveService.getOneLive(today); //오늘날짜 확진자수 받아오기
 		vo.calSum();
 		
 		JsonObject obj = new JsonObject();
