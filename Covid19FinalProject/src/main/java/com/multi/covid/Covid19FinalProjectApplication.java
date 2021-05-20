@@ -5,13 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.multi.covid.controller.AISpeakerController;
-import com.multi.covid.controller.ChatBotController;
-import com.multi.covid.controller.WebController;
-import com.multi.covid.mapper.CenterMapper;
-import com.multi.covid.mapper.LiveMapper;
-import com.multi.covid.mapper.ResultMapper;
-
 @ComponentScan(basePackages = "com.multi.covid.controller")
 @ComponentScan(basePackages = "com.multi.covid.service")
 @MapperScan(basePackages = "com.multi.covid.mapper")

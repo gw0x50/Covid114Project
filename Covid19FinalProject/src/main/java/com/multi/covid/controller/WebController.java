@@ -8,29 +8,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.multi.covid.domain.CenterVO;
-import com.multi.covid.domain.LiveVO;
 import com.multi.covid.domain.ResultVO;
-import com.multi.covid.mapper.ResultMapper;
-import com.multi.covid.service.CenterService;
-import com.multi.covid.service.LiveService;
-import com.multi.covid.service.ResultService;
+import com.multi.covid.service.ChartService;
+import com.multi.covid.service.MapService;
 
 @Controller
 public class WebController {
 	@Autowired
-	private LiveService liveService;
+	private ChartService chartService;
 	@Autowired
-	private CenterService centerService;
-	@Autowired
-	private ResultMapper ResultService;
+	private MapService mapService;
+
 	
 	@RequestMapping("/")
 	public ModelAndView main() {
 		ModelAndView mv = new ModelAndView();
 		
 		mv.setViewName("index");
-		
+
 		return mv;
 	}
 	
@@ -46,7 +41,7 @@ public class WebController {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("startDate", "2020-05-01");
 		map.put("endDate", "2020-05-10");
-		List<ResultVO> resultList = ResultService.getBetweenResult(map);
+		List<ResultVO> resultList = chartService.getBetweenResult(map);
 		for(ResultVO a : resultList) System.out.println(a);
 	}
 }

@@ -14,19 +14,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.multi.covid.domain.LiveVO;
 import com.multi.covid.domain.ResultVO;
-import com.multi.covid.mapper.ResultMapper;
-import com.multi.covid.service.CenterService;
-import com.multi.covid.service.LiveService;
+import com.multi.covid.service.AISpeakerService;
 
 @Controller
 @RequestMapping("/speaker")
 public class AISpeakerController {
 	@Autowired
-	private LiveService liveService;
-	@Autowired
-	private CenterService centerService;
-	@Autowired
-	private ResultMapper ResultService;
+	private AISpeakerService service;
 	
 	@ResponseBody
 	@RequestMapping("/test")//test
@@ -35,7 +29,7 @@ public class AISpeakerController {
 		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd ");
 		String today = format1.format(time);
 		System.out.println("오늘: "+today);
-		LiveVO vo = liveService.getOneLive(today); //오늘날짜 확진자수 받아오기
+		LiveVO vo = service.getOneLive(today); //오늘날짜 확진자수 받아오기
 		vo.calSum();
 		
 		JsonObject obj = new JsonObject();
@@ -51,7 +45,7 @@ public class AISpeakerController {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("startDate", "2020-05-01");
 		map.put("endDate", "2020-05-10");
-		List<ResultVO> resultList = ResultService.getBetweenResult(map);
+		List<ResultVO> resultList = service.getBetweenResult(map);
 		
 		JsonObject obj = new JsonObject();
 		obj.addProperty("title", "list");
