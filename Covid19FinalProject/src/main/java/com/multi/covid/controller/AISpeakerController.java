@@ -26,6 +26,7 @@ public class AISpeakerController {
 	@Autowired
 	private ResultMapper ResultService;
 	
+	// test 주석 입니다.
 	@ResponseBody
 	@RequestMapping("/test")
 	public String test() {
