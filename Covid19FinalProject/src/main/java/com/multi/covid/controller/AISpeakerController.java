@@ -16,6 +16,9 @@ import com.multi.covid.mapper.ResultMapper;
 import com.multi.covid.service.CenterService;
 import com.multi.covid.service.LiveService;
 
+
+//ai speaker test
+//두번째 주석입니다
 @Controller
 @RequestMapping("/speaker")
 public class AISpeakerController {
