@@ -30,6 +30,7 @@ $(document).ready(function(){
 
 </head>
 <body>
+${sevenDays[0][1].result_date}
 	<div class="wrap">
 		<div class="container">
 			<img src="/resources/images/logo.png">

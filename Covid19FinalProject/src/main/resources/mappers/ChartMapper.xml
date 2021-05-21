@@ -13,6 +13,7 @@
 		SELECT * FROM covid_result
 		WHERE DATE(result_date)
 		BETWEEN #{startDate} AND #{endDate}
+		ORDER BY location DESC, result_date;
 	</select>
 
 	<select id="getAllResult" resultType="ResultVO"
