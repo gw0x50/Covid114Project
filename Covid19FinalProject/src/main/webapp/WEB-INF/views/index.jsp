@@ -33,6 +33,7 @@ $(document).ready(function(){
 			<img src="/resources/images/logo.png">
 			<jsp:include page="/WEB-INF/views/section/chart.jsp"/>
 			<jsp:include page="/WEB-INF/views/section/map.jsp"/>
+			<jsp:include page="/WEB-INF/views/section/chat.jsp"/>
 		</div>
 	</div>
 </body>
