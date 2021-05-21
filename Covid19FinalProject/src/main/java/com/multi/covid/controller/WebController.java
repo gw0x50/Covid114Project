@@ -1,5 +1,6 @@
 package com.multi.covid.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,29 +20,36 @@ public class WebController {
 	@Autowired
 	private MapService mapService;
 
-	
 	@RequestMapping("/")
 	public ModelAndView main() {
 		ModelAndView mv = new ModelAndView();
-		
+
 		mv.setViewName("index");
 
 		return mv;
 	}
-	
-	@RequestMapping("/test")
-	public void test() {
+
+	@RequestMapping("/charttest")
+	public ModelAndView charttest() {
+		ModelAndView mv = new ModelAndView();
+
+		mv.setViewName("charttest");
+
+
+
 		// LiveVO liveVO =  liveService.getOneLive("2021-05-18");
 		// liveVO.calSum();
 		// System.out.println(liveVO);
-		
+
 		// List<CenterVO> centerList = centerService.getAllCenter();
 		// for(CenterVO a : centerList) System.out.println(a);
+
+		// 합계, 충북, 충남, 제주, 전북, 전남, 인천, 울산, 세종, 서울,
+		// 부산, 대전, 대구, 광주, 경북, 경남, 경기, 검역, 강원 (총 19지역)
+		ArrayList<ArrayList<ResultVO>> sevenDays = chartService.get7DaysResult();
 		
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("startDate", "2020-05-01");
-		map.put("endDate", "2020-05-10");
-		List<ResultVO> resultList = chartService.getBetweenResult(map);
-		for(ResultVO a : resultList) System.out.println(a);
+		mv.addObject("sevenDays", sevenDays);		
+		
+		return mv;
 	}
 }

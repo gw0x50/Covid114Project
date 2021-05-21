@@ -1,5 +1,6 @@
 package com.multi.covid.mapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import com.multi.covid.domain.ResultVO;
 @Repository
 public interface ChartMapper {
 	ResultVO getOneResult(String date);
-	List<ResultVO> getBetweenResult(HashMap<String, String> map);
+	ArrayList<ResultVO> getBetweenResult(HashMap<String, String> map);
 	List<ResultVO> getAllResult();
 	LiveVO getOneLive(String date);
 	List<CenterVO> getAllCenter();

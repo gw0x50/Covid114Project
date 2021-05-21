@@ -1,5 +1,6 @@
 package com.multi.covid.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public interface ChartService {
 	LiveVO getOneLive(String date);
 	List<CenterVO> getAllCenter();
 	ResultVO getOneResult(String date);
-	List<ResultVO> getBetweenResult(HashMap<String, String> map);
-	List<ResultVO> getAllResult();
+	List<ResultVO[]> getBetweenResult(String startDate, String endDate);
+	List<ResultVO[]> getAllResult();
+	public ArrayList<ArrayList<ResultVO>> get7DaysResult();
 }
