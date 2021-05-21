@@ -3,9 +3,12 @@ package com.multi.covid.controller;
 import java.util.HashMap;
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.JsonArray;
@@ -15,23 +18,52 @@ import com.multi.covid.domain.ResultVO;
 import com.multi.covid.service.ChatbotService;
 
 @Controller
-@RequestMapping("/chatbot")
 public class ChatbotController {
 	@Autowired
 	private ChatbotService service;
+	/*http://61.102.5.133:9091/*/
 	
+	//서버 응답테스트 
+	@RequestMapping(value="/chattest", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
 	@ResponseBody
-	@RequestMapping("/test")
-	public String test() {
-		LiveVO vo = service.getOneLive("2021-05-18");
-		vo.calSum();
+	public String chattest(@RequestBody String location) {
 		
-		JsonObject obj = new JsonObject();
-		obj.addProperty("live_date", vo.getLive_date());
-		obj.addProperty("sum", vo.getSum());
+		//prameter 요청 확인
+		System.out.println(location);
 		
-		return obj.toString();
+		//응답코드 
+		JsonObject text = new JsonObject();
+		text.addProperty("text", "hello I'm test!");
+		
+		JsonObject simpleText = new JsonObject();
+		simpleText.add("simpleText", text);
+		
+		JsonArray st_array = new JsonArray();
+		st_array.add(simpleText);
+		
+		JsonObject outputs = new JsonObject();
+		outputs.add("outputs", st_array);
+		
+		JsonObject res = new JsonObject();
+		res.addProperty("version", "2.0");
+		res.add("template", outputs);
+		
+		//System.out.println(res.toString());
+		return res.toString();
 	}
+	
+	
+	/*
+	 * @ResponseBody
+	 * @RequestMapping("/test") public String test() { 
+	 * LiveVO vo = service.getOneLive("2021-05-18"); vo.calSum();
+	 * 
+	 * JsonObject obj = new JsonObject(); obj.addProperty("live_date",
+	 * vo.getLive_date()); 
+	 * obj.addProperty("sum", vo.getSum());
+	 * 
+	 * return obj.toString(); }
+	 */
 	
 	@ResponseBody
 	@RequestMapping("/listtest")
