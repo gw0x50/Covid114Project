@@ -35,8 +35,6 @@ public class WebController {
 
 		mv.setViewName("charttest");
 
-
-
 		// LiveVO liveVO =  liveService.getOneLive("2021-05-18");
 		// liveVO.calSum();
 		// System.out.println(liveVO);
@@ -46,9 +44,10 @@ public class WebController {
 
 		// 합계, 충북, 충남, 제주, 전북, 전남, 인천, 울산, 세종, 서울,
 		// 부산, 대전, 대구, 광주, 경북, 경남, 경기, 검역, 강원 (총 19지역)
-		ArrayList<ArrayList<ResultVO>> sevenDays = chartService.get7DaysResult();
+		// ArrayList<ArrayList<ResultVO>> sevenDays = chartService.get7DaysResult();
+		// ArrayList<ArrayList<ResultVO>> fourWeeks = chartService.get4WeeksResult();
 		
-		mv.addObject("sevenDays", sevenDays);		
+		//mv.addObject("sevenDays", sevenDays);		
 		
 		return mv;
 	}

@@ -92,4 +92,88 @@ public class ChartServiceImpl implements ChartService {
 		System.out.println();
 		return returnList;
 	}
+	
+	public ArrayList<ArrayList<ResultVO>> get4WeeksResult() {
+		Calendar today = Calendar.getInstance();
+		Calendar daysBefore = Calendar.getInstance();
+		
+		if(today.get(Calendar.HOUR)<10) { // 00:00 ~ 09:59이면 데이터 갱신이 안되어있으므로 
+			today.add(Calendar.DATE, -2);
+			daysBefore.add(Calendar.DATE, -29);
+		}
+		else {
+			today.add(Calendar.DATE, -1);
+			daysBefore.add(Calendar.DATE, -28);
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String strYesterday = sdf.format(today.getTime());
+		String strDaysBefore = sdf.format(daysBefore.getTime());
+		
+		System.out.println(strYesterday);
+		System.out.println(strDaysBefore);
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("startDate", strDaysBefore);
+		map.put("endDate", strYesterday);
+		ArrayList<ResultVO> sqlResult = chartMapper.getBetweenResult(map);
+		
+		System.out.println(sqlResult);
+		System.out.println(sqlResult.size());
+		
+		ArrayList<ArrayList<ResultVO>> returnList = new ArrayList<ArrayList<ResultVO>>();
+		// 합계, 충북, 충남, 제주, 전북, 전남, 인천, 울산, 세종, 서울,
+		// 부산, 대전, 대구, 광주, 경북, 경남, 경기, 검역, 강원 (총 19지역)
+		for(int i = 0; i < 19; i++) {
+			ArrayList<ResultVO> temp = new ArrayList<ResultVO>();
+			for(int j = 0; j < 7; j++) {
+				temp.add(sqlResult.remove(0));
+			}
+			returnList.add(temp);
+		}
+		System.out.println();
+		return returnList;
+	}
+	
+	public ArrayList<ArrayList<ResultVO>> get12YearsResult() {
+		Calendar today = Calendar.getInstance();
+		Calendar daysBefore = Calendar.getInstance();
+		
+		if(today.get(Calendar.HOUR)<10) { // 00:00 ~ 09:59이면 데이터 갱신이 안되어있으므로 
+			today.add(Calendar.DATE, -2);
+		}
+		else {
+			today.add(Calendar.DATE, -1);
+		}
+		daysBefore.set(Calendar.DATE, 1);
+		daysBefore.add(Calendar.YEAR, -11);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String strYesterday = sdf.format(today.getTime());
+		String strDaysBefore = sdf.format(daysBefore.getTime());
+		
+		System.out.println(strYesterday);
+		System.out.println(strDaysBefore);
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("startDate", strDaysBefore);
+		map.put("endDate", strYesterday);
+		ArrayList<ResultVO> sqlResult = chartMapper.getBetweenResult(map);
+		
+		System.out.println(sqlResult);
+		System.out.println(sqlResult.size());
+		
+		ArrayList<ArrayList<ResultVO>> returnList = new ArrayList<ArrayList<ResultVO>>();
+		// 합계, 충북, 충남, 제주, 전북, 전남, 인천, 울산, 세종, 서울,
+		// 부산, 대전, 대구, 광주, 경북, 경남, 경기, 검역, 강원 (총 19지역)
+		for(int i = 0; i < 19; i++) {
+			ArrayList<ResultVO> temp = new ArrayList<ResultVO>();
+
+			returnList.add(temp);
+		}
+		System.out.println();
+		return returnList;
+	}
 }

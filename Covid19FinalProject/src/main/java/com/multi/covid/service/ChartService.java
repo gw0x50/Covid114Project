@@ -1,7 +1,6 @@
 package com.multi.covid.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.multi.covid.domain.CenterVO;
@@ -15,4 +14,5 @@ public interface ChartService {
 	List<ResultVO[]> getBetweenResult(String startDate, String endDate);
 	List<ResultVO[]> getAllResult();
 	public ArrayList<ArrayList<ResultVO>> get7DaysResult();
+	public ArrayList<ArrayList<ResultVO>> get4WeeksResult();
 }
