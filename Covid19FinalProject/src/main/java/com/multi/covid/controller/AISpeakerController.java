@@ -23,20 +23,9 @@ public class AISpeakerController {
 	private AISpeakerService service;
 	
 	@ResponseBody
-	@RequestMapping("/test")//test
+	@RequestMapping("/daily-patient")//일일확진자	
 	public String test() {
-		Date time = new Date();
-		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd ");
-		String today = format1.format(time);
-		System.out.println("오늘: "+today);
-		LiveVO vo = service.getOneLive(today); //오늘날짜 확진자수 받아오기
-		vo.calSum();
-		
-		JsonObject obj = new JsonObject();
-		obj.addProperty("live_date", vo.getLive_date());
-		obj.addProperty("sum", vo.getSum());
-		 
-		return obj.toString();
+		return service.DailyPatient();
 	}
 
 	@ResponseBody
