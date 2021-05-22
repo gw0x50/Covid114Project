@@ -13,4 +13,5 @@ public interface AISpeakerService {
 	ResultVO getOneResult(String date);
 	List<ResultVO> getBetweenResult(HashMap<String, String> map);
 	List<ResultVO> getAllResult();
+	String DailyPatient(); //일일 확진자수
 }
