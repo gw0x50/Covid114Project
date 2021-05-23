@@ -10,7 +10,7 @@ import com.multi.covid.domain.ResultVO;
 public interface ChatbotService {
 	LiveVO getOneLive(String date);
 	List<CenterVO> getAllCenter();
-	ResultVO getOneResult(String date);
+	String getOneResult(String location);
 	List<ResultVO> getBetweenResult(HashMap<String, String> map);
 	List<ResultVO> getAllResult();
 }

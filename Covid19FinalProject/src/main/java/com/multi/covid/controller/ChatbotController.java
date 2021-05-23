@@ -1,5 +1,6 @@
 package com.multi.covid.controller;
 
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.multi.covid.domain.LiveVO;
+
 import com.multi.covid.domain.ResultVO;
 import com.multi.covid.service.ChatbotService;
 
@@ -22,34 +23,15 @@ public class ChatbotController {
 	@Autowired
 	private ChatbotService service;
 	/*http://61.102.5.133:9091/*/
+	/*http://49.142.68.213:9091*/
 	
-	//서버 응답테스트 
-	@RequestMapping(value="/chattest", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	
+	//누적 확진자 조회 (전체, 지역별)
+	@RequestMapping(value="/result", method=RequestMethod.POST)
 	@ResponseBody
-	public String chattest(@RequestBody String location) {
-		
-		//prameter 요청 확인
-		System.out.println(location);
-		
-		//응답코드 
-		JsonObject text = new JsonObject();
-		text.addProperty("text", "hello I'm test!");
-		
-		JsonObject simpleText = new JsonObject();
-		simpleText.add("simpleText", text);
-		
-		JsonArray st_array = new JsonArray();
-		st_array.add(simpleText);
-		
-		JsonObject outputs = new JsonObject();
-		outputs.add("outputs", st_array);
-		
-		JsonObject res = new JsonObject();
-		res.addProperty("version", "2.0");
-		res.add("template", outputs);
-		
-		//System.out.println(res.toString());
-		return res.toString();
+	public String covid_result(@RequestBody String location) {
+		//{{#webhook.count}} return
+		return service.getOneResult(location);
 	}
 	
 	
