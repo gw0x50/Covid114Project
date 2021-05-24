@@ -25,6 +25,11 @@
 		WHERE live_date=#{date}
 	</select>
 	
+	<select id="getRegLive" resultType="int" parameterType="hashmap">
+		SELECT ${location} FROM covid_live 
+		WHERE live_date=#{date}
+	</select>
+	
 	<select id="getAllCenter" resultType="CenterVO">
 		SELECT * FROM covid_vaccine_center
 	</select>
