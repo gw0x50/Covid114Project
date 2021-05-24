@@ -8,7 +8,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -20,12 +22,20 @@ import com.multi.covid.service.AISpeakerService;
 @RequestMapping("/speaker")
 public class AISpeakerController {
 	@Autowired
-	private AISpeakerService service;
+	private AISpeakerService service;	
 	
 	@ResponseBody
 	@RequestMapping("/daily-patient")//일일확진자	
-	public String test() {
+	public String DailyPatient() {
 		return service.DailyPatient();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/triage") //가까운 선별진료소
+	public String geolocation(String r1, String r2, String r3) { // r1 - 시, r2 - 구, r3 - 동
+		//스피커 접속지역의 선별진료소 목록을 반환한다
+		List<String> list = service.geolocation(r1, r2, r3);		
+		return list.get(0);
 	}
 
 	@ResponseBody
