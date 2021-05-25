@@ -6,10 +6,11 @@ public class ResultVO {
 	private int increment_count, total_count;
 
 	public ResultVO() {
+		this.increment_count = 0;
+		this.total_count = 0;
 	}
 
 	public ResultVO(int sequence, String result_date, String location, int increment_count, int total_count) {
-		super();
 		this.sequence = sequence;
 		this.result_date = result_date;
 		this.location = location;

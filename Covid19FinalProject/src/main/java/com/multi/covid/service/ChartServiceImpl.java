@@ -127,8 +127,19 @@ public class ChartServiceImpl implements ChartService {
 		// 부산, 대전, 대구, 광주, 경북, 경남, 경기, 검역, 강원 (총 19지역)
 		for(int i = 0; i < 19; i++) {
 			ArrayList<ResultVO> temp = new ArrayList<ResultVO>();
-			for(int j = 0; j < 7; j++) {
-				temp.add(sqlResult.remove(0));
+			for(int j = 0; j < 4; j++) {
+				ResultVO tempVO = new ResultVO();
+				tempVO.setResult_date(sqlResult.get(0).getResult_date());
+				tempVO.setLocation(sqlResult.get(0).getLocation());
+				for(int k = 0; k < 7; k++) {
+					tempVO.setIncrement_count(tempVO.getIncrement_count() + sqlResult.get(0).getIncrement_count());
+					if (k == 6) {
+						tempVO.setResult_date(tempVO.getResult_date() + " ~ " + sqlResult.get(0).getResult_date());
+						tempVO.setTotal_count(sqlResult.get(0).getTotal_count());
+					}
+					sqlResult.remove(0);
+				}
+				temp.add(tempVO);
 			}
 			returnList.add(temp);
 		}
@@ -136,7 +147,7 @@ public class ChartServiceImpl implements ChartService {
 		return returnList;
 	}
 	
-	public ArrayList<ArrayList<ResultVO>> get12YearsResult() {
+	public ArrayList<ArrayList<ResultVO>> get12MonthsResult() {
 		Calendar today = Calendar.getInstance();
 		Calendar daysBefore = Calendar.getInstance();
 		
@@ -147,7 +158,7 @@ public class ChartServiceImpl implements ChartService {
 			today.add(Calendar.DATE, -1);
 		}
 		daysBefore.set(Calendar.DATE, 1);
-		daysBefore.add(Calendar.YEAR, -11);
+		daysBefore.add(Calendar.MONTH, -11);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -160,7 +171,7 @@ public class ChartServiceImpl implements ChartService {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("startDate", strDaysBefore);
 		map.put("endDate", strYesterday);
-		ArrayList<ResultVO> sqlResult = chartMapper.getBetweenResult(map);
+		ArrayList<ResultVO> sqlResult = chartMapper.get12MonthsResult(map);
 		
 		System.out.println(sqlResult);
 		System.out.println(sqlResult.size());
@@ -170,7 +181,9 @@ public class ChartServiceImpl implements ChartService {
 		// 부산, 대전, 대구, 광주, 경북, 경남, 경기, 검역, 강원 (총 19지역)
 		for(int i = 0; i < 19; i++) {
 			ArrayList<ResultVO> temp = new ArrayList<ResultVO>();
-
+			for(int j = 0; j < 12; j++) {
+				temp.add(sqlResult.remove(0));
+			}
 			returnList.add(temp);
 		}
 		System.out.println();

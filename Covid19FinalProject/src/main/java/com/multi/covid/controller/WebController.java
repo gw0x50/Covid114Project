@@ -44,10 +44,17 @@ public class WebController {
 
 		// 합계, 충북, 충남, 제주, 전북, 전남, 인천, 울산, 세종, 서울,
 		// 부산, 대전, 대구, 광주, 경북, 경남, 경기, 검역, 강원 (총 19지역)
-		// ArrayList<ArrayList<ResultVO>> sevenDays = chartService.get7DaysResult();
-		// ArrayList<ArrayList<ResultVO>> fourWeeks = chartService.get4WeeksResult();
 		
-		//mv.addObject("sevenDays", sevenDays);		
+		// ArrayList<ArrayList<ResultVO>> sevenDays = chartService.get7DaysResult();
+		// System.out.println(sevenDays.get(0));
+		// ArrayList<ArrayList<ResultVO>> fourWeeks = chartService.get4WeeksResult();
+		// System.out.println(fourWeeks.get(0));
+		ArrayList<ArrayList<ResultVO>> twelveMonths = chartService.get12MonthsResult();
+		System.out.println(twelveMonths.get(0));
+		
+		// mv.addObject("sevenDays", sevenDays);		
+		// mv.addObject("fourWeeks", fourWeeks);
+		mv.addObject("twelveMonths", twelveMonths);
 		
 		return mv;
 	}
