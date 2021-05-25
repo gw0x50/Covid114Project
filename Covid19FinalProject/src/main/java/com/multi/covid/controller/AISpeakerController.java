@@ -25,10 +25,10 @@ public class AISpeakerController {
 	private AISpeakerService service;	
 	
 	@ResponseBody
-	@RequestMapping("/daily-patient")//일일확진자	
-	public String DailyPatient() {
-		return service.DailyPatient();
-	}
+	@RequestMapping("/patient")//일일확진자	
+	public String Patient(String day) {//(today / yesterday)
+		return service.Patient(day);
+	}		
 	
 	@ResponseBody
 	@RequestMapping("/triage") //가까운 선별진료소

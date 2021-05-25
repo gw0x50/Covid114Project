@@ -13,6 +13,6 @@ public interface AISpeakerService {
 	ResultVO getOneResult(String date);
 	List<ResultVO> getBetweenResult(HashMap<String, String> map);
 	List<ResultVO> getAllResult();
-	String DailyPatient(); //일일 확진자수
+	String Patient(String day); //일일 확진자수	
 	List<String> geolocation(String r1, String r2, String r3); //가까운 진료소
 }

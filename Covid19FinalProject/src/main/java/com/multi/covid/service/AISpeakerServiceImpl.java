@@ -2,6 +2,7 @@ package com.multi.covid.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,20 +54,33 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	}
 
 	@Override
-	public String DailyPatient() {
-		Date time = new Date();
+	public String Patient(String day) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		String date;
 		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd ");
-		String today = format.format(time);
-//		System.out.println("오늘: "+today);
-		LiveVO vo = service.getOneLive("2021-05-23"); //오늘날짜 확진자수 받아오기
-		vo.calSum();				
-		
+		LiveVO vo = null;
+		if(day.equals("today")) {			
+			date = format.format(cal.getTime());
+			System.out.println("오늘: "+date);			
+			vo = service.getOneLive(date); //오늘날짜 확진자수 받아오기
+			vo.calSum();			
+		}
+		else if(day.equals("yesterday")) {
+			cal.add(Calendar.DATE, - 1);		
+			date = format.format(cal.getTime());
+			System.out.println("어제: "+date);
+			vo = service.getOneLive(date); //어제날짜 확진자수 받아오기
+			vo.calSum();
+		}
+		else {
+			System.out.println("잘못된접근");
+		}
 		JsonObject obj = new JsonObject();
 		obj.addProperty("live_date", vo.getLive_date());
-		obj.addProperty("sum", vo.getSum());
-		 
+		obj.addProperty("sum", vo.getSum());		
 		return obj.toString();
-	}
+	}		
 
 	@Override
 	public List<String> geolocation(String r1, String r2, String r3) {
