@@ -32,19 +32,7 @@
 	SELECT * FROM covid_vaccine_center 
 	WHERE center_name LIKE CONCAT('%',#{location},'%')
 	</select>
-	
-	
-	<select id="getAllResult" resultType="ResultVO"
-		parameterType="String">
-		SELECT * FROM covid_result
-	</select>
 
-	<select id="getBetweenResult" resultType="ResultVO"
-		parameterType="hashmap">
-		SELECT * FROM covid_result
-		WHERE DATE(result_date)
-		BETWEEN #{startDate} AND #{endDate}
-	</select>
 </mapper>
 
 

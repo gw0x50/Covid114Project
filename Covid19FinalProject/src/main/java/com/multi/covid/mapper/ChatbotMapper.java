@@ -19,5 +19,4 @@ public interface ChatbotMapper {
 	List<CenterVO> getAllCenter();
 	List<CenterVO> getLocCenter(String location);
 	List<CenterVO> getTownCenter(String location);
-	List<ResultVO> getAllResult();
 }
