@@ -23,7 +23,7 @@
 	<select id="getOneLive" resultType="LiveVO" parameterType="String">
 		SELECT * FROM covid_live
 		WHERE live_date=#{date}
-	</select>
+	</select>		
 	
 	<select id="getAllCenter" resultType="CenterVO">
 		SELECT * FROM covid_vaccine_center

@@ -17,5 +17,6 @@ public interface AISpeakerMapper {
 	List<ResultVO> getBetweenResult(HashMap<String, String> map);
 	List<ResultVO> getAllResult();
 	LiveVO getOneLive(String date);
+	List<LiveVO> getTwoLive(); //오늘, 어제 확진자수 반환
 	List<CenterVO> getAllCenter();
 }
