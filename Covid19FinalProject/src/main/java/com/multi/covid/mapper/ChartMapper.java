@@ -16,6 +16,7 @@ import com.multi.covid.domain.ResultVO;
 public interface ChartMapper {
 	ResultVO getOneResult(String date);
 	ArrayList<ResultVO> getBetweenResult(HashMap<String, String> map);
+	ArrayList<ResultVO> get12MonthsResult(HashMap<String, String> map);
 	List<ResultVO> getAllResult();
 	LiveVO getOneLive(String date);
 	List<CenterVO> getAllCenter();

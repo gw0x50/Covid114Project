@@ -15,4 +15,5 @@ public interface ChartService {
 	List<ResultVO[]> getAllResult();
 	public ArrayList<ArrayList<ResultVO>> get7DaysResult();
 	public ArrayList<ArrayList<ResultVO>> get4WeeksResult();
+	public ArrayList<ArrayList<ResultVO>> get12MonthsResult();
 }
