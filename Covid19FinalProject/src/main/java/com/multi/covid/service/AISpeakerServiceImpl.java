@@ -15,43 +15,12 @@ import com.multi.covid.mapper.AISpeakerMapper;
 import com.multi.covid.domain.CenterVO;
 import com.multi.covid.domain.LiveVO;
 import com.multi.covid.domain.ResultVO;
-import com.multi.covid.mapper.MapMapper;
 
 @Service
-public class AISpeakerServiceImpl implements AISpeakerService {
-	@Autowired
-	private MapMapper mapMapper;
-
-	@Autowired
-	private AISpeakerService service;
+public class AISpeakerServiceImpl implements AISpeakerService {	
 	
 	@Autowired
 	private AISpeakerMapper mapper;
-	
-	@Override
-	public ResultVO getOneResult(String date) {
-		return mapMapper.getOneResult(date);
-	}
-
-	@Override
-	public List<ResultVO> getBetweenResult(HashMap<String, String> map) {
-		return mapMapper.getBetweenResult(map);
-	}
-
-	@Override
-	public List<ResultVO> getAllResult() {
-		return mapMapper.getAllResult();
-	}
-
-	@Override
-	public LiveVO getOneLive(String date) {
-		return mapMapper.getOneLive(date);
-	}
-
-	@Override
-	public List<CenterVO> getAllCenter() {
-		return mapMapper.getAllCenter();
-	}
 
 	@Override
 	public String Patient(String day) {
@@ -60,25 +29,52 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		String date;
 		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd ");
 		LiveVO vo = null;
-		if(day.equals("today")) {			
+		List<ResultVO> list = null;
+		int sum=0;
+		JsonObject obj = new JsonObject();
+		if(day.equals("today")) {	
+			try {
 			date = format.format(cal.getTime());
 			System.out.println("오늘: "+date);			
-			vo = service.getOneLive(date); //오늘날짜 확진자수 받아오기
-			vo.calSum();			
+			vo = mapper.getOneLive(date); //오늘날짜 확진자수 받아오기
+			vo.calSum();
+			obj.addProperty("live_date", vo.getLive_date());
+			obj.addProperty("sum", vo.getSum());
+			}catch(Exception e) {
+				System.out.println(e.toString());
+				return "결과값이 없습니다";
+			}
 		}
 		else if(day.equals("yesterday")) {
+			try {
 			cal.add(Calendar.DATE, - 1);		
 			date = format.format(cal.getTime());
 			System.out.println("어제: "+date);
-			vo = service.getOneLive(date); //어제날짜 확진자수 받아오기
-			vo.calSum();
+			list = mapper.getOneResult(date); //어제날짜 확진자수 받아오기
+			System.out.println(list.get(0).getTotal_count());//데이터가 없으면 에러발생
+			
+			for(ResultVO one : list) {			
+				sum += one.getIncrement_count();//각 지역별 확진자수 더하기				
+			}
+			obj.addProperty("result_date", date);
+			obj.addProperty("sum", sum);
+			}catch(Exception e) {//전날 데이터가 아직 갱신되지 않은경우
+				System.out.println(e.toString());
+				cal.add(Calendar.DATE, - 2);
+				date = format.format(cal.getTime());
+				System.out.println("그제: "+date);
+				list = mapper.getOneResult(date); //그제날짜 확진자수 받아오기
+				for(ResultVO one : list) {				
+					sum += one.getIncrement_count();
+				}
+				obj.addProperty("result_date", date);
+				obj.addProperty("sum", sum);					
+			}				
 		}
 		else {
-			System.out.println("잘못된접근");
+			return "잘못된접근";
 		}
-		JsonObject obj = new JsonObject();
-		obj.addProperty("live_date", vo.getLive_date());
-		obj.addProperty("sum", vo.getSum());		
+				
 		return obj.toString();
 	}		
 
@@ -132,4 +128,6 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		
 		return result;
 	}
+
+	
 }
