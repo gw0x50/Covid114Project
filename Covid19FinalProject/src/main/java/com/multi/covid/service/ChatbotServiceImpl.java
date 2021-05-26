@@ -23,8 +23,9 @@ public class ChatbotServiceImpl implements ChatbotService{
 	@Autowired
 	private ChatbotMapper chatbotMapper;
 
+	//누적 확진자 조회 전체 추가 
 	
-	@Override //누적 확진자 조회(전체, 지역별)  
+	@Override //누적 확진자 조회(지역별)  
 	public String getOneResult(String location) {
 		//JSON Parsing - result_location 
 		//get val location
@@ -40,6 +41,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		Calendar today = Calendar.getInstance();
 		
 		//webhook.result_date 추가 (집계일 추가) 
+		// 업데이트시간 예외처리 수정 
 		String result_date = "";
 		
 		if(today.get(Calendar.HOUR_OF_DAY) < 11 && today.get(Calendar.MINUTE) < 15) {
@@ -56,6 +58,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		//select
 		ResultVO vo = chatbotMapper.getOneResult(date, location);
 		
+		//Skill JSON return 으로 수정 > 바로가기버튼(발화: ㅇㅇ지역 실시간 확진 조회) return 
 		//{{#webhook.getTotal_count}}, {{#webhook.increment_count}} JSON Format
 		//number format comma (xxx,xxx)
 		String getTotal_count = String.format("%,d", vo.getTotal_count());
@@ -87,6 +90,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		vo.calSum();
 		String getSum = String.format("%,d", vo.getSum()); 
 		
+		// Skill JSON return으로 수정 (전체 출력) 
 		// {{#webhook.total_liveCount}}, {{#webhook.locName}} JSON Format
 		// 전체, 지역별 전부
 		JsonObject total_liveCount = new JsonObject();
@@ -128,17 +132,6 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get("live_location").getAsString();
-
-		/*
-		 * //파라미터값을 한글로 통합 > database 조회용 영문 변환 
-		 * String[] location_kor = {"강원도", "경기도",
-		 * "경상남도", "경상북도", "광주", "대구", "대전", "부산", "서울", "세종", "울산", "인천", "전라남도",
-		 * "전라북도", "제주도", "충청남도", "충청북도"}; String[] location_eng = {"gangwon",
-		 * "gyeonggi", "gyeongnam", "gyeongbuk", "gwangju", "daegu", "daejeon", "busan",
-		 * "seoul", "sejong", "ulsan", "incheon", "jeonnam", "jeonbuk", "jeju",
-		 * "chungnam", "chungbuk"}; for(int i = 0; i <location_kor.length; i++) {
-		 * if(location.equals(location_kor[i])) { location = location_eng[i]; } }
-		 */
 		
 		//get val date
 		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
@@ -165,6 +158,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 
 
+	//사용 (X) 
 	@Override//백신센터 전체 리스트(지역별로 분리)
 	public String getAllCenter() {
 
@@ -183,8 +177,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 			for(int k = 0; k < vo.size(); k++) {
 				facility_name.append(vo.get(k).getFacility_name() + "\n");		
 			} 
-			
 			list.add(facility_name);			
+			
 		}	
 		
 		
@@ -289,8 +283,5 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 		return result.toString();
 	}
-
-
-
 
 }

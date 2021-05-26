@@ -21,6 +21,7 @@ public class ChatbotController {
 	/*http://61.102.5.133:9091/*/
 	/*http://49.142.68.213:9091*/
 	
+	//누적 확진자 전체 조회 추가 
 	
 	//누적 확진자 조회 (전체, 지역별)
 	@RequestMapping(value="/result", method=RequestMethod.POST)
