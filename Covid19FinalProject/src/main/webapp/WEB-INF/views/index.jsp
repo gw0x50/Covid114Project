@@ -35,7 +35,7 @@ $(document).ready(function(){
 	<div class="wrap">
 		<div class="container">
 			<img src="/resources/images/logo.png">
-			<!-- <jsp:include page="/WEB-INF/views/section/chart.jsp"/> -->
+			<jsp:include page="/WEB-INF/views/section/chart.jsp"/>
 			<jsp:include page="/WEB-INF/views/section/map.jsp"/>
 			<jsp:include page="/WEB-INF/views/section/chatbot.jsp"/>
 		</div>
