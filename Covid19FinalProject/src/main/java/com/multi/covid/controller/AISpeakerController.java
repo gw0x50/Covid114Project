@@ -16,6 +16,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.multi.covid.domain.LiveVO;
 import com.multi.covid.domain.ResultVO;
+import com.multi.covid.mapper.AISpeakerMapper;
 import com.multi.covid.service.AISpeakerService;
 
 @Controller
@@ -23,6 +24,9 @@ import com.multi.covid.service.AISpeakerService;
 public class AISpeakerController {
 	@Autowired
 	private AISpeakerService service;	
+	
+	@Autowired
+	private AISpeakerMapper mapper;
 	
 	@ResponseBody
 	@RequestMapping("/patient")//일일확진자	
@@ -44,7 +48,7 @@ public class AISpeakerController {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("startDate", "2020-05-01");
 		map.put("endDate", "2020-05-10");
-		List<ResultVO> resultList = service.getBetweenResult(map);
+		List<ResultVO> resultList = mapper.getBetweenResult(map);
 		
 		JsonObject obj = new JsonObject();
 		obj.addProperty("title", "list");
