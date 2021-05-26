@@ -25,7 +25,8 @@
 
 	<select id="getLocCenter" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
-		WHERE location=#{location}
+		WHERE location=#{location} 
+		ORDER BY facility_name;
 	</select>
 	
 	<select id="getTownCenter" resultType="CenterVO" parameterType="String">
