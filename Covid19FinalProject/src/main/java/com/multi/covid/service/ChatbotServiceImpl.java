@@ -36,15 +36,21 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 		//get val date
 		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
-				
+		SimpleDateFormat wh_format = new SimpleDateFormat ("yyyy년 MM월 dd일");		
 		Calendar today = Calendar.getInstance();
 		
-		if(today.get(Calendar.HOUR_OF_DAY) < 10) {
+		//webhook.result_date 추가 (집계일 추가) 
+		String result_date = "";
+		
+		if(today.get(Calendar.HOUR_OF_DAY) < 11 && today.get(Calendar.MINUTE) < 15) {
 			today.add(Calendar.DAY_OF_MONTH, -2);
+			result_date = wh_format.format(today.getTime());
 		}
 		else {
 			today.add(Calendar.DAY_OF_MONTH, -1);
+			result_date = wh_format.format(today.getTime());
 		}
+		
 		String date = format.format(today.getTime());
 		
 		//select
@@ -58,6 +64,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonObject count = new JsonObject();
 		count.addProperty("count", getTotal_count);
 		count.addProperty("increment_count", increment_count);
+		count.addProperty("result_date", result_date);
 		JsonObject result = new JsonObject();
 		result.addProperty("version", "2.0");
 		result.add("data", count);
@@ -100,6 +107,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		total_liveCount.addProperty("jeju", vo.getJeju());
 		total_liveCount.addProperty("chungnam", vo.getChungnam());
 		total_liveCount.addProperty("chungbuk", vo.getChungbuk());
+		total_liveCount.addProperty("sejong", vo.getSejong());
 		
 		JsonObject result = new JsonObject();
 		result.addProperty("version", "2.0");
@@ -121,6 +129,17 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get("live_location").getAsString();
 
+		/*
+		 * //파라미터값을 한글로 통합 > database 조회용 영문 변환 
+		 * String[] location_kor = {"강원도", "경기도",
+		 * "경상남도", "경상북도", "광주", "대구", "대전", "부산", "서울", "세종", "울산", "인천", "전라남도",
+		 * "전라북도", "제주도", "충청남도", "충청북도"}; String[] location_eng = {"gangwon",
+		 * "gyeonggi", "gyeongnam", "gyeongbuk", "gwangju", "daegu", "daejeon", "busan",
+		 * "seoul", "sejong", "ulsan", "incheon", "jeonnam", "jeonbuk", "jeju",
+		 * "chungnam", "chungbuk"}; for(int i = 0; i <location_kor.length; i++) {
+		 * if(location.equals(location_kor[i])) { location = location_eng[i]; } }
+		 */
+		
 		//get val date
 		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
 		Calendar today = Calendar.getInstance();
@@ -134,7 +153,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		int one_count = chatbotMapper.getLocLive(map);
 		
 		
-		//{{#webhook.live_count}} JSON Format
+		//{{#webhook.one_livecount}} JSON Format
 		JsonObject one_liveCount = new JsonObject();
 		one_liveCount.addProperty("live_count", one_count);
 		JsonObject result = new JsonObject();
@@ -244,7 +263,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 		
 		JsonObject title = new JsonObject();
-		title.addProperty("title", location + "지역의 백신 정보 센터");
+		title.addProperty("title", location + "지역의 백신 센터");
 		
 		JsonArray items_array = new JsonArray();
 		for(int i = 0; i < setItems_array.size(); i++) {

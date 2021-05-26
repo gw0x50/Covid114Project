@@ -1,7 +1,8 @@
 package com.multi.covid.controller;
 
 
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,27 +14,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.multi.covid.service.ChatbotService;
 
 @Controller
+@RequestMapping("/chatbot")
 public class ChatbotController {
 	@Autowired
 	private ChatbotService service;
 	/*http://61.102.5.133:9091/*/
 	/*http://49.142.68.213:9091*/
 	
-	@RequestMapping(value="/chattest", method=RequestMethod.POST)
-	@ResponseBody
-	public String actiontest(@RequestBody String location) {
-	//	System.out.println("확인" + service.getAllCenter());
-		return"";
-	}
-	
 	
 	//누적 확진자 조회 (전체, 지역별)
 	@RequestMapping(value="/result", method=RequestMethod.POST)
 	@ResponseBody
 	public String getOneResult(@RequestBody String location) {
-		//{{#webhook.count}} return
-		//{{#webhook.increment_count}} return
+		//{{#webhook.getTotal_count}}
+		//{{#webhook.increment_count}}
+		//{{#weobhook.result_date}}
+		
 		return service.getOneResult(location);
+		
 		
 	}
 	
@@ -41,7 +39,8 @@ public class ChatbotController {
 	@RequestMapping(value="/liveall", method=RequestMethod.POST)
 	@ResponseBody
 	public String getAllLive() {
-		//{{#webhook.total_liveCount}} return
+		//{{#webhook.total_liveCount}}
+		//{{#webhook.locName}}(총 17)
 		return service.getAllLive();
 	}
 	
@@ -49,7 +48,7 @@ public class ChatbotController {
 	@RequestMapping(value="/liveone", method=RequestMethod.POST)
 	@ResponseBody
 	public String getLocLive(@RequestBody String location) {
-		//{{#webhook.total_OneCount}} return
+		//{{#webhook.live_count}
 		return service.getLocLive(location);
 	}
 	
@@ -57,7 +56,7 @@ public class ChatbotController {
 	@RequestMapping(value="/vaccineall", method=RequestMethod.POST)
 	@ResponseBody
 	public String getAllCenter() {
-		//{{#webhook.facility_name}} return
+		//{{#webhook.지역이름}}(총 16)
 		return service.getAllCenter();
 	}
 	
@@ -65,7 +64,7 @@ public class ChatbotController {
 	@RequestMapping(value="/vaccineloc", method=RequestMethod.POST)
 	@ResponseBody
 	public String getLocCenter(@RequestBody String location) {
-		//{{#webhook.facility_name}} return
+		//{{#webhook.r_facility_name}}
 		return service.getLocCenter(location);
 	}
 	
