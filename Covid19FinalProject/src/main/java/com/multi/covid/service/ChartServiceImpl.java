@@ -22,12 +22,7 @@ public class ChartServiceImpl implements ChartService {
 		System.out.println(sqlResult);
 		System.out.println(sqlResult.size());
 
-		List<ResultVO> returnList = new ArrayList<ResultVO>();
-		for (int i = 0; i < 7; i++) {
-			returnList.add(sqlResult.remove(0));
-		}
-		System.out.println();
-		return returnList;
+		return sqlResult;
 	}
 	
 	@Override
@@ -63,12 +58,7 @@ public class ChartServiceImpl implements ChartService {
 		System.out.println(sqlResult);
 		System.out.println(sqlResult.size());
 
-		List<ResultVO> returnList = new ArrayList<ResultVO>();
-		for (int i = 0; i < 12; i++) {
-			returnList.add(sqlResult.remove(0));
-		}
-		System.out.println();
-		return returnList;
+		return sqlResult;
 	}
 
 	@Override
