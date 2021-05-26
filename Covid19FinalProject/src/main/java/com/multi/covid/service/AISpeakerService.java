@@ -7,11 +7,7 @@ import com.multi.covid.domain.CenterVO;
 import com.multi.covid.domain.LiveVO;
 import com.multi.covid.domain.ResultVO;
 
-public interface AISpeakerService {
-	LiveVO getOneLive(String date);
-	List<CenterVO> getAllCenter();
-	ResultVO getOneResult(String date);
-	List<ResultVO> getBetweenResult(HashMap<String, String> map);
-	List<ResultVO> getAllResult();
-	String DailyPatient(); //일일 확진자수
+public interface AISpeakerService {	
+	String Patient(String day); //일일 확진자수	
+	List<String> geolocation(String r1, String r2, String r3); //가까운 진료소
 }

@@ -30,12 +30,13 @@ $(document).ready(function(){
 
 </head>
 <body>
-${sevenDays[0][1].result_date}
+
 	<div class="wrap">
 		<div class="container">
 			<img src="/resources/images/logo.png">
 			<jsp:include page="/WEB-INF/views/section/chart.jsp"/>
 			<jsp:include page="/WEB-INF/views/section/map.jsp"/>
+			<jsp:include page="/WEB-INF/views/section/chatbot.jsp"/>
 		</div>
 	</div>
 </body>

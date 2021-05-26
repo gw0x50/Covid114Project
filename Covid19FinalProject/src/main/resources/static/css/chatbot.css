@@ -1,0 +1,7 @@
+/* PC 카카오톡 채널 버튼 위치 */
+.kakaoChatPc {
+    position: fixed;
+    z-index: 999;
+    right: 20px; /* 화면 오른쪽으로부터의 거리, 숫자만 입력 */
+    bottom: 20px; /* 화면 아래쪽으로부터의 거리, 숫자만 입력 */
+}

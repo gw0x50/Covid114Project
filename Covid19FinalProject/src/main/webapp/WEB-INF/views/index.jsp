@@ -22,6 +22,8 @@
 <link rel="stylesheet" href="/resources/css/chart.css" type="text/css">
 <!-- map 관련 css -->
 <link rel="stylesheet" href="/resources/css/map.css" type="text/css">
+<!-- chatbot 관련 css -->
+<link rel="stylesheet" href="/resources/css/chatbot.css" type="text/css">
 <script>
 $(document).ready(function(){
 	
@@ -33,9 +35,9 @@ $(document).ready(function(){
 	<div class="wrap">
 		<div class="container">
 			<img src="/resources/images/logo.png">
-			<jsp:include page="/WEB-INF/views/section/chart.jsp"/>
+			<!-- <jsp:include page="/WEB-INF/views/section/chart.jsp"/> -->
 			<jsp:include page="/WEB-INF/views/section/map.jsp"/>
-			<jsp:include page="/WEB-INF/views/section/chat.jsp"/>
+			<jsp:include page="/WEB-INF/views/section/chatbot.jsp"/>
 		</div>
 	</div>
 </body>

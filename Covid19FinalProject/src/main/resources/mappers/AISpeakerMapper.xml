@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.multi.covid.mapper.AISpeakerMapper">
+<mapper namespace="com.multi.covid.mapper.AISpeakerMapper">	
+
 	<select id="getOneResult" resultType="ResultVO"
 		parameterType="String">
 		SELECT * FROM covid_result
 		WHERE result_date=#{date}
 	</select>
-
+	
 	<select id="getBetweenResult" resultType="ResultVO"
 		parameterType="hashmap">
 		SELECT * FROM covid_result
@@ -15,15 +16,14 @@
 		BETWEEN #{startDate} AND #{endDate}
 	</select>
 
-	<select id="getAllResult" resultType="ResultVO"
-		parameterType="String">
+	<select id="getAllResult" resultType="ResultVO">
 		SELECT * FROM covid_result
-	</select>
+	</select>		
 	
 	<select id="getOneLive" resultType="LiveVO" parameterType="String">
 		SELECT * FROM covid_live
 		WHERE live_date=#{date}
-	</select>
+	</select>		
 	
 	<select id="getAllCenter" resultType="CenterVO">
 		SELECT * FROM covid_vaccine_center

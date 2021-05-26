@@ -1,7 +1,6 @@
 package com.multi.covid.controller;
 
-import java.util.HashMap;
-import java.util.List;
+
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.multi.covid.domain.LiveVO;
-import com.multi.covid.domain.ResultVO;
 import com.multi.covid.service.ChatbotService;
 
 @Controller
@@ -22,74 +17,68 @@ public class ChatbotController {
 	@Autowired
 	private ChatbotService service;
 	/*http://61.102.5.133:9091/*/
+	/*http://49.142.68.213:9091*/
 	
-	//서버 응답테스트 
-	@RequestMapping(value="/chattest", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	@RequestMapping(value="/chattest", method=RequestMethod.POST)
 	@ResponseBody
-	public String chattest(@RequestBody String location) {
-		
-		//prameter 요청 확인
-		System.out.println(location);
-		
-		//응답코드 
-		JsonObject text = new JsonObject();
-		text.addProperty("text", "hello I'm test!");
-		
-		JsonObject simpleText = new JsonObject();
-		simpleText.add("simpleText", text);
-		
-		JsonArray st_array = new JsonArray();
-		st_array.add(simpleText);
-		
-		JsonObject outputs = new JsonObject();
-		outputs.add("outputs", st_array);
-		
-		JsonObject res = new JsonObject();
-		res.addProperty("version", "2.0");
-		res.add("template", outputs);
-		
-		//System.out.println(res.toString());
-		return res.toString();
+	public String actiontest(@RequestBody String location) {
+	//	System.out.println("확인" + service.getAllCenter());
+		return"";
 	}
 	
 	
-	/*
-	 * @ResponseBody
-	 * @RequestMapping("/test") public String test() { 
-	 * LiveVO vo = service.getOneLive("2021-05-18"); vo.calSum();
-	 * 
-	 * JsonObject obj = new JsonObject(); obj.addProperty("live_date",
-	 * vo.getLive_date()); 
-	 * obj.addProperty("sum", vo.getSum());
-	 * 
-	 * return obj.toString(); }
-	 */
-	
+	//누적 확진자 조회 (전체, 지역별)
+	@RequestMapping(value="/result", method=RequestMethod.POST)
 	@ResponseBody
-	@RequestMapping("/listtest")
-	public String listtest() {
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("startDate", "2020-05-01");
-		map.put("endDate", "2020-05-10");
-		List<ResultVO> resultList = service.getBetweenResult(map);
+	public String getOneResult(@RequestBody String location) {
+		//{{#webhook.count}} return
+		//{{#webhook.increment_count}} return
+		return service.getOneResult(location);
 		
-		JsonObject obj = new JsonObject();
-		obj.addProperty("title", "list");
-		
-		JsonArray array = new JsonArray();
-		for(ResultVO vo : resultList) {
-			JsonObject inObj = new JsonObject();
-			
-			inObj.addProperty("result_date", vo.getResult_date());
-			inObj.addProperty("location", vo.getLocation());
-			inObj.addProperty("increment_count", vo.getIncrement_count());
-			inObj.addProperty("total_count", vo.getTotal_count());
-			
-			array.add(inObj);
-		}
-		
-		obj.add("data", array);
-		
-		return obj.toString();
 	}
+	
+	//실시간 확진자 조회 (전체)
+	@RequestMapping(value="/liveall", method=RequestMethod.POST)
+	@ResponseBody
+	public String getAllLive() {
+		//{{#webhook.total_liveCount}} return
+		return service.getAllLive();
+	}
+	
+	//실시간 확진자 조회 (지역별)
+	@RequestMapping(value="/liveone", method=RequestMethod.POST)
+	@ResponseBody
+	public String getLocLive(@RequestBody String location) {
+		//{{#webhook.total_OneCount}} return
+		return service.getLocLive(location);
+	}
+	
+	//백신 센터 조회(전체)
+	@RequestMapping(value="/vaccineall", method=RequestMethod.POST)
+	@ResponseBody
+	public String getAllCenter() {
+		//{{#webhook.facility_name}} return
+		return service.getAllCenter();
+	}
+	
+	//백신 센터 조회(지역별)
+	@RequestMapping(value="/vaccineloc", method=RequestMethod.POST)
+	@ResponseBody
+	public String getLocCenter(@RequestBody String location) {
+		//{{#webhook.facility_name}} return
+		return service.getLocCenter(location);
+	}
+	
+	
+	//백신 센터 조회(지역 - 시/군별) + 링크
+	@RequestMapping(value="/vaccinetown", method=RequestMethod.POST)
+	@ResponseBody
+	public String getTownCenter(@RequestBody String location) {
+		//link list JSON return
+		return service.getTownCenter(location);		
+	}
+	
+	
+	
+	  
 }

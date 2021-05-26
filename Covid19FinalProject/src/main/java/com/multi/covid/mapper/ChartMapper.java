@@ -1,7 +1,5 @@
 package com.multi.covid.mapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -15,7 +13,9 @@ import com.multi.covid.domain.ResultVO;
 @Repository
 public interface ChartMapper {
 	ResultVO getOneResult(String date);
-	ArrayList<ResultVO> getBetweenResult(HashMap<String, String> map);
+	List<ResultVO> get7DaysResult(String location);
+	List<ResultVO> get4WeeksResult(String location);
+	List<ResultVO> get12MonthsResult(String location);
 	List<ResultVO> getAllResult();
 	LiveVO getOneLive(String date);
 	List<CenterVO> getAllCenter();

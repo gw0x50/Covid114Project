@@ -13,9 +13,9 @@ import com.multi.covid.domain.ResultVO;
 @Mapper
 @Repository
 public interface AISpeakerMapper {
-	ResultVO getOneResult(String date);
+	List<ResultVO> getOneResult(String date);
 	List<ResultVO> getBetweenResult(HashMap<String, String> map);
 	List<ResultVO> getAllResult();
-	LiveVO getOneLive(String date);
+	LiveVO getOneLive(String date);	
 	List<CenterVO> getAllCenter();
 }
