@@ -2,9 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.covid.mapper.BoardMapper">
-	<select id="getOneLive" resultType="LiveVO" parameterType="String">
+	<select id="getRecentLive" resultType="LiveVO">
 		SELECT * FROM covid_live
-		WHERE live_date=#{date}
+		ORDER BY live_date DESC
+		LIMIT 1
+	</select>
+	
+	<select id="getRecentTwoResult" resultType="ResultVO" parameterType="String">
+		SELECT * FROM covid_result
+		WHERE location = #{location}
+		ORDER BY result_date DESC
+		LIMIT 2
 	</select>
 </mapper>
 
