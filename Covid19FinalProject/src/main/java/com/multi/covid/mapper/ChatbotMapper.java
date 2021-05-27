@@ -13,7 +13,7 @@ import com.multi.covid.domain.ResultVO;
 @Mapper
 @Repository
 public interface ChatbotMapper {
-	ResultVO getOneResult(String date, String location);
+	ResultVO getOneResult(String location);
 	int getLocLive(HashMap<String, String> map);
 	LiveVO getOneLive(String date);
 	List<CenterVO> getAllCenter();
