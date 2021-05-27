@@ -4,26 +4,14 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page import="com.multi.covid.domain.CenterVO" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-	<link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=vq5qzwym0i"></script>
-	<script type="text/javascript" src="/resources/js/jquery-3.2.1.min.js"></script>
-</head>
-<div class="map_section">
+
+
    <div class="map_title">
       <h1>지도</h1>
    </div>
-   <div class="map" id="map" style="width:500px;height:400px;"></div>
-</div>
+   <div class="map" id="map" ></div>
 
 <script>
-
 var markers = []
 var infoWindows = []
 
@@ -31,7 +19,8 @@ var map = new naver.maps.Map('map', {
     center: new naver.maps.LatLng(37.5666805, 126.9784147),
     zoom: 10,
     mapTypeId: naver.maps.MapTypeId.NORMAL
-}); // 위치정보 없을시 기본 위치 지정
+});
+ // 위치정보 없을시 기본 위치 지정
 
 <%
 for(int i=0;i<((ArrayList)request.getAttribute("allcenter")).size();i++){
@@ -46,11 +35,13 @@ var zipcode = "<%=vo.getZip_code()%>"
 var facility_name = "<%=vo.getFacility_name()%>"
 var phone_number = "<%=vo.getPhone_number()%>"
 //자바스크립트용 변수로 저장
+
 var marker = new naver.maps.Marker({
 	  position: new naver.maps.LatLng(lat,lng),
 	  map: map
 });
 //백신정보센터 위도 경도 좌표로 마커 표시하기	
+
 var contentStrings = [
     '<div class="iw_inner">',
     '   <h3>'+center_name+'</h3>',
@@ -61,16 +52,21 @@ var contentStrings = [
     '</div>'
 ].join('');
 //클릭했을 때 뜨게 할 내용 입력
+
 var infoWindow = new naver.maps.InfoWindow({
 content: contentStrings
 });
 //클릭시 뜨는 창 설정 
+
 markers.push(marker);
 infoWindows.push(infoWindow);
 
 
+
+<%}
+%>
 //다수의 이벤트 핸들러 설정
- function getClickHandler(seq) {
+function getClickHandler(seq) {
 	    return function(e) {
 	        var marker = markers[seq],
 	            infoWindow = infoWindows[seq];
@@ -87,9 +83,6 @@ infoWindows.push(infoWindow);
 	    naver.maps.Event.addListener(markers[i], 'click', getClickHandler(i));
 	}
 	
-<%}
-%>
-
 
 
 var infowindow1 =new naver.maps.InfoWindow()
@@ -128,10 +121,5 @@ $(window).on("load", function() {
         infowindow1.open(map, center);
     }
 });
-
-
-
 </script>
 
-</body>
-</html>
