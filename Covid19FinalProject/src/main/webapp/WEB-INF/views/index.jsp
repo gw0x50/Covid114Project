@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>최종 프로젝트</title>
+<!-- 네이버 맵 api -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=vq5qzwym0i"></script>
 <!-- jquery  --> 
 <script type="text/javascript" src="/resources/js/jquery-3.2.1.min.js"></script>
 <!-- chart.js -->
