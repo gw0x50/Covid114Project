@@ -29,7 +29,7 @@ $(document).ready(function(){
 	}
 	onChange();
 	
-	$("#board_category").on("change", function(){
+	$("#board_location").on("change", function(){
 		onChange();
 	});
 });
