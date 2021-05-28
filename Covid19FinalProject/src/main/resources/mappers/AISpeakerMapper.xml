@@ -3,14 +3,12 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.covid.mapper.AISpeakerMapper">	
 
-	<select id="getOneResult" resultType="ResultVO"
-		parameterType="String">
+	<select id="getOneResult" resultType="ResultVO" parameterType="String">
 		SELECT * FROM covid_result
 		WHERE result_date=#{date}
 	</select>
 	
-	<select id="getBetweenResult" resultType="ResultVO"
-		parameterType="hashmap">
+	<select id="getBetweenResult" resultType="ResultVO" parameterType="hashmap">
 		SELECT * FROM covid_result
 		WHERE DATE(result_date)
 		BETWEEN #{startDate} AND #{endDate}
