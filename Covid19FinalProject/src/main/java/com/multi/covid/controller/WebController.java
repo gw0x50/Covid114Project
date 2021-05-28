@@ -13,15 +13,18 @@ import com.multi.covid.service.MapService;
 @Controller
 public class WebController {
 	
+	
 	 @Autowired 
 	 private MapService mapService;
+	 
 	 
 	@RequestMapping("/")
 	public ModelAndView main() {
 		ModelAndView mv = new ModelAndView();
 		
-		 List<CenterVO> allcenter = mapService.getAllCenter();
-		 mv.addObject("allcenter",allcenter);
+		
+		  List<CenterVO> allcenter = mapService.getAllCentertemp();
+		  mv.addObject("allcenter",allcenter);
 		 
 
 		mv.setViewName("index");
