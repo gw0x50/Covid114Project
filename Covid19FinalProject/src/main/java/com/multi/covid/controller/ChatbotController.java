@@ -1,8 +1,7 @@
 package com.multi.covid.controller;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +20,12 @@ public class ChatbotController {
 	/*http://61.102.5.133:9091/*/
 	/*http://49.142.68.213:9091*/
 	
-	//누적 확진자 전체 조회 추가 
+	//누적 확진자 전체 조회
+	@RequestMapping(value="/resultall", method=RequestMethod.POST)
+	@ResponseBody
+	public String getAllResult() {
+		return service.getAllResult();
+	}
 	
 	//누적 확진자 조회 (전체, 지역별)
 	@RequestMapping(value="/result", method=RequestMethod.POST)
@@ -30,7 +34,7 @@ public class ChatbotController {
 		//{{#webhook.getTotal_count}}
 		//{{#webhook.increment_count}}
 		//{{#weobhook.result_date}}
-		
+		System.out.println(service.getOneResult(location));
 		return service.getOneResult(location);
 		
 		
@@ -68,6 +72,22 @@ public class ChatbotController {
 		//{{#webhook.r_facility_name}}
 		return service.getLocCenter(location);
 	}
+	
+	//백신 센터 선택지 return 
+	@RequestMapping(value="/vaccineselect", method=RequestMethod.POST)
+	@ResponseBody
+	public String selectCenterLocation(@RequestBody String location) {
+		//link list JSON return
+		return service.selectCenterLocation(location);		
+	}
+	
+	
+	//백신 센터 선택지 return 
+		@RequestMapping(value="/vaccineselect2", method=RequestMethod.POST)
+		@ResponseBody
+		public String selectCenterLocation2(@RequestBody String location) {
+			return service.selectCenterLocation(location);		
+		}
 	
 	
 	//백신 센터 조회(지역 - 시/군별) + 링크

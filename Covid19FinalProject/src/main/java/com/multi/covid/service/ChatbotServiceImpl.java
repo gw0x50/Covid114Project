@@ -2,6 +2,7 @@ package com.multi.covid.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +24,55 @@ public class ChatbotServiceImpl implements ChatbotService{
 	@Autowired
 	private ChatbotMapper chatbotMapper;
 
-	//누적 확진자 조회 전체 추가 
 	
+	
+	@Override //누적 확진자 조회(전체)
+	public String getAllResult() {
+		
+		ResultVO vo = chatbotMapper.getOneResult("합계");
+	
+		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
+		SimpleDateFormat wh_format = new SimpleDateFormat ("yyyy년 MM월 dd일");		
+		Calendar today1 = Calendar.getInstance();
+		today1.add(Calendar.DAY_OF_MONTH, -1);
+		Calendar today2 = Calendar.getInstance();
+		today2.add(Calendar.DAY_OF_MONTH, -2);
+
+		String result_date = "";
+		
+		if(vo.getResult_date().equals(format.format(today1.getTime()))) {
+			result_date = wh_format.format(today1.getTime());
+		}
+		else {
+			result_date = wh_format.format(today2.getTime());
+		}
+		vo.getResult_date().equals(result_date);
+		
+		String[] location_array = {"서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종", "경기", "강원", "충북",
+				 "충남", "전북", "전남", "경북", "경남", "제주"};
+		StringBuffer webhook_locResult = new StringBuffer();
+		for(int i = 0; i < location_array.length; i++) {
+			ResultVO one_vo = chatbotMapper.getOneResult(location_array[i]);
+			Arrays.sort(location_array);
+			webhook_locResult.append(location_array[i] + " 지역 확진자 수: "
+					+ one_vo.getIncrement_count() + " \n");
+		}
+		
+		
+		JsonObject result_count = new JsonObject();
+		result_count.addProperty("getTotal_count", vo.getTotal_count());
+		result_count.addProperty("increment_count", vo.getIncrement_count());
+		result_count.addProperty("locResult", webhook_locResult.toString().replaceAll(",", ""));
+		result_count.addProperty("result_date", result_date);
+		JsonObject result = new JsonObject();
+		result.addProperty("version", "2.0");
+		result.add("data", result_count);
+		
+		return result.toString();
+	}
+
+
+
 	@Override //누적 확진자 조회(지역별)  
 	public String getOneResult(String location) {
 		//JSON Parsing - result_location 
@@ -32,52 +80,80 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-		location = params.getAsJsonObject().get("result_location").getAsString();
-		
+		location = params.getAsJsonObject().get("result_location").getAsString();		
 
-		//get val date
+		//select
+		ResultVO vo = chatbotMapper.getOneResult(location);
+		
+		// simpleText로 출력할 업데이트 시간
 		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
 		SimpleDateFormat wh_format = new SimpleDateFormat ("yyyy년 MM월 dd일");		
-		Calendar today = Calendar.getInstance();
-		
-		//webhook.result_date 추가 (집계일 추가) 
-		// 업데이트시간 예외처리 수정 
+		Calendar today1 = Calendar.getInstance();
+		today1.add(Calendar.DAY_OF_MONTH, -1);
+		Calendar today2 = Calendar.getInstance();
+		today2.add(Calendar.DAY_OF_MONTH, -2);
+
 		String result_date = "";
 		
-		if(today.get(Calendar.HOUR_OF_DAY) < 11 && today.get(Calendar.MINUTE) < 15) {
-			today.add(Calendar.DAY_OF_MONTH, -2);
-			result_date = wh_format.format(today.getTime());
+		if(vo.getResult_date().equals(format.format(today1.getTime()))) {
+			result_date = wh_format.format(today1.getTime());
 		}
 		else {
-			today.add(Calendar.DAY_OF_MONTH, -1);
-			result_date = wh_format.format(today.getTime());
+			result_date = wh_format.format(today2.getTime());
 		}
+			
 		
-		String date = format.format(today.getTime());
-		
-		//select
-		ResultVO vo = chatbotMapper.getOneResult(date, location);
-		
-		//Skill JSON return 으로 수정 > 바로가기버튼(발화: ㅇㅇ지역 실시간 확진 조회) return 
-		//{{#webhook.getTotal_count}}, {{#webhook.increment_count}} JSON Format
+		//Skill JSON return
 		//number format comma (xxx,xxx)
 		String getTotal_count = String.format("%,d", vo.getTotal_count());
 		String increment_count = String.format("%,d", vo.getIncrement_count());
+
+		String result_message = result_date + " 기준 " + location + "지역의 누적 확진자 수는" + getTotal_count + "입니다.\n\n"
+								+ "확진자 수는 " + increment_count + " 명 입니다.";
+		String quick_message = location + " 실시간 확진자 조회";
 		
-		JsonObject count = new JsonObject();
-		count.addProperty("count", getTotal_count);
-		count.addProperty("increment_count", increment_count);
-		count.addProperty("result_date", result_date);
+		//home button
+		JsonObject buttons = new JsonObject();
+		buttons.addProperty("label", "처음으로 돌아가기");
+		buttons.addProperty("action", "block");
+		buttons.addProperty("blockId", "60ade7ebe0891e661e4aad61");
+		
+		JsonArray buttons_array = new JsonArray();
+		buttons_array.add(buttons);
+
+		JsonObject card = new JsonObject();
+		card.addProperty("title", result_message);
+		card.add("buttons", buttons_array);
+		
+		JsonObject basicCard = new JsonObject();
+		basicCard.add("basicCard", card);
+		
+		JsonArray outputs_array = new JsonArray();
+		outputs_array.add(basicCard);
+		
+		//quickReplies
+		JsonObject quickReplies = new JsonObject();
+		quickReplies.addProperty("label", quick_message);
+		quickReplies.addProperty("action", "message");
+		quickReplies.addProperty("messageText", quick_message);
+		
+		JsonArray quick_array = new JsonArray();
+		quick_array.add(quickReplies);
+		
+		JsonObject template = new JsonObject();
+		template.add("outputs", outputs_array);
+		template.add("quickReplies", quick_array);
+		
 		JsonObject result = new JsonObject();
 		result.addProperty("version", "2.0");
-		result.add("data", count);
+		result.add("template", template);
 		
 		return result.toString();
 		
 	}
 	
 	
-
+	
 	@Override //실시간 확진자 조회(전체)
 	public String getAllLive() {
 		
@@ -90,28 +166,21 @@ public class ChatbotServiceImpl implements ChatbotService{
 		vo.calSum();
 		String getSum = String.format("%,d", vo.getSum()); 
 		
-		// Skill JSON return으로 수정 (전체 출력) 
-		// {{#webhook.total_liveCount}}, {{#webhook.locName}} JSON Format
+		String[] loc_name = {"강원도", "경기도", "경상남도", "경상북도", "광주", "대구", "대전", "부산", "서울", 
+				"세종", "울산", "인천", "전남", "전북", "제주", "충남", "충북"};
+		int[] loc_liveCount = {vo.getGangwon(), vo.getGyeonggi(), vo.getGyeongnam(), vo.getGyeongbuk(), 
+				vo.getGwangju(), vo.getDaegu(), vo.getDaejeon(), vo.getBusan(), vo.getSeoul(), vo.getSejong(), 
+				vo.getUlsan(), vo.getIncheon(), vo.getJeonnam(), vo.getJeonbuk(), vo.getJeju(), vo.getChungnam(), vo.getChungbuk()};
+		StringBuffer webhook_locLive = new StringBuffer();
+		for(int i = 0; i < loc_name.length; i++) {
+			webhook_locLive.append(loc_name[i] + " 지역 확진자 수: " + loc_liveCount[i] + " 명\n");
+		}
+
+		// {{#webhook.total_liveCount}}, {{#webhook.loc_liveCount}} JSON Format
 		// 전체, 지역별 전부
 		JsonObject total_liveCount = new JsonObject();
 		total_liveCount.addProperty("total_liveCount", getSum);
-		total_liveCount.addProperty("gangwon", vo.getGangwon());
-		total_liveCount.addProperty("gyeonggi", vo.getGyeonggi());
-		total_liveCount.addProperty("gyeongnam", vo.getGyeongnam());
-		total_liveCount.addProperty("gyeongbuk", vo.getGyeongbuk());
-		total_liveCount.addProperty("gwangju", vo.getGwangju());
-		total_liveCount.addProperty("daegu", vo.getDaegu());
-		total_liveCount.addProperty("daejeon", vo.getDaejeon());
-		total_liveCount.addProperty("busan", vo.getBusan());
-		total_liveCount.addProperty("seoul", vo.getSeoul());
-		total_liveCount.addProperty("ulsan", vo.getUlsan());
-		total_liveCount.addProperty("incheon", vo.getIncheon());
-		total_liveCount.addProperty("jeonnam", vo.getJeonnam());
-		total_liveCount.addProperty("jeonbuk", vo.getJeonbuk());
-		total_liveCount.addProperty("jeju", vo.getJeju());
-		total_liveCount.addProperty("chungnam", vo.getChungnam());
-		total_liveCount.addProperty("chungbuk", vo.getChungbuk());
-		total_liveCount.addProperty("sejong", vo.getSejong());
+		total_liveCount.addProperty("loc_liveCount", webhook_locLive.toString().replaceAll(",", ""));
 		
 		JsonObject result = new JsonObject();
 		result.addProperty("version", "2.0");
@@ -144,16 +213,56 @@ public class ChatbotServiceImpl implements ChatbotService{
 		map.put("date", date);
 		
 		int one_count = chatbotMapper.getLocLive(map);
+		//db 영어 -> 한글 변환
+		String[] eng_loc = {"gangwon", "gyeonggi", "gyeongnam", "gyeongbuk", "gwangju", "daegu", "daejeon", "busan", "seoul", 
+				"sejong", "ulsan", "incheon", "jeonnam", "jeonbuk", "jeju", "chungnam", "chungbuk"};
+		String[] kor_loc = {"강원도", "경기도", "경상남도", "경상북도", "광주", "대구", "대전", "부산", "서울", 
+				"세종", "울산", "인천", "전남", "전북", "제주", "충남", "충북"};
+		for(int i = 0; i < eng_loc.length; i++) {
+			if(location.equals(eng_loc[i])) {
+				location = kor_loc[i];
+			}
+		}
 		
+		String live_message = location + " 지역 오늘 확진자 수는" + one_count + " 명 입니다.";
+		String quick_message = location + " 누적 확진자 조회";
 		
-		//{{#webhook.one_livecount}} JSON Format
-		JsonObject one_liveCount = new JsonObject();
-		one_liveCount.addProperty("live_count", one_count);
+		JsonObject buttons = new JsonObject();
+		buttons.addProperty("label", "처음으로 돌아가기");
+		buttons.addProperty("action", "block");
+		buttons.addProperty("blockId", "60ade7ebe0891e661e4aad61");
+		
+		JsonArray buttons_array = new JsonArray();
+		buttons_array.add(buttons);
+
+		JsonObject card = new JsonObject();
+		card.addProperty("title", live_message);
+		card.add("buttons", buttons_array);
+		
+		JsonObject basicCard = new JsonObject();
+		basicCard.add("basicCard", card);
+		
+		JsonArray outputs_array = new JsonArray();
+		outputs_array.add(basicCard);
+		
+		JsonObject quickReplies = new JsonObject();
+		quickReplies.addProperty("label", quick_message);
+		quickReplies.addProperty("action", "message");
+		quickReplies.addProperty("messageText", quick_message);
+		
+		JsonArray quick_array = new JsonArray();
+		quick_array.add(quickReplies);
+		
+		JsonObject template = new JsonObject();
+		template.add("outputs", outputs_array);
+		template.add("quickReplies", quick_array);
+		
 		JsonObject result = new JsonObject();
 		result.addProperty("version", "2.0");
-		result.add("data", one_liveCount);
+		result.add("template", template);
 		
 		return result.toString();
+		
 		
 	}
 
@@ -225,7 +334,81 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 	}
 
-
+	
+	
+	@Override//지역 선택 바로가기버튼 생성 
+	public String selectCenterLocation(String location) {
+		
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
+		JsonElement action = jsonObj.get("action");
+		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
+		location = params.getAsJsonObject().get("vaccine_center_location").getAsString();
+		
+		List<CenterVO> vo = chatbotMapper.getLocCenter(location);
+		ArrayList<String> detail_loc = new ArrayList<String>();
+		
+		//예외처리 - 바로가기 버튼 최대 10 인데..파라미터로 보내면 20 이상 가능한듯.. ? 
+		if(vo.size() >= 30) {
+			for(int i = 0; i < 29; i++) {
+				String[] center_name = vo.get(i).getCenter_name().split(" ");
+				detail_loc.add(center_name[2]);
+			}
+			detail_loc.add("그 외 지역" + "(" + location + ")");
+		}
+		else {
+			for(CenterVO name : vo) {	
+				String[] center_name = name.getCenter_name().split(" ");
+				detail_loc.add(center_name[2]);
+			}
+		}
+		
+		JsonArray quick_item_arr = new JsonArray();
+		
+		for(int i = 0; i < detail_loc.size(); i++) {
+		JsonObject quickReplies = new JsonObject();
+			quickReplies.addProperty("label", detail_loc.get(i));
+			quickReplies.addProperty("action", "message");
+			quickReplies.addProperty("messageText", location + " " + detail_loc.get(i) + " 백신센터");
+			quick_item_arr.add(quickReplies);
+		}
+		
+		
+		JsonArray quick_array = new JsonArray();
+		for(int i = 0; i < quick_item_arr.size(); i++) {
+			quick_array.add(quick_item_arr.get(i));
+		}
+		
+		JsonObject text = new JsonObject();
+		text.addProperty("text", "원하시는 지역을 선택하세요.");
+		
+		JsonObject simpleText = new JsonObject();
+		simpleText.add("simpleText", text);
+		
+		JsonArray outputs_array = new JsonArray();
+		outputs_array.add(simpleText);
+		
+		JsonObject template = new JsonObject();
+		template.add("outputs", outputs_array);
+		template.add("quickReplies", quick_array);
+		
+		JsonObject result = new JsonObject();
+		result.addProperty("version", "2.0");
+		result.add("template", template);
+		
+		return result.toString();
+		
+		
+	}
+	
+	
+	
+	@Override
+	public String selectCenterLocation2(String location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 	@Override//백신센터 지역별(시, 군, 구) + 주소링크
 	public String getTownCenter(String location) {
 		
@@ -264,9 +447,19 @@ public class ChatbotServiceImpl implements ChatbotService{
 			items_array.add(setItems_array.get(i));
 		}
 		
+		//home button
+		JsonObject buttons = new JsonObject();
+		buttons.addProperty("label", "처음으로 돌아가기");
+		buttons.addProperty("action", "block");
+		buttons.addProperty("blockId", "60ade7ebe0891e661e4aad61");
+		
+		JsonArray buttons_array = new JsonArray();
+		buttons_array.add(buttons);
+		
 		JsonObject header = new JsonObject();
 		header.add("items", items_array);
 		header.add("header", title);
+		header.add("buttons", buttons_array);
 		
 		JsonObject listCard = new JsonObject();
 		listCard.add("listCard", header);
@@ -283,5 +476,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 		return result.toString();
 	}
+
+
+
 
 }

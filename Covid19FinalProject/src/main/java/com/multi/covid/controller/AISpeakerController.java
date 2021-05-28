@@ -30,9 +30,9 @@ public class AISpeakerController {
 	
 	@ResponseBody
 	@RequestMapping("/patient")//일일확진자	
-	public String Patient(String day) {//(today / yesterday)
-		return service.Patient(day);
-	}		
+	public String patient(String day, String location) {//(today / yesterday)
+		return service.patient(day, location);
+	}
 	
 	@ResponseBody
 	@RequestMapping("/triage") //가까운 선별진료소

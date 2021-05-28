@@ -40,8 +40,10 @@ public class MapServiceImpl implements MapService{
 	public List<CenterVO> getAllCenter() {
 		return mapMapper.getAllCenter();
 	}
+
 	@Override
 	public List<CenterVO> getAllCentertemp() {
+
 		return mapMapper.getAllCentertemp();
 	}
 }

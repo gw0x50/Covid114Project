@@ -29,7 +29,7 @@
 		SELECT * FROM covid_vaccine_center
 	</select>
 	
-		<select id="getAllCentertemp" resultType="CenterVO">
+	<select id="getAllCentertemp" resultType="CenterVO">
 		SELECT * FROM covid_vaccine_center_temp
 	</select>
 </mapper>

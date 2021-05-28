@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.multi.covid.domain.LiveVO;
+import com.google.gson.Gson;
 import com.multi.covid.domain.ResultVO;
 import com.multi.covid.mapper.ChartMapper;
 
@@ -14,20 +14,23 @@ import com.multi.covid.mapper.ChartMapper;
 public class ChartServiceImpl implements ChartService {
 	@Autowired
 	private ChartMapper chartMapper;
-	
+
 	@Override
-	public List<ResultVO> get7DaysResult(String location) {
+	public String get7DaysResult(String location) {
+		Gson gson = new Gson();
 		List<ResultVO> sqlResult = chartMapper.get7DaysResult(location);
-		
-		for(int i = 0; i < 7; i++) {
+
+		for (int i = 0; i < 7; i++) {
 			sqlResult.get(i).setResult_date(sqlResult.get(i).getResult_date().substring(5));
 		}
-		
-		return sqlResult;
+
+		return gson.toJson(sqlResult);
+
 	}
-	
+
 	@Override
-	public List<ResultVO> get4WeeksResult(String location) {
+	public String get4WeeksResult(String location) {
+		Gson gson = new Gson();
 		List<ResultVO> sqlResult = chartMapper.get4WeeksResult(location);
 
 		List<ResultVO> returnList = new ArrayList<ResultVO>();
@@ -45,19 +48,15 @@ public class ChartServiceImpl implements ChartService {
 			}
 			returnList.add(temp);
 		}
-		return returnList;
-	}
-	
-	@Override
-	public List<ResultVO> get12MonthsResult(String location) {
-		List<ResultVO> sqlResult = chartMapper.get12MonthsResult(location);
-		
-		return sqlResult;
+		return gson.toJson(returnList);
 	}
 
 	@Override
-	public LiveVO getOneLive(String date) {
-		// TODO Auto-generated method stub
-		return null;
+	public String get12MonthsResult(String location) {
+		Gson gson = new Gson();
+
+		List<ResultVO> sqlResult = chartMapper.get12MonthsResult(location);
+
+		return gson.toJson(sqlResult);
 	}
 }
