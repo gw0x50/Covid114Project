@@ -2,6 +2,7 @@ package com.multi.covid.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,10 +21,38 @@ import com.multi.covid.domain.ResultVO;
 public class AISpeakerServiceImpl implements AISpeakerService {	
 	
 	@Autowired
+	private AISpeakerService service;
+
+	@Autowired
 	private AISpeakerMapper mapper;
+	
+	@Override
+	public List<ResultVO> getOneResult(String date) {
+		return mapper.getOneResult(date);
+	}
 
 	@Override
-	public String Patient(String day) {
+	public List<ResultVO> getBetweenResult(HashMap<String, String> map) {
+		return mapper.getBetweenResult(map);
+	}
+
+	@Override
+	public List<ResultVO> getAllResult() {
+		return mapper.getAllResult();
+	}
+
+	@Override
+	public LiveVO getOneLive(String date) {
+		return mapper.getOneLive(date);
+	}
+
+	@Override
+	public List<CenterVO> getAllCenter() {
+		return mapper.getAllCenter();
+	}
+
+	@Override
+	public String patient(String day, String location) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		String date;
@@ -32,14 +61,29 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		List<ResultVO> list = null;
 		int sum=0;
 		JsonObject obj = new JsonObject();
-		if(day.equals("today")) {	
+		//covid_live
+		String[] loc = {"seoul", "incheon", "gwangju", "daejeon", "daegu", "busan", "ulsan", "sejong",
+						"gyeonggi", "gangwon", "chungbuk", "chungnam", "jeonbuk", "jeonnam", "gyeongbuk", 
+						"gyeongnam", "jeju"};
+		//covid_result
+		String[] loc2 = {"서울", "인천", "광주", "대전", "대구", "부산", "울산", "세종", "경기", "강원", "충북", "충남", 
+						"전북", "전남", "경북", "경남", "제주"};
+		if(day.equals("today")) {
 			try {
 			date = format.format(cal.getTime());
 			System.out.println("오늘: "+date);			
-			vo = mapper.getOneLive(date); //오늘날짜 확진자수 받아오기
+			vo = service.getOneLive(date); //오늘날짜 확진자수 받아오기
 			vo.calSum();
 			obj.addProperty("live_date", vo.getLive_date());
-			obj.addProperty("sum", vo.getSum());
+			if(location.equals("all")) { //전체지역 확진자								
+				obj.addProperty("sum", vo.getSum());
+			}
+			else if(Arrays.asList(loc).contains(location)) {//location값이 배열에 있는지 확인(있으면 true 반환) 				
+				obj.addProperty("sum", vo.getLocation(location));//특정지역 확진자수 조회
+			}
+			else {
+				obj.addProperty("sum", "잘못된접근");
+			}
 			}catch(Exception e) {
 				System.out.println(e.toString());
 				return "결과값이 없습니다";
@@ -50,11 +94,20 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 			cal.add(Calendar.DATE, - 1);		
 			date = format.format(cal.getTime());
 			System.out.println("어제: "+date);
-			list = mapper.getOneResult(date); //어제날짜 확진자수 받아오기
+			list = service.getOneResult(date); //어제날짜 확진자수 받아오기
 			System.out.println(list.get(0).getTotal_count());//데이터가 없으면 에러발생
 			
-			for(ResultVO one : list) {			
-				sum += one.getIncrement_count();//각 지역별 확진자수 더하기				
+			if(location.equals("all")) {
+				for(ResultVO one : list) {
+					if(one.getLocation().equals("합계")) 
+						sum = one.getIncrement_count();//모든지역 확진자수				
+				}
+			}
+			else if(Arrays.asList(loc2).contains(location)) {
+				for(ResultVO one : list) {
+					if(one.getLocation().equals(location)) 
+						sum = one.getIncrement_count();//특정지역 확진자수				
+				}
 			}
 			obj.addProperty("result_date", date);
 			obj.addProperty("sum", sum);
@@ -64,8 +117,11 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 				date = format.format(cal.getTime());
 				System.out.println("그제: "+date);
 				list = mapper.getOneResult(date); //그제날짜 확진자수 받아오기
-				for(ResultVO one : list) {				
-					sum += one.getIncrement_count();
+				for(ResultVO one : list) {		
+					if(one.getLocation().equals("합계")) {
+						System.out.println(one.getLocation());
+						sum += one.getIncrement_count();
+					}
 				}
 				obj.addProperty("result_date", date);
 				obj.addProperty("sum", sum);					
