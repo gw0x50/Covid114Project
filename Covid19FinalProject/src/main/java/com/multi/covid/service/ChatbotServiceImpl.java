@@ -266,45 +266,6 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 	}
 
-
-	//사용 (X) 
-	@Override//백신센터 전체 리스트(지역별로 분리)
-	public String getAllCenter() {
-
-		String[] location = {"강원도", "경기도", "경상남도", "경상북도", "광주광역시", "대구광역시", "대전광역시",
-				 "부산광역시", "서울특별시", "울산광역시", "인천광역시", "전라남도", "전라북도", "제주특별자치도", "충청남도", "충청북도"};
-
-		//location.length(총 16)만큼 {{#webhook.지역명}} 생성 
-		ArrayList<StringBuffer> list = new ArrayList<StringBuffer>();
-		
-		for(int i = 0; i < location.length; i++) {
-			
-			StringBuffer facility_name = new StringBuffer();
-			//select
-			List<CenterVO> vo = chatbotMapper.getLocCenter(location[i]);
-			
-			for(int k = 0; k < vo.size(); k++) {
-				facility_name.append(vo.get(k).getFacility_name() + "\n");		
-			} 
-			list.add(facility_name);			
-			
-		}	
-		
-		
-		//{{#webhook.지역명}} JSON Format
-		JsonObject all_center = new JsonObject();
-		
-		for(int i = 0; i < location.length; i++) {			
-			all_center.addProperty(location[i], list.get(i).toString().replaceAll(",", ""));
-		}
-		
-		JsonObject result = new JsonObject();
-		result.addProperty("version", "2.0");
-		result.add("data", all_center);
-		
-		return all_center.toString();
-	}
-
 	
 	@Override//백신센터 지역별(도, 시)
 	public String getLocCenter(String location) {
@@ -334,41 +295,39 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 	}
 
-	
-	
+
+
 	@Override//지역 선택 바로가기버튼 생성 
-	public String selectCenterLocation(String location) {
+	public String selectAddrTwo(String location) {
 		
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get("vaccine_center_location").getAsString();
 		
-		List<CenterVO> vo = chatbotMapper.getLocCenter(location);
-		ArrayList<String> detail_loc = new ArrayList<String>();
+		List<String> addr = chatbotMapper.getAddrTwo(location);
+		ArrayList<String> addr_arr = new ArrayList<String>();
 		
-		//예외처리 - 바로가기 버튼 최대 10 인데..파라미터로 보내면 20 이상 가능한듯.. ? 
-		if(vo.size() >= 30) {
-			for(int i = 0; i < 29; i++) {
-				String[] center_name = vo.get(i).getCenter_name().split(" ");
-				detail_loc.add(center_name[2]);
+		//예외처리 - 바로가기버튼 20개로 제한
+		if(addr.size() >= 20) {
+			for(int i = 0; i < 19; i++) {
+				addr_arr.add(addr.get(i));
 			}
-			detail_loc.add("그 외 지역" + "(" + location + ")");
+			addr_arr.add("그 외 " + "(" + location + ")");
 		}
 		else {
-			for(CenterVO name : vo) {	
-				String[] center_name = name.getCenter_name().split(" ");
-				detail_loc.add(center_name[2]);
+			for(int i = 0; i < addr.size(); i++) {	
+				addr_arr.add(addr.get(i));
 			}
 		}
 		
 		JsonArray quick_item_arr = new JsonArray();
 		
-		for(int i = 0; i < detail_loc.size(); i++) {
+		for(int i = 0; i < addr_arr.size(); i++) {
 		JsonObject quickReplies = new JsonObject();
-			quickReplies.addProperty("label", detail_loc.get(i));
+			quickReplies.addProperty("label", addr_arr.get(i));
 			quickReplies.addProperty("action", "message");
-			quickReplies.addProperty("messageText", location + " " + detail_loc.get(i) + " 백신센터");
+			quickReplies.addProperty("messageText", addr_arr.get(i));
 			quick_item_arr.add(quickReplies);
 		}
 		
@@ -401,25 +360,139 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 	
 	
+	@Override//20개 초과 버튼 처리
+	public String selectAddrTwo_2(String location) {
+		
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
+		JsonElement action = jsonObj.get("action");
+		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
+		location = params.getAsJsonObject().get("vaccine_center_location").getAsString();
+		
+		List<String> addr = chatbotMapper.getAddrTwo(location);
+		
+		JsonArray quick_item_arr = new JsonArray();
+		
+		//20번째부터 나머지 출력 
+		for(int i = 20; i < addr.size(); i++) {
+		JsonObject quickReplies = new JsonObject();
+			quickReplies.addProperty("label", addr.get(i));
+			quickReplies.addProperty("action", "message");
+			quickReplies.addProperty("messageText", addr.get(i));
+			quick_item_arr.add(quickReplies);
+		}
+		
+		JsonArray quick_array = new JsonArray();
+		for(int i = 0; i < quick_item_arr.size(); i++) {
+			quick_array.add(quick_item_arr.get(i));
+		}
+		
+		JsonObject text = new JsonObject();
+		text.addProperty("text", "원하시는 지역을 선택하세요.");
+		
+		JsonObject simpleText = new JsonObject();
+		simpleText.add("simpleText", text);
+		
+		JsonArray outputs_array = new JsonArray();
+		outputs_array.add(simpleText);
+		
+		JsonObject template = new JsonObject();
+		template.add("outputs", outputs_array);
+		template.add("quickReplies", quick_array);
+		
+		JsonObject result = new JsonObject();
+		result.addProperty("version", "2.0");
+		result.add("template", template);
+		
+		return result.toString();
+
+	}
 	
-	@Override
-	public String selectCenterLocation2(String location) {
+	
+	@Override//읍, 면, 리 바로가기버튼 생성 1(최대 20)
+	public String selectAddrThree(String location) {
+		
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
+		JsonElement action = jsonObj.get("action");
+		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
+		location = params.getAsJsonObject().get("vaccine_address_two").getAsString();
+		
+		List<String> addr = chatbotMapper.getAddrThree(location);
+		ArrayList<String> addr_arr = new ArrayList<String>();
+		//String another = "";
+		
+		//예외처리 - 바로가기버튼 20개로 제한
+		if(addr.size() >= 20) {
+			for(int i = 0; i < 19; i++) {
+				//String[] addr_split = addr.get(i).split(" ");
+				addr_arr.add(addr.get(i));
+				//another = addr_split[1];
+			}
+			addr_arr.add("주소 직접 입력하기");
+		}
+		else {
+			for(int i = 0; i < addr.size(); i++) {	
+				addr_arr.add(addr.get(i));
+			}
+		}
+		
+		JsonArray quick_item_arr = new JsonArray();
+		
+		for(int i = 0; i < addr_arr.size(); i++) {
+		JsonObject quickReplies = new JsonObject();
+			quickReplies.addProperty("label", addr_arr.get(i));
+			quickReplies.addProperty("action", "message");
+			quickReplies.addProperty("messageText", addr_arr.get(i));
+			quick_item_arr.add(quickReplies);
+		}
+		
+		
+		JsonArray quick_array = new JsonArray();
+		for(int i = 0; i < quick_item_arr.size(); i++) {
+			quick_array.add(quick_item_arr.get(i));
+		}
+		
+		JsonObject text = new JsonObject();
+		text.addProperty("text", location + " 을 선택하셨습니다. \n원하시는 지역을 선택하세요.");
+		
+		JsonObject simpleText = new JsonObject();
+		simpleText.add("simpleText", text);
+		
+		JsonArray outputs_array = new JsonArray();
+		outputs_array.add(simpleText);
+		
+		JsonObject template = new JsonObject();
+		template.add("outputs", outputs_array);
+		template.add("quickReplies", quick_array);
+		
+		JsonObject result = new JsonObject();
+		result.addProperty("version", "2.0");
+		result.add("template", template);
+		
+		return result.toString();
+	}
+	
+	
+	
+	@Override//읍, 면, 리 바로가기버튼 생성 2(최대 20)
+	public String selectAddrThree_2(String location) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	
+	
+	
 	@Override//백신센터 지역별(시, 군, 구) + 주소링크
-	public String getTownCenter(String location) {
+	public String getAddrCenter(String location) {
 		
 		//get val location
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-		location = params.getAsJsonObject().get("vaccine_center_detailLoc").getAsString();
+		location = params.getAsJsonObject().get("vaccine_address_three").getAsString();
 		
 		//select
-		List<CenterVO> vo = chatbotMapper.getTownCenter(location);
+		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
 		
 		//JSON format
 		//link box 형태 출력, 지역마다 센터 수가 상이하기 때문에 반복문으로 items 생성 
@@ -478,6 +551,11 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 
 
+	@Override
+	public String getAddrCenter_2(String facility_name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

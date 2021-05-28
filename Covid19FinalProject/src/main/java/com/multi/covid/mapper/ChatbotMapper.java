@@ -18,5 +18,8 @@ public interface ChatbotMapper {
 	LiveVO getOneLive(String date);
 	List<CenterVO> getAllCenter();
 	List<CenterVO> getLocCenter(String location);
-	List<CenterVO> getTownCenter(String location);
+	List<String> getAddrTwo(String location);
+	List<String> getAddrThree(String location);
+	List<CenterVO> getAddrCenter(String address);
+	List<CenterVO> getAddrCenter_2(String facility_name);
 }
