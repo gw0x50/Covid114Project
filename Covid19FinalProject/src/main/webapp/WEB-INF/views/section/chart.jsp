@@ -1,31 +1,55 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <div class="chart_section">
-	<select id="chart_category">
-		<option value="일별" selected>일별</option>
-		<option value="주별">주별</option>
-		<option value="월별">월별</option>
-	</select>
-	<select id="chart_location">
-		<option value="전체" selected>전체</option>
-		<option value="서울">서울</option>
-		<option value="부산">부산</option>
-		<option value="인천">인천</option>
-		<option value="대구">대구</option>
-		<option value="광주">광주</option>
-		<option value="대전">대전</option>
-		<option value="울산">울산</option>
-		<option value="세종">세종</option>
-		<option value="경기">경기</option>
-		<option value="강원">강원</option>
-		<option value="충북">충북</option>
-		<option value="충남">충남</option>
-		<option value="경북">경북</option>
-		<option value="경남">경남</option>
-		<option value="전북">전북</option>
-		<option value="전남">전남</option>
-		<option value="제주">제주</option>
-		<option value="검역">검역</option>
-	</select>
+	<div class="chart_select_category_box">
+		<dl class="dropdown">
+			<dt>
+				<a href="#" style="padding-top:4px;">
+					<div class="text">기간</div>
+					<div class="chart_select_category" id="chart_select_category">일일</div>
+				</a>
+			</dt>
+			<dd>
+				<ul class="chart_dropdown_category">
+					<li><a href="#">일일</a></li>
+					<li><a href="#">주간</a></li>
+					<li><a href="#">월간</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
+	<div class="chart_select_location_box">
+		<dl class="dropdown">
+			<dt>
+				<a href="#" style="padding-top:4px;">
+					<div class="text">지역</div>
+					<div class="chart_select_location" id="chart_select_location">전체</div>
+				</a>
+			</dt>
+			<dd>
+				<ul class="chart_dropdown_location">
+					<li><a href="#">전체</a></li>
+					<li><a href="#">서울</a></li>
+					<li><a href="#">부산</a></li>
+					<li><a href="#">인천</a></li>
+					<li><a href="#">대구</a></li>
+					<li><a href="#">광주</a></li>
+					<li><a href="#">대전</a></li>
+					<li><a href="#">울산</a></li>
+					<li><a href="#">세종</a></li>
+					<li><a href="#">경기</a></li>
+					<li><a href="#">강원</a></li>
+					<li><a href="#">충북</a></li>
+					<li><a href="#">충남</a></li>
+					<li><a href="#">경북</a></li>
+					<li><a href="#">경남</a></li>
+					<li><a href="#">전북</a></li>
+					<li><a href="#">전남</a></li>
+					<li><a href="#">제주</a></li>
+					<li><a href="#">검역</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
 	<canvas class="chart_area" id="chart_area"></canvas>
 </div>
