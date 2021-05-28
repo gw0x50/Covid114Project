@@ -29,5 +29,5 @@
 		<option value="제주">제주</option>
 		<option value="검역">검역</option>
 	</select>
-	<canvas id="myChart" width="400" height="400"></canvas>
+	<canvas id="myChart"></canvas>
 </div>
