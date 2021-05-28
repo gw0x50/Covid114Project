@@ -11,7 +11,7 @@
 <!-- jquery  --> 
 <script type="text/javascript" src="/resources/js/jquery-3.2.1.min.js"></script>
 <!-- chart.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.1/chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
 <!-- index 관련 script -->
 <script src="/resources/js/index.js"></script>
 <!-- board 관련 script -->
@@ -46,7 +46,7 @@ $(document).ready(function(){
 			<img src="/resources/images/logo.png">
 			<jsp:include page="/WEB-INF/views/section/board.jsp"/>
 			<jsp:include page="/WEB-INF/views/section/chart.jsp"/>
-			<jsp:include page="/WEB-INF/views/section/map.jsp"/>
+			<!-- <jsp:include page="/WEB-INF/views/section/map.jsp"/> -->
 			<jsp:include page="/WEB-INF/views/section/chatbot.jsp"/>
 		</div>
 	</div>

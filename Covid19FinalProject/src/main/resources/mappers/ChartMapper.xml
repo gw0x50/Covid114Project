@@ -33,11 +33,6 @@
 		) AS RESULT
 		ORDER BY RESULT.result_date
 	</select>
-
-	<select id="getOneLive" resultType="LiveVO" parameterType="String">
-		SELECT * FROM covid_live
-		WHERE live_date=#{date}
-	</select>
 </mapper>
 
 
