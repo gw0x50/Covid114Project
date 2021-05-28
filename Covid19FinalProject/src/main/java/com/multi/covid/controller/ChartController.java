@@ -21,13 +21,13 @@ public class ChartController {
 		
 		if (location.equals("전체")) location = "합계";
 
-		if (type.equals("일별")) {
+		if (type.equals("일일")) {
 			result = service.get7DaysResult(location);
 		}
-		else if (type.equals("주별")) {
+		else if (type.equals("주간")) {
 			result = service.get4WeeksResult(location);
 		}
-		else if (type.equals("월별")) {
+		else if (type.equals("월간")) {
 			result = service.get12MonthsResult(location);
 		}
 

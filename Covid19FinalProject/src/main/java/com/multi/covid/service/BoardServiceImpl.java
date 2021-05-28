@@ -22,7 +22,7 @@ public class BoardServiceImpl implements BoardService {
 		JsonObject jsonObject = new JsonObject();
 		LiveVO sqlResult = boardMapper.getRecentLive();
 		int count = 0;
-
+		
 		if (location.equals("전체")) {
 			sqlResult.calSum();
 			count = sqlResult.getSum();
