@@ -6,9 +6,11 @@ public interface ChatbotService {
 	String getOneResult(String location);
 	String getAllLive();
 	String getLocLive(String location);
-	String getAllCenter();
 	String getLocCenter(String location);
-	String selectCenterLocation(String location);
-	String selectCenterLocation2(String location);
-	String getTownCenter(String location);
+	String selectAddrTwo(String location);
+	String selectAddrTwo_2(String location);
+	String selectAddrThree(String location);
+	String selectAddrThree_2(String location);
+	String getAddrCenter(String facility_name);
+	String getAddrCenter_2(String facility_name);
 }

@@ -15,7 +15,6 @@
 	ORDER BY result_date DESC LIMIT 1
 	</select>
 	
-	
 	<select id="getOneLive" resultType="LiveVO" parameterType="String">
 		SELECT * FROM covid_live
 		WHERE live_date=#{date}
@@ -25,10 +24,6 @@
 		SELECT ${location} FROM covid_live 
 		WHERE live_date=#{date}
 	</select>
-	
-	<select id="getAllCenter" resultType="CenterVO">
-		SELECT * FROM covid_vaccine_center
-	</select>
 
 	<select id="getLocCenter" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
@@ -36,11 +31,28 @@
 		ORDER BY facility_name;
 	</select>
 	
-	<select id="getTownCenter" resultType="CenterVO" parameterType="String">
-	SELECT * FROM covid_vaccine_center 
+
+	<select id="getAddrTwo" resultType="String" parameterType="String">
+	SELECT DISTINCT(substring_index(address, ' ', 2)) 
+	FROM covid_vaccine_center 
+	WHERE location = #{location}
+	</select>
+	
+	<select id="getAddrThree" resultType="String" parameterType="String">
+	SELECT DISTINCT(substring_index(address, ' ', 3)) 
+	FROM covid_vaccine_center 
 	WHERE address LIKE CONCAT('%',#{location},'%')
 	</select>
+	
+	<select id="getAddrCenter" resultType="CenterVO" parameterType="String">
+	SELECT * FROM covid_vaccine_center 
+	WHERE address LIKE CONCAT('%',#{address},'%')
+	</select>
 
+	<select id = "getAddrCenter_2" resultType="CenterVO" parameterType="String">
+	SELECT * FROM covid_vaccine_center 
+	WHERE facility_name = #{facility_name}
+	</select>
 </mapper>
 
 
