@@ -18,4 +18,5 @@ public interface MapMapper {
 	List<ResultVO> getAllResult();
 	LiveVO getOneLive(String date);
 	List<CenterVO> getAllCenter();
+	List<CenterVO> getAllCentertemp();
 }
