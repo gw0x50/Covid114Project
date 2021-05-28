@@ -1,8 +1,7 @@
 package com.multi.covid.controller;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,6 +72,22 @@ public class ChatbotController {
 		//{{#webhook.r_facility_name}}
 		return service.getLocCenter(location);
 	}
+	
+	//백신 센터 선택지 return 
+	@RequestMapping(value="/vaccineselect", method=RequestMethod.POST)
+	@ResponseBody
+	public String selectCenterLocation(@RequestBody String location) {
+		//link list JSON return
+		return service.selectCenterLocation(location);		
+	}
+	
+	
+	//백신 센터 선택지 return 
+		@RequestMapping(value="/vaccineselect2", method=RequestMethod.POST)
+		@ResponseBody
+		public String selectCenterLocation2(@RequestBody String location) {
+			return service.selectCenterLocation(location);		
+		}
 	
 	
 	//백신 센터 조회(지역 - 시/군별) + 링크

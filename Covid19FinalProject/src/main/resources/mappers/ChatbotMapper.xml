@@ -38,7 +38,7 @@
 	
 	<select id="getTownCenter" resultType="CenterVO" parameterType="String">
 	SELECT * FROM covid_vaccine_center 
-	WHERE center_name LIKE CONCAT('%',#{location},'%')
+	WHERE address LIKE CONCAT('%',#{location},'%')
 	</select>
 
 </mapper>

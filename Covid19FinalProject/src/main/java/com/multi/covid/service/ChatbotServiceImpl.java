@@ -104,19 +104,15 @@ public class ChatbotServiceImpl implements ChatbotService{
 			
 		
 		//Skill JSON return
-		//1) simpleText - 확진자 정보	
-		//2) quickReplies - (message: ㅇㅇ지역 실시간 확진 조회), covid_liveLoc block 실행  
-		//3) button - 시작블록으로 돌아가는 버튼 
-		// quickReplies, outputs는 array type 
-		
 		//number format comma (xxx,xxx)
 		String getTotal_count = String.format("%,d", vo.getTotal_count());
 		String increment_count = String.format("%,d", vo.getIncrement_count());
 
 		String result_message = result_date + " 기준 " + location + "지역의 누적 확진자 수는" + getTotal_count + "입니다.\n\n"
 								+ "확진자 수는 " + increment_count + " 명 입니다.";
-		String quick_message = location + " 지역 실시간 확진 조회";
+		String quick_message = location + " 실시간 확진자 조회";
 		
+		//home button
 		JsonObject buttons = new JsonObject();
 		buttons.addProperty("label", "처음으로 돌아가기");
 		buttons.addProperty("action", "block");
@@ -135,8 +131,9 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonArray outputs_array = new JsonArray();
 		outputs_array.add(basicCard);
 		
+		//quickReplies
 		JsonObject quickReplies = new JsonObject();
-		quickReplies.addProperty("label", location + " 지역 실시간 확진자 조회");
+		quickReplies.addProperty("label", quick_message);
 		quickReplies.addProperty("action", "message");
 		quickReplies.addProperty("messageText", quick_message);
 		
@@ -157,8 +154,6 @@ public class ChatbotServiceImpl implements ChatbotService{
 	
 	
 	
-	//수정! JSON 타입 - 1. 심플메시지 2. home 버튼 return 
-	//전체 누적 확진자 조회 entity return 
 	@Override //실시간 확진자 조회(전체)
 	public String getAllLive() {
 		
@@ -171,7 +166,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		vo.calSum();
 		String getSum = String.format("%,d", vo.getSum()); 
 		
-		String[] loc_name = {"강원", "경기", "경남", "경북", "광주", "대구", "대전", "부산", "서울", 
+		String[] loc_name = {"강원도", "경기도", "경상남도", "경상북도", "광주", "대구", "대전", "부산", "서울", 
 				"세종", "울산", "인천", "전남", "전북", "제주", "충남", "충북"};
 		int[] loc_liveCount = {vo.getGangwon(), vo.getGyeonggi(), vo.getGyeongnam(), vo.getGyeongbuk(), 
 				vo.getGwangju(), vo.getDaegu(), vo.getDaejeon(), vo.getBusan(), vo.getSeoul(), vo.getSejong(), 
@@ -181,7 +176,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 			webhook_locLive.append(loc_name[i] + " 지역 확진자 수: " + loc_liveCount[i] + " 명\n");
 		}
 
-		// {{#webhook.total_liveCount}}, {{#webhook.locName}} JSON Format
+		// {{#webhook.total_liveCount}}, {{#webhook.loc_liveCount}} JSON Format
 		// 전체, 지역별 전부
 		JsonObject total_liveCount = new JsonObject();
 		total_liveCount.addProperty("total_liveCount", getSum);
@@ -218,9 +213,19 @@ public class ChatbotServiceImpl implements ChatbotService{
 		map.put("date", date);
 		
 		int one_count = chatbotMapper.getLocLive(map);
+		//db 영어 -> 한글 변환
+		String[] eng_loc = {"gangwon", "gyeonggi", "gyeongnam", "gyeongbuk", "gwangju", "daegu", "daejeon", "busan", "seoul", 
+				"sejong", "ulsan", "incheon", "jeonnam", "jeonbuk", "jeju", "chungnam", "chungbuk"};
+		String[] kor_loc = {"강원도", "경기도", "경상남도", "경상북도", "광주", "대구", "대전", "부산", "서울", 
+				"세종", "울산", "인천", "전남", "전북", "제주", "충남", "충북"};
+		for(int i = 0; i < eng_loc.length; i++) {
+			if(location.equals(eng_loc[i])) {
+				location = kor_loc[i];
+			}
+		}
 		
 		String live_message = location + " 지역 오늘 확진자 수는" + one_count + " 명 입니다.";
-		String quick_message = location + "누적 확진자 조회";
+		String quick_message = location + " 누적 확진자 조회";
 		
 		JsonObject buttons = new JsonObject();
 		buttons.addProperty("label", "처음으로 돌아가기");
@@ -241,7 +246,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		outputs_array.add(basicCard);
 		
 		JsonObject quickReplies = new JsonObject();
-		quickReplies.addProperty("label", location + " 누적 확진자 조회");
+		quickReplies.addProperty("label", quick_message);
 		quickReplies.addProperty("action", "message");
 		quickReplies.addProperty("messageText", quick_message);
 		
@@ -330,12 +335,79 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 
 	
-	//도, 시 정보 받아오면 처리해서 시, 군, 구 return - 각 시, 군, 구에 발화주기 
-	//if문 처리 - 만약 vo.get의 사이즈가 9 이상이라면 vo.length변수 먼저 줬던 걸 9로 바꾸고 반복문 돌리기 - 그리고 그 외 지역 추가
 	
-	//두번째 시, 군, 구 주기 - 만약 vo.get 사이즈가 9 이상이라면, 9번째 인덱스부터 조회(i값을 9로 주면 됨) 
-	//get해서 뽑아오고 센터네임을 " "기준으로 split해서 1,2번째 값 가져오기  
-
+	@Override//지역 선택 바로가기버튼 생성 
+	public String selectCenterLocation(String location) {
+		
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
+		JsonElement action = jsonObj.get("action");
+		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
+		location = params.getAsJsonObject().get("vaccine_center_location").getAsString();
+		
+		List<CenterVO> vo = chatbotMapper.getLocCenter(location);
+		ArrayList<String> detail_loc = new ArrayList<String>();
+		
+		//예외처리 - 바로가기 버튼 최대 10 인데..파라미터로 보내면 20 이상 가능한듯.. ? 
+		if(vo.size() >= 30) {
+			for(int i = 0; i < 29; i++) {
+				String[] center_name = vo.get(i).getCenter_name().split(" ");
+				detail_loc.add(center_name[2]);
+			}
+			detail_loc.add("그 외 지역" + "(" + location + ")");
+		}
+		else {
+			for(CenterVO name : vo) {	
+				String[] center_name = name.getCenter_name().split(" ");
+				detail_loc.add(center_name[2]);
+			}
+		}
+		
+		JsonArray quick_item_arr = new JsonArray();
+		
+		for(int i = 0; i < detail_loc.size(); i++) {
+		JsonObject quickReplies = new JsonObject();
+			quickReplies.addProperty("label", detail_loc.get(i));
+			quickReplies.addProperty("action", "message");
+			quickReplies.addProperty("messageText", location + " " + detail_loc.get(i) + " 백신센터");
+			quick_item_arr.add(quickReplies);
+		}
+		
+		
+		JsonArray quick_array = new JsonArray();
+		for(int i = 0; i < quick_item_arr.size(); i++) {
+			quick_array.add(quick_item_arr.get(i));
+		}
+		
+		JsonObject text = new JsonObject();
+		text.addProperty("text", "원하시는 지역을 선택하세요.");
+		
+		JsonObject simpleText = new JsonObject();
+		simpleText.add("simpleText", text);
+		
+		JsonArray outputs_array = new JsonArray();
+		outputs_array.add(simpleText);
+		
+		JsonObject template = new JsonObject();
+		template.add("outputs", outputs_array);
+		template.add("quickReplies", quick_array);
+		
+		JsonObject result = new JsonObject();
+		result.addProperty("version", "2.0");
+		result.add("template", template);
+		
+		return result.toString();
+		
+		
+	}
+	
+	
+	
+	@Override
+	public String selectCenterLocation2(String location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 	@Override//백신센터 지역별(시, 군, 구) + 주소링크
 	public String getTownCenter(String location) {
@@ -404,5 +476,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 		return result.toString();
 	}
+
+
+
 
 }
