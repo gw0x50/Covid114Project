@@ -6,5 +6,5 @@
    <div class="map_title">
       <h1>지도</h1>
    </div>
-   <div class="map_area" id="map_area" ></div>
+   <div class="map_area" id="map_area" style="width:100%; height:500px;" ></div>
 </div>

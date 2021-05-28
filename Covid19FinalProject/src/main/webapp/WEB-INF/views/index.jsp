@@ -18,9 +18,9 @@
 		<div class="container">
 			<jsp:include page="/WEB-INF/views/section/board.jsp"/>
 			<jsp:include page="/WEB-INF/views/section/chart.jsp"/>
-			<jsp:include page="/WEB-INF/views/section/map.jsp"/>	
+			<jsp:include page="/WEB-INF/views/section/map.jsp"/>
 		</div>
-	</div>
+	</div>	
 	<jsp:include page="/WEB-INF/views/section/chatbot.jsp"/>
 </body>
 </html>
