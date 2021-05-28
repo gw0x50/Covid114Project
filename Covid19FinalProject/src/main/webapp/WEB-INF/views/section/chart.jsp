@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
 <div class="chart_section">
 	<select id="chart_category">
 		<option value="일별" selected>일별</option>
@@ -29,5 +27,5 @@
 		<option value="제주">제주</option>
 		<option value="검역">검역</option>
 	</select>
-	<canvas id="myChart"></canvas>
+	<canvas class="chart_area" id="chart_area"></canvas>
 </div>
