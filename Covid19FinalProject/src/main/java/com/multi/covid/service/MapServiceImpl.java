@@ -43,7 +43,7 @@ public class MapServiceImpl implements MapService{
 
 	@Override
 	public List<CenterVO> getAllCentertemp() {
-		
+
 		return mapMapper.getAllCentertemp();
 	}
 }
