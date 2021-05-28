@@ -195,8 +195,8 @@ $(document).ready(function() {
 
 	$(document).bind('click', function(e) {
 		var $clicked = $(e.target);
-		if (!$clicked.parents().hasClass("dropdown"))
-			$(".chart_select_category_box .dropdown dd #chart_dropdown_category").hide();
+		if (!$clicked.parents().hasClass("chart_select_category_box"))
+			$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
 	});
 
 	$(".chart_select_category_box .dropdown img.flag").toggleClass("flagvisibility");
@@ -225,8 +225,8 @@ $(document).ready(function() {
 
 	$(document).bind('click', function(e) {
 		var $clicked = $(e.target);
-		if (!$clicked.parents().hasClass("dropdown"))
-			$(".chart_select_location_box .dropdown dd #chart_dropdown_location").hide();
+		if (!$clicked.parents().hasClass("chart_select_location_box"))
+			$(".chart_select_location_box .dropdown dd .chart_dropdown_location").hide();
 	});
 
 	$(".chart_select_location_box .dropdown img.flag").toggleClass("flagvisibility");

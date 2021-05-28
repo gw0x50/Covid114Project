@@ -46,11 +46,11 @@ $(document).ready(function() {
 	function getSelectedValue(id) {
 		return $("#" + id).find("dt a #board_select_location.value").html();
 	}
-
+	
 	$(document).bind('click', function(e) {
 		var $clicked = $(e.target);
-		if (!$clicked.parents().hasClass("dropdown"))
-			$(".board_select_box .dropdown dd #board_dropdown_location").hide();
+		if (!$clicked.parents().hasClass("board_select_box"))
+			$(".board_select_box .dropdown dd .board_dropdown_location").hide();
 	});
 
 	$(".board_select_box .dropdown img.flag").toggleClass("flagvisibility");
