@@ -54,5 +54,7 @@
 			</dl>
 		</div>
 	</div>
-	<canvas class="chart_area" id="chart_area" style="width:100%; height:250px"></canvas>
+	<div class="chart_wrap">
+		<canvas class="chart_area" id="chart_area" style="width:100%; height:250px"></canvas>
+	</div>
 </div>
