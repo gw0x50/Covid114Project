@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
 	var markers = [];
 	var infoWindows = [];
 	var contentStrings = [];
@@ -20,11 +19,10 @@ $(document).ready(function() {
 		mapTypeId: naver.maps.MapTypeId.NORMAL
 	})
 
-	var infowindow1 = new naver.maps.InfoWindow()
+	var infowindow1 = new naver.maps.InfoWindow();
 
 	function onSuccessGeolocation(position) {
-		var location = new naver.maps.LatLng(position.coords.latitude,
-			position.coords.longitude);
+		var location = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
 		locallat = position.coords.latitude;
 		locallng = position.coords.longitude;
@@ -32,7 +30,7 @@ $(document).ready(function() {
 
 		map.setCenter(location);
 		map.setZoom(13);
-    
+
 		infowindow1.setContent('<div style="padding:20px;">  현재 내 위치 </div>');
 		var marker1 = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
@@ -60,8 +58,6 @@ $(document).ready(function() {
 			url: "./map/getAllCentertemp",
 			dataType: "json",
 			success: function(allcenter) {
-				map.setSize(new naver.maps.Size($('.map_title').width(), $('.map_title').width()));
-
 				$.each(allcenter, function(key, value) {
 					lat.push(value.lat);
 					lng.push(value.lng);
@@ -71,8 +67,6 @@ $(document).ready(function() {
 					zipcode.push(value.zipcode);
 					facility_name.push(value.facility_name);
 					phone_number.push(value.phone_number);
-
-
 
 					var marker = new naver.maps.Marker({
 						position: new naver.maps.LatLng(value.lat, value.lng),
@@ -95,16 +89,12 @@ $(document).ready(function() {
 
 					markers.push(marker);
 					infoWindows.push(infoWindow);
-
-
 				});
 				for (var i = 0, ii = markers.length; i < ii; i++) {
 					naver.maps.Event.addListener(markers[i], 'click', getClickHandler(i));
 				}
 			}
-
 		}); //ajax end
-
 	} //getallCenter end
 
 	function onErrorGeolocation() {
@@ -118,11 +108,10 @@ $(document).ready(function() {
 
 	$(window).on("load", function() {
 		if (navigator.geolocation) {
-
+			map.setSize(new naver.maps.Size($('.map_title').width(), $('.map_title').width()));
 			navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
-		} 
-    else {
-
+		}
+		else {
 			var center = map.getCenter();
 			infowindow1.setContent('<div style="padding:20px;"><h5 style="margin-bottom:5px;color:#f00;">Geolocation not supported</h5></div>');
 			infowindow1.open(map, center);
