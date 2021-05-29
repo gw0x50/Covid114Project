@@ -6,7 +6,7 @@
 		<div class="board_select_box">
 			<dl class="dropdown">
 				<dt>
-					<a href="#" style="padding-top:4px;">
+					<a href="#" style="padding-top:2px; padding-bottom:3px;">
 						<div class="text">지역</div>
 						<div class="board_select_location" id="board_select_location">전체</div>
 					</a>
