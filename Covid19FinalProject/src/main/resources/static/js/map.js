@@ -1,19 +1,38 @@
 $(document).ready(function() {
 
+	var markers = [];
+	var infoWindows = [];
+	var contentStrings = [];
+	var lat = [];
+	var lng = [];
+	var city_name = [];
+	var center_name = [];
+	var address = [];
+	var zipcode = [];
+	var facility_name = [];
+	var phone_number = [];
+	var locallat = 4.15;
+	var locallng = 3.14;
+
 	var map = new naver.maps.Map('map_area', {
 		center: new naver.maps.LatLng(37.5666805, 126.9784147),
-		zoom: 9,
-		mapTypeId: naver.maps.MapTypeId.NORMAL,
-	});
+		zoom: 10,
+		mapTypeId: naver.maps.MapTypeId.NORMAL
+	})
 
-	var infowindow1 = new naver.maps.InfoWindow();
+	var infowindow1 = new naver.maps.InfoWindow()
 
 	function onSuccessGeolocation(position) {
 		var location = new naver.maps.LatLng(position.coords.latitude,
 			position.coords.longitude);
+
+		locallat = position.coords.latitude;
+		locallng = position.coords.longitude;
+		getAllCenter();
+
 		map.setCenter(location);
 		map.setZoom(13);
-
+    
 		infowindow1.setContent('<div style="padding:20px;">  현재 내 위치 </div>');
 		var marker1 = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
@@ -36,14 +55,13 @@ $(document).ready(function() {
 		}
 	} //getClickHandler end
 
-
-
 	function getAllCenter() {
 		$.ajax({
 			url: "./map/getAllCentertemp",
 			dataType: "json",
 			success: function(allcenter) {
 				map.setSize(new naver.maps.Size($('.map_title').width(), $('.map_title').width()));
+
 				$.each(allcenter, function(key, value) {
 					lat.push(value.lat);
 					lng.push(value.lng);
@@ -88,9 +106,6 @@ $(document).ready(function() {
 		}); //ajax end
 
 	} //getallCenter end
-	getAllCenter();
-
-
 
 	function onErrorGeolocation() {
 		var center = map.getCenter();
@@ -101,35 +116,16 @@ $(document).ready(function() {
 		infowindow1.open(map, center);
 	}
 
-
-
 	$(window).on("load", function() {
 		if (navigator.geolocation) {
 
 			navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
-		} else {
+		} 
+    else {
+
 			var center = map.getCenter();
 			infowindow1.setContent('<div style="padding:20px;"><h5 style="margin-bottom:5px;color:#f00;">Geolocation not supported</h5></div>');
 			infowindow1.open(map, center);
 		}
 	});
-
-
-
-
-
 }); //ready 함수 end
-
-var markers = [];
-var infoWindows = [];
-var contentStrings = [];
-var lat = [];
-var lng = [];
-var city_name = [];
-var center_name = [];
-var address = [];
-var zipcode = [];
-var facility_name = [];
-var phone_number = [];
-
-
