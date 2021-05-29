@@ -204,8 +204,8 @@ $(document).ready(function() {
 	$('#chart_select_category').on('change', function() {
 		onChange();
 	});
-	
-	
+
+
 	$(".chart_select_location_box .dropdown img.flag").addClass("flagvisibility");
 
 	$(".chart_select_location_box .dropdown dt a").click(function() {

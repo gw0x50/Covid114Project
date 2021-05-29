@@ -1,12 +1,39 @@
 @charset "UTF-8";
 
 .chart_section {
-	width: 100%;
+	background: #fff none repeat scroll 0 0;
+	border: 1px solid #9e9e9e;
+	border-radius: 8px;
+	margin-bottom: 20px;
+	padding: 12px 12px;
+}
+
+.chart_title {
+	display: flex;
+	margin-bottom: 12px;
+}
+
+.chart_title_text {
+	text-align: center;
+	display: flex;
+	align-items: center;
+}
+
+.chart_select_category_box {
+	height: 34px;
+}
+
+.chart_select_location_box {
+	height: 34px;
+}
+
+.chart_wrap {
+	width: 484px;
+	height: 408px;
 }
 
 .chart_area {
-	width: 100%;
-	height: 600px;
+	width: 100% !important;
 }
 
 .desc {
@@ -18,8 +45,8 @@
 }
 
 .dropdown {
-	width: 96px;
-	height: 39px;
+	width: 104px;
+	height: 34px;
 	margin: 0px;
 }
 
@@ -54,12 +81,12 @@
 	padding-right: 20px;
 	border: 1px solid #9e9e9e;
 	width: 82px;
-	height: 33px;
+	height: 27px;
 }
 
 .dropdown dt a div {
 	padding-top: 1px;
-	font-size: 12px;
+	font-size: 13px;
 	cursor: pointer;
 	line-height: 29px;
 	margin: 0;
@@ -108,7 +135,7 @@
 	min-width: 102px;
 	list-style: none;
 	text-align: left;
-	overflow:auto;
+	overflow: auto;
 	height: 145px;
 }
 
