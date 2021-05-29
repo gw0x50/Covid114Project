@@ -3,6 +3,10 @@ package com.multi.covid.controller;
 
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.multi.covid.service.ChatbotService;
 
 @Controller
@@ -62,7 +69,7 @@ public class ChatbotController {
 	@RequestMapping(value="/vaccineloc", method=RequestMethod.POST)
 	@ResponseBody
 	public String getLocCenter(@RequestBody String location) {
-		//{{#webhook.r_facility_name}}
+		
 		return service.getLocCenter(location);
 	}
 	
@@ -76,10 +83,10 @@ public class ChatbotController {
 	
 	
 	//백신 센터 선택지 return 
-	@RequestMapping(value="/selectaddrtwo2", method=RequestMethod.POST)
+	@RequestMapping(value="/selectremainder", method=RequestMethod.POST)
 	@ResponseBody
-	public String selectAddTwo_2(@RequestBody String location) {
-		return service.selectAddrTwo_2(location);		
+	public String selectAddrRemainder(@RequestBody String location) {
+		return service.selectAddrRemainder(location);		
 	}
 		
 
@@ -90,12 +97,6 @@ public class ChatbotController {
 		return service.selectAddrThree(location);		
 	}
 	
-	//백신 센터 선택지 return 
-	@RequestMapping(value="/selectaddrthree2", method=RequestMethod.POST)
-	@ResponseBody
-	public String selectAddThree_2(@RequestBody String location) {
-		return service.selectAddrThree_2(location);		
-	}
 				
 	//백신 센터 조회(지역 - 시/군별) + 링크
 	@RequestMapping(value="/vaccineaddr", method=RequestMethod.POST)
