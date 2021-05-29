@@ -410,7 +410,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		//예외 1) 두번째 주소까지 조회시 리스트가 5개 이하 -> getAddCenter메소드 실행(링크 출력)
 		//예외 2) 리스트 5개 이상, 세번째 주소 index가 없는 경우 리스트출력 (ex. 세종특별자치시 한누리대로)
 		if(center_count.size()<=5 || third_check) {
-			result_string = getAddrCenter(location);
+			result_string = getAddrCenter(location, center_count.size());
 		}
 		else {
 			//바로가기버튼 20개로 제한
@@ -557,7 +557,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	
 	
 	@Override//백신센터 지역별(시, 군, 구) + 주소링크
-	public String getAddrCenter(String location) {	
+	public String getAddrCenter(String location, int lengthNum) {	
 		
 		//JSON으로 받아올 경우
 		if(location.contains(":")) {
@@ -571,30 +571,35 @@ public class ChatbotServiceImpl implements ChatbotService{
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
 		
 		
-		
 		int endNum = 0;
 		int startNum = 0;
 
 		boolean overLength = false;
 		boolean overLength15 = false;
-		if(vo.size() > 5) {
-			startNum = 0;
-			endNum = 5;
-			overLength = true;
-		}
-		else if(vo.size() > 10) {
+		if(lengthNum > 5 && lengthNum <= 10) {
 			startNum = 5;
-			endNum = 10;
+			endNum = lengthNum;
 			overLength = true;
 		}
-		else if(vo.size() > 15) {
+		else if(lengthNum > 10 && lengthNum <= 15) {
+			startNum = 10;
+			endNum = lengthNum;
+			overLength = true;
+		}else if(lengthNum > 15) {
 			startNum = 10;
 			endNum = 15;
 			overLength15 = true;
 		}
-		else {
-			startNum = vo.size();
+		else if(vo.size() > 5) {
+			startNum = 0;
+			endNum = 5;
+			overLength = true;
 		}
+		else {
+			startNum = 0;
+			endNum = vo.size();
+		}
+		
 		
 		JsonArray setItems_array = new JsonArray(); 
 		for(int i = startNum; i < endNum; i++) {
@@ -613,7 +618,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 		
 		//리스트가 5-10개 초과일 경우, '더 보기' 버튼 생성/ 리스트가 15개 초과일 경우, '지역별 센터 리스트 보기'
-		
+		//버튼 하나 더 생성 '한 번 더 보기'
 		String label = "";
 		String messageText = "";
 		if(overLength) {
@@ -630,8 +635,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 			JsonObject quickReplies = new JsonObject();
 			
 			quickReplies.addProperty("label", label);
-			quickReplies.addProperty("action", messageText);
-			quickReplies.addProperty("messageText", location);
+			quickReplies.addProperty("action", "message");
+			quickReplies.addProperty("messageText", messageText);
 
 			quick_array.add(quickReplies);
 		}
@@ -681,15 +686,37 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 	@Override//리스트 5개 초과
 	public String getAddrCenter_2(String location) {
-		
-		return getAddrCenter(location);
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
+		JsonElement action = jsonObj.get("action");
+		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
+		location = params.getAsJsonObject().get("vaccine_address_three").getAsString();
+		//처리 - 10개보다 크면 10으로 숫자 맞춰서 내보내기 
+		//발화 처리 - '센터 알아보기'
+		location = location.replace("센터 알아보기", "");
+		int lengthNum = 0;
+		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
+		if(vo.size()>10) {
+			lengthNum = 10;
+		}
+		else {
+			lengthNum = vo.size();
+		}
+		return getAddrCenter(location, lengthNum);
 	}
 
 
 
 	@Override//리스트 15개 초과
 	public String getAddrCenter_3(String location) {
-		return getAddrCenter(location);
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
+		JsonElement action = jsonObj.get("action");
+		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
+		location = params.getAsJsonObject().get("vaccine_address_three").getAsString();
+		
+		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
+		int lengthNum = vo.size();
+		
+		return getAddrCenter(location, lengthNum);
 	}
 
 

@@ -3,9 +3,6 @@ package com.multi.covid.controller;
 
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.multi.covid.service.ChatbotService;
 
 @Controller
@@ -103,7 +97,7 @@ public class ChatbotController {
 	@ResponseBody
 	public String getAddrCenter(@RequestBody String location) {
 		//link list JSON return
-		return service.getAddrCenter(location);		
+		return service.getAddrCenter(location, 1);		
 	}
 	
 	//백신 센터 조회(지역 - 시/군별) + 링크
@@ -111,7 +105,7 @@ public class ChatbotController {
 	@ResponseBody
 	public String getAddrCenter2(@RequestBody String location) {
 		//link list JSON return
-		return service.getAddrCenter(location);	
+		return service.getAddrCenter_2(location);	
 	}
 	
 	
