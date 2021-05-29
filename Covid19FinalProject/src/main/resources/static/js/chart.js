@@ -18,6 +18,8 @@ $(document).ready(function() {
 			}]
 		},
 		options: {
+			responsive: false,
+			maintainAspectRatio: false,
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -27,11 +29,11 @@ $(document).ready(function() {
 			}
 		}
 	});
-
 	function onChange() {
 		var chartLabels = [];
 		var chartData = [];
 		myChart.destroy();
+
 		$.ajax({
 			url: './chart/getValues',
 			data: {
@@ -64,6 +66,8 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
+							responsive: false,
+							maintainAspectRatio: false,
 							scales: {
 								yAxes: [{
 									ticks: {
@@ -112,6 +116,8 @@ $(document).ready(function() {
 							]
 						},
 						options: {
+							responsive: false,
+							maintainAspectRatio: false,
 							scales: {
 								'A': {
 									stacked: true,
@@ -154,6 +160,8 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
+							responsive: false,
+							maintainAspectRatio: false,
 							scales: {
 								yAxes: [{
 									ticks: {

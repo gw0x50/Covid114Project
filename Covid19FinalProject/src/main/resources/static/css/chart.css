@@ -28,12 +28,9 @@
 }
 
 .chart_wrap {
+	overflow: hidden;
 	width: 484px;
-	height: 408px;
-}
-
-.chart_area {
-	width: 100% !important;
+	height: 484px;
 }
 
 .desc {

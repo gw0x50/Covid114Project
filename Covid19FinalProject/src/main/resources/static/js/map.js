@@ -2,18 +2,15 @@ $(document).ready(function(){
   
     var map = new naver.maps.Map('map_area', {
            center: new naver.maps.LatLng(37.5666805, 126.9784147),
-           zoom: 10,
-           mapTypeId: naver.maps.MapTypeId.NORMAL
-       }) 
+           zoom: 9,
+           mapTypeId: naver.maps.MapTypeId.NORMAL,
+       }); 
        
-       var infowindow1 =new naver.maps.InfoWindow()
- 
+       var infowindow1 =new naver.maps.InfoWindow();
    
    function onSuccessGeolocation(position) {
    var location = new naver.maps.LatLng(position.coords.latitude,
                                         position.coords.longitude);
-
-	 
    map.setCenter(location); 
    map.setZoom(13); 
 
@@ -25,8 +22,6 @@ $(document).ready(function(){
    infowindow1.open(map, location);
    console.log('Coordinates: ' + location.toString());
    } //onSuccessGeolocation end
-  
-   
    
    function getClickHandler(seq) {
        return function(e) {
@@ -48,6 +43,7 @@ $(document).ready(function(){
            url:  "./map/getAllCentertemp",
            dataType: "json",
            success: function(allcenter) {
+               map.setSize(new naver.maps.Size($('.map_title').width(),$('.map_title').width()));
                $.each(allcenter, function(key,value){
                    lat.push(value.lat);
                    lng.push(value.lng);
