@@ -5,9 +5,14 @@
 	border: 1px solid #9e9e9e;
 	border-radius: 8px;
 	margin-bottom: 20px;
+	padding: 12px 12px;
 }
-.map_wrap{
-	width: 490px;
-	height: 490px;
-	padding: 10px 10px;
+
+.map_title {
+	margin-bottom: 12px;
+}
+
+.map_wrap {
+	width: 484px;
+	height: 484px;
 }

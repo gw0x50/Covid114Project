@@ -5,6 +5,6 @@
 		<div class="map_title_text">백신 접종센터 지도</div>
 	</div>
 	<div class="map_wrap">
-		<div class="map_area" id="map_area" style="width:490px; height:490px;" ></div>
+		<div class="map_area" id="map_area" style="width:484px; height:484px;" ></div>
 	</div>
 </div>

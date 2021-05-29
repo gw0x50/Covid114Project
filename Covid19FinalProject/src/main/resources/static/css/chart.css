@@ -5,10 +5,12 @@
 	border: 1px solid #9e9e9e;
 	border-radius: 8px;
 	margin-bottom: 20px;
+	padding: 12px 12px;
 }
 
 .chart_title {
 	display: flex;
+	margin-bottom: 12px;
 }
 
 .chart_title_text {
@@ -26,9 +28,8 @@
 }
 
 .chart_wrap {
-	width: 490px;
+	width: 484px;
 	height: 408px;
-	padding: 10px 10px;
 }
 
 .chart_area {
