@@ -14,7 +14,7 @@ body {
 }
 
 .wrap {
-	padding: 40px 40px;
+	padding: 20px 0;
 	display: flex;
 	justify-content: center;
 }
