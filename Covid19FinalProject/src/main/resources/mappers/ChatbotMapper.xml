@@ -3,16 +3,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.covid.mapper.ChatbotMapper">
 
-	<!-- <select id="getOneResult" resultType="ResultVO"
-		parameterType="ResultVO">
-		SELECT * FROM covid_result
-		WHERE result_date=#{date} and location=#{location}
-	</select> -->
-	
 	<select id="getOneResult" resultType="ResultVO" parameterType="String">
-	SELECT * FROM covid_result 
-	WHERE location=#{location} 
-	ORDER BY result_date DESC LIMIT 1
+		SELECT * FROM covid_result 
+		WHERE location=#{location} 
+		ORDER BY result_date DESC LIMIT 1
 	</select>
 	
 	<select id="getOneLive" resultType="LiveVO" parameterType="String">
@@ -27,32 +21,34 @@
 
 	<select id="getLocCenter" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
-		WHERE location=#{location} 
+		WHERE address LIKE CONCAT('%',#{location},'%') 
 		ORDER BY facility_name;
 	</select>
 	
-
 	<select id="getAddrTwo" resultType="String" parameterType="String">
-	SELECT DISTINCT(substring_index(address, ' ', 2)) 
-	FROM covid_vaccine_center 
-	WHERE location = #{location}
+		SELECT DISTINCT(SUBSTRING_INDEX(address, ' ', 2)) 
+		FROM covid_vaccine_center 
+		WHERE location = #{location}
 	</select>
 	
 	<select id="getAddrThree" resultType="String" parameterType="String">
-	SELECT DISTINCT(substring_index(address, ' ', 3)) 
-	FROM covid_vaccine_center 
-	WHERE address LIKE CONCAT('%',#{location},'%')
+		SELECT DISTINCT(SUBSTRING_INDEX(
+		(SELECT REGEXP_REPLACE(address,'[0-9]','')
+		), ' ', 3)) 
+		FROM covid_vaccine_center
+		WHERE address LIKE CONCAT('%',#{location},'%')
 	</select>
 	
 	<select id="getAddrCenter" resultType="CenterVO" parameterType="String">
-	SELECT * FROM covid_vaccine_center 
-	WHERE address LIKE CONCAT('%',#{address},'%')
+		SELECT * FROM covid_vaccine_center 
+		WHERE address LIKE CONCAT('%',#{address},'%')
 	</select>
 
 	<select id = "getAddrCenter_2" resultType="CenterVO" parameterType="String">
-	SELECT * FROM covid_vaccine_center 
-	WHERE facility_name = #{facility_name}
+		SELECT * FROM covid_vaccine_center 
+		WHERE facility_name = #{facility_name}
 	</select>
+	
 </mapper>
 
 
