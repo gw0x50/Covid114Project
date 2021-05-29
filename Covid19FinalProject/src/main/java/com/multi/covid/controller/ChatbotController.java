@@ -57,13 +57,6 @@ public class ChatbotController {
 		return service.getLocLive(location);
 	}
 	
-	//백신 센터 조회(전체)
-	@RequestMapping(value="/vaccineall", method=RequestMethod.POST)
-	@ResponseBody
-	public String getAllCenter() {
-		//{{#webhook.지역이름}}(총 16)
-		return service.getAllCenter();
-	}
 	
 	//백신 센터 조회(지역별)
 	@RequestMapping(value="/vaccineloc", method=RequestMethod.POST)
@@ -74,28 +67,50 @@ public class ChatbotController {
 	}
 	
 	//백신 센터 선택지 return 
-	@RequestMapping(value="/vaccineselect", method=RequestMethod.POST)
+	@RequestMapping(value="/selectaddrtwo", method=RequestMethod.POST)
 	@ResponseBody
-	public String selectCenterLocation(@RequestBody String location) {
+	public String selectAddTwo(@RequestBody String location) {
 		//link list JSON return
-		return service.selectCenterLocation(location);		
+		return service.selectAddrTwo(location);		
 	}
 	
 	
 	//백신 센터 선택지 return 
-		@RequestMapping(value="/vaccineselect2", method=RequestMethod.POST)
-		@ResponseBody
-		public String selectCenterLocation2(@RequestBody String location) {
-			return service.selectCenterLocation(location);		
-		}
+	@RequestMapping(value="/selectaddrtwo2", method=RequestMethod.POST)
+	@ResponseBody
+	public String selectAddTwo_2(@RequestBody String location) {
+		return service.selectAddrTwo_2(location);		
+	}
+		
+
+	//백신 센터 선택지 return 
+	@RequestMapping(value="/selectaddrthree", method=RequestMethod.POST)
+	@ResponseBody
+	public String selectAddThree(@RequestBody String location) {
+		return service.selectAddrThree(location);		
+	}
 	
+	//백신 센터 선택지 return 
+	@RequestMapping(value="/selectaddrthree2", method=RequestMethod.POST)
+	@ResponseBody
+	public String selectAddThree_2(@RequestBody String location) {
+		return service.selectAddrThree_2(location);		
+	}
+				
+	//백신 센터 조회(지역 - 시/군별) + 링크
+	@RequestMapping(value="/vaccineaddr", method=RequestMethod.POST)
+	@ResponseBody
+	public String getAddrCenter(@RequestBody String location) {
+		//link list JSON return
+		return service.getAddrCenter(location);		
+	}
 	
 	//백신 센터 조회(지역 - 시/군별) + 링크
-	@RequestMapping(value="/vaccinetown", method=RequestMethod.POST)
+	@RequestMapping(value="/vaccineaddr2", method=RequestMethod.POST)
 	@ResponseBody
-	public String getTownCenter(@RequestBody String location) {
+	public String getAddrCenter2(@RequestBody String location) {
 		//link list JSON return
-		return service.getTownCenter(location);		
+		return service.getAddrCenter(location);	
 	}
 	
 	

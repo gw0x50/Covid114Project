@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+.footer_section {
+	background: #fff none repeat scroll 0 0;
+	border: 1px solid #9e9e9e;
+}
+
+.footer_wrap {
+	width: 490px;
+	padding: 10px 10px;
+}
+
+@media ( min-width : 768px) {
+	.footer_section {
+		background: #fff none repeat scroll 0 0;
+		border: 1px solid #9e9e9e;
+		border-radius: 8px;
+	}
+	.footer_wrap {
+		width: 490px;
+		padding: 10px 10px;
+	}
+}

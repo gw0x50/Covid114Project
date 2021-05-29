@@ -18,6 +18,8 @@ $(document).ready(function() {
 			}]
 		},
 		options: {
+			responsive: true,
+			maintainAspectRatio: false,
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -27,16 +29,18 @@ $(document).ready(function() {
 			}
 		}
 	});
-
+	$('.chart_area').attr('width', $('.chart_title').width());
+	$('.chart_area').attr('height', $('.chart_title').width());
 	function onChange() {
 		var chartLabels = [];
 		var chartData = [];
 		myChart.destroy();
+
 		$.ajax({
 			url: './chart/getValues',
 			data: {
-				'type': $('#chart_category').val(),
-				'location': $('#chart_location').val()
+				'type': $('#chart_select_category').text(),
+				'location': $('#chart_select_location').text()
 			},
 			dataType: 'json',
 			success: function(data) {
@@ -64,6 +68,8 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
+							responsive: true,
+							maintainAspectRatio: false,
 							scales: {
 								yAxes: [{
 									ticks: {
@@ -112,6 +118,8 @@ $(document).ready(function() {
 							]
 						},
 						options: {
+							responsive: true,
+							maintainAspectRatio: false,
 							scales: {
 								'A': {
 									stacked: true,
@@ -154,6 +162,8 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
+							responsive: true,
+							maintainAspectRatio: false,
 							scales: {
 								yAxes: [{
 									ticks: {
@@ -173,6 +183,65 @@ $(document).ready(function() {
 		onChange();
 	});
 	$('#chart_location').on('change', function() {
+		onChange();
+	});
+
+	$(".chart_select_category_box .dropdown img.flag").addClass("flagvisibility");
+
+	$(".chart_select_category_box .dropdown dt a").click(function() {
+		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").toggle();
+	});
+
+	$(".chart_select_category_box .dropdown dd ul li a").click(function() {
+		var text = $(this).html();
+		$(".chart_select_category_box .dropdown dt a .chart_select_category").html(text);
+		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
+		onChange();
+	});
+
+	function getSelectedValue(id) {
+		return $("#" + id).find("dt a #chart_select_category.value").html();
+	}
+
+	$(document).bind('click', function(e) {
+		var $clicked = $(e.target);
+		if (!$clicked.parents().hasClass("chart_select_category_box"))
+			$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
+	});
+
+	$(".chart_select_category_box .dropdown img.flag").toggleClass("flagvisibility");
+
+	$('#chart_select_category').on('change', function() {
+		onChange();
+	});
+
+
+	$(".chart_select_location_box .dropdown img.flag").addClass("flagvisibility");
+
+	$(".chart_select_location_box .dropdown dt a").click(function() {
+		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").toggle();
+	});
+
+	$(".chart_select_location_box .dropdown dd ul li a").click(function() {
+		var text = $(this).html();
+		$(".chart_select_location_box .dropdown dt a .chart_select_location").html(text);
+		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").hide();
+		onChange();
+	});
+
+	function getSelectedValue(id) {
+		return $("#" + id).find("dt a #chart_select_location.value").html();
+	}
+
+	$(document).bind('click', function(e) {
+		var $clicked = $(e.target);
+		if (!$clicked.parents().hasClass("chart_select_location_box"))
+			$(".chart_select_location_box .dropdown dd .chart_dropdown_location").hide();
+	});
+
+	$(".chart_select_location_box .dropdown img.flag").toggleClass("flagvisibility");
+
+	$('#chart_select_location').on('change', function() {
 		onChange();
 	});
 });

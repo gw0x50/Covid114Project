@@ -1,24 +1,66 @@
 @charset "UTF-8";
 
-@import "board.css";
+@import "/resources/css/header.css";
+
+@import "/resources/css/board.css";
 
 @import "/resources/css/chart.css";
 
 @import "/resources/css/map.css";
 
+@import "/resources/css/footer.css";
+
 @import "/resources/css/chatbot.css";
+
+html {
+	-webkit-text-size-adjust: none;
+	overflow-x: hidden;
+}
 
 body {
 	margin: 0;
 	overflow-x: hidden;
 }
 
-.wrap {
-	padding: 40px 40px;
-	display: flex;
-	justify-content: center;
+.container {
+	width: auto;
 }
 
-.container {
-	width: 510px;
+.wrap {
+	margin: auto;
+	width: auto;
+	float: none;
+}
+
+::-webkit-scrollbar {
+	width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #a9a9a9;
+}
+
+@media ( min-width : 768px) {
+	html {
+		-webkit-text-size-adjust: none;
+		overflow-x: hidden;
+	}
+	body {
+		margin: 0;
+		overflow-x: hidden;
+	}
+	.wrap {
+		padding: 20px 0;
+		width: 510px;
+		margin: 0 auto;
+	}
+	.container {
+		width: 510px;
+	}
+	::-webkit-scrollbar {
+		width: 3px;
+	}
+	::-webkit-scrollbar-thumb {
+		background: #a9a9a9;
+	}
 }

@@ -1,5 +1,3 @@
-
-
 $(document).ready(function() {
 
 	var markers = [];
@@ -16,7 +14,6 @@ $(document).ready(function() {
 	var locallat = 4.15;
 	var locallng = 3.14;
 
-
 	var map = new naver.maps.Map('map_area', {
 		center: new naver.maps.LatLng(37.5666805, 126.9784147),
 		zoom: 10,
@@ -24,7 +21,6 @@ $(document).ready(function() {
 	})
 
 	var infowindow1 = new naver.maps.InfoWindow()
-
 
 	function onSuccessGeolocation(position) {
 		var location = new naver.maps.LatLng(position.coords.latitude,
@@ -36,8 +32,7 @@ $(document).ready(function() {
 
 		map.setCenter(location);
 		map.setZoom(13);
-
-
+    
 		infowindow1.setContent('<div style="padding:20px;">  현재 내 위치 </div>');
 		var marker1 = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
@@ -46,9 +41,6 @@ $(document).ready(function() {
 		infowindow1.open(map, location);
 		console.log('Coordinates: ' + location.toString());
 	} //onSuccessGeolocation end
-
-
-
 
 	function getClickHandler(seq) {
 		return function(e) {
@@ -63,14 +55,13 @@ $(document).ready(function() {
 		}
 	} //getClickHandler end
 
-
-
 	function getAllCenter() {
-
 		$.ajax({
 			url: "./map/getAllCentertemp",
 			dataType: "json",
 			success: function(allcenter) {
+				map.setSize(new naver.maps.Size($('.map_title').width(), $('.map_title').width()));
+
 				$.each(allcenter, function(key, value) {
 					lat.push(value.lat);
 					lng.push(value.lng);
@@ -116,9 +107,6 @@ $(document).ready(function() {
 
 	} //getallCenter end
 
-
-
-
 	function onErrorGeolocation() {
 		var center = map.getCenter();
 
@@ -128,29 +116,16 @@ $(document).ready(function() {
 		infowindow1.open(map, center);
 	}
 
-
-
 	$(window).on("load", function() {
 		if (navigator.geolocation) {
 
 			navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
-
-		}
-		else {
+		} 
+    else {
 
 			var center = map.getCenter();
 			infowindow1.setContent('<div style="padding:20px;"><h5 style="margin-bottom:5px;color:#f00;">Geolocation not supported</h5></div>');
 			infowindow1.open(map, center);
 		}
-
 	});
-
-
-
-
-
 }); //ready 함수 end
-
-
-
-
