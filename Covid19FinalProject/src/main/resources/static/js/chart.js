@@ -18,7 +18,7 @@ $(document).ready(function() {
 			}]
 		},
 		options: {
-			responsive: false,
+			responsive: true,
 			maintainAspectRatio: false,
 			scales: {
 				yAxes: [{
@@ -29,6 +29,8 @@ $(document).ready(function() {
 			}
 		}
 	});
+	$('.chart_area').attr('width', $('.chart_title').width());
+	$('.chart_area').attr('height', $('.chart_title').width());
 	function onChange() {
 		var chartLabels = [];
 		var chartData = [];
@@ -66,7 +68,7 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
-							responsive: false,
+							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
 								yAxes: [{
@@ -116,7 +118,7 @@ $(document).ready(function() {
 							]
 						},
 						options: {
-							responsive: false,
+							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
 								'A': {
@@ -160,7 +162,7 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
-							responsive: false,
+							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
 								yAxes: [{
