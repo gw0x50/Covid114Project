@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
-@import "board.css";
+@import "/resources/css/header.css";
+
+@import "/resources/css/board.css";
 
 @import "/resources/css/chart.css";
 
