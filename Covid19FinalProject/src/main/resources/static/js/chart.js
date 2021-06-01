@@ -127,7 +127,7 @@ $(document).ready(function() {
 									position: 'right',
 									min: 0,
 									ticks: {
-										stepSize: 60
+										stepSize: 80
 									}
 								},
 								'B': {
@@ -188,11 +188,13 @@ $(document).ready(function() {
 
 	$(".chart_select_category_box .dropdown img.flag").addClass("flagvisibility");
 
-	$(".chart_select_category_box .dropdown dt a").click(function() {
+	$(".chart_select_category_box .dropdown dt a").click(function(e) {
+		e.preventDefault();
 		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").toggle();
 	});
 
-	$(".chart_select_category_box .dropdown dd ul li a").click(function() {
+	$(".chart_select_category_box .dropdown dd ul li a").click(function(e) {
+		e.preventDefault();
 		var text = $(this).html();
 		$(".chart_select_category_box .dropdown dt a .chart_select_category").html(text);
 		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
@@ -204,6 +206,7 @@ $(document).ready(function() {
 	}
 
 	$(document).bind('click', function(e) {
+		e.preventDefault();
 		var $clicked = $(e.target);
 		if (!$clicked.parents().hasClass("chart_select_category_box"))
 			$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
@@ -218,11 +221,13 @@ $(document).ready(function() {
 
 	$(".chart_select_location_box .dropdown img.flag").addClass("flagvisibility");
 
-	$(".chart_select_location_box .dropdown dt a").click(function() {
+	$(".chart_select_location_box .dropdown dt a").click(function(e) {
+		e.preventDefault();
 		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").toggle();
 	});
 
-	$(".chart_select_location_box .dropdown dd ul li a").click(function() {
+	$(".chart_select_location_box .dropdown dd ul li a").click(function(e) {
+		e.preventDefault();
 		var text = $(this).html();
 		$(".chart_select_location_box .dropdown dt a .chart_select_location").html(text);
 		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").hide();
