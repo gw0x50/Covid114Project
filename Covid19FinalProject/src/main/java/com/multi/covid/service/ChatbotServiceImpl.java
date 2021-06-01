@@ -1,5 +1,13 @@
 package com.multi.covid.service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +33,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	private ChatbotMapper chatbotMapper;
 
 	
+	//조회 - 전체 기능 통합 / 지역 기능 통합  
 	
 	@Override //누적 확진자 조회(전체)
 	public String getAllResult() {
@@ -299,7 +308,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 
 
-
+	//selectAddTwo -Three 기능 통합시킬 것 
 	@Override//두 번째 지역 선택 바로가기버튼 생성 
 	public String selectAddrTwo(String location) {
 			
@@ -554,7 +563,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	
 	
 	
-	@Override//백신센터 지역별(시, 군, 구) + 주소링크
+	@Override//백신센터 지역별(시, 군, 구) + 주소링크 전부 처리
 	public String getAddrCenter(String location, int lengthNum) {	
 		
 		//JSON으로 받아올 경우
@@ -567,7 +576,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 		//select
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
-		
+		//5개 미만, 5개 이상, 10개 이상, 15개 이상 처리
 		int endNum = 0;
 		int startNum = 0;
 
@@ -602,12 +611,18 @@ public class ChatbotServiceImpl implements ChatbotService{
 			lengthNum = vo.size();
 		}
 		
+
 		
 		JsonArray setItems_array = new JsonArray(); 
 		for(int i = startNum; i < endNum; i++) {
+			
+			//카카오 지도 ID 
+			String id = getKakaoAddress(location, vo.get(i).getCenter_name());
+			
+			
 			//주소 링크 생성
 			String address_url = "https://map.kakao.com/link/map/" 
-			+ vo.get(i).getFacility_name().replaceAll(" ", "") + "," + vo.get(i).getLat() + "," + vo.get(i).getLng();
+			+ id;
 			JsonObject web = new JsonObject();
 			web.addProperty("web", address_url);
 			
@@ -618,6 +633,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 			
 			setItems_array.add(items);
 		}
+		
+		
 		
 		//리스트가 5-10개 초과일 경우, '더 보기' 버튼 생성/ 리스트가 15개 초과일 경우, '지역별 센터 리스트 보기'
 		//버튼 하나 더 생성 '한 번 더 보기'
@@ -730,7 +747,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	@Override//리스트 15개 초과
 	public String getAddrCenter_3(String location) {
 
-		System.out.println(location);
+		//System.out.println(location);
 		
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
@@ -741,7 +758,6 @@ public class ChatbotServiceImpl implements ChatbotService{
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
 		
 		int lengthNum = vo.size();
-		
 		return getAddrCenter(location, lengthNum);
 		
 	}
@@ -751,7 +767,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	@Override
 	public String facilityCheck(String facility_name) {
 		// 발화로 들어오는 json 가져오기
-		// 발화 가능한지 확인 필요 
+		// 발화 가능한지 확인 (완료)
 		System.out.print(facility_name);
 		
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(facility_name);
@@ -759,15 +775,64 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		facility_name = params.getAsJsonObject().get("facility_name1").getAsString();
 		
-
+		// 6 개 이상 예외처리 필요  
 		CenterVO vo = chatbotMapper.getFacilityName(facility_name);
 
 		String location = vo.getAddress();
-
 		
 		return getAddrCenter(location, 1);
 		
 	}
+
+
+
+	@Override //카카오맵
+	public String getKakaoAddress(String address, String facility_name) {
+		
+		 String apiKey = "649061c6abd5ffc886277e7f9a91a020";
+		 String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json";
+		 String jsonString = null;
+
+		    try {
+		       facility_name = URLEncoder.encode(facility_name, "UTF-8");
+
+		      String addr = apiUrl + "?query=" + facility_name;
+
+		        URL url = new URL(addr);
+		        URLConnection conn = url.openConnection();
+		        conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
+
+		        BufferedReader rd = null;
+		        rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+		        StringBuffer docJson = new StringBuffer();
+
+		        String line;
+
+		        while ((line=rd.readLine()) != null) {
+		            docJson.append(line);
+		        }
+
+		        jsonString = docJson.toString();
+		        rd.close();
+
+		    } catch (UnsupportedEncodingException e) {
+		        e.printStackTrace();
+		    } catch (MalformedURLException e) {
+		        e.printStackTrace();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+		    
+		    
+			JsonObject jsonObj = (JsonObject) JsonParser.parseString(jsonString);
+			JsonArray documents = jsonObj.get("documents").getAsJsonArray();
+			
+			String id = documents.get(0).getAsJsonObject().get("id").getAsString();
+			
+		    return id;
+		    
+	}
+	
 	
 
 }

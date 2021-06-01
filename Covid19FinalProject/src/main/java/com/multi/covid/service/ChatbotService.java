@@ -14,5 +14,5 @@ public interface ChatbotService {
 	String getAddrCenter_2(String location);
 	String getAddrCenter_3(String location);
 	String facilityCheck(String facility_name);
-	
+	String getKakaoAddress(String phone, String facility_name);
 }
