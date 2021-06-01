@@ -3,6 +3,8 @@ package com.multi.covid.service;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.xml.bind.ParseConversionEvent;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,13 +39,17 @@ public class MapServiceImpl implements MapService{
 	}
 
 	@Override
-	public List<CenterVO> getAllCenter() {
-		return mapMapper.getAllCenter();
+	public List<CenterVO> getAllCenter(String lat,String lng) {
+		double lat1 = Double.parseDouble(lat);
+		double lng1 = Double.parseDouble(lng);
+		return mapMapper.getAllCenter(lat1,lng1);
 	}
 
 	@Override
-	public List<CenterVO> getAllCentertemp() {
-
-		return mapMapper.getAllCentertemp();
+	public List<CenterVO> getAllCentertemp(String lat,String lng) {
+		double lat1 = Double.parseDouble(lat);
+		double lng1 = Double.parseDouble(lng);
+		
+		return mapMapper.getAllCentertemp(lat1,lng1);
 	}
 }

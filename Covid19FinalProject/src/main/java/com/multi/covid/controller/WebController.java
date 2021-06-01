@@ -23,8 +23,7 @@ public class WebController {
 		ModelAndView mv = new ModelAndView();
 		
 		
-		  List<CenterVO> allcenter = mapService.getAllCentertemp();
-		  mv.addObject("allcenter",allcenter);
+		
 		 
 
 		mv.setViewName("index");

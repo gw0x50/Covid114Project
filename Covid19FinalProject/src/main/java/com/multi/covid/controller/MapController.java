@@ -20,10 +20,9 @@ public class MapController {
 
 	@RequestMapping(value = "/getAllCentertemp", method = RequestMethod.GET)
 	@ResponseBody
-	public String getValues(String type, String location) {
+	public String getValues(String lat, String lng) {
 		Gson gson = new Gson();
-		
-		List<CenterVO> allcenter = mapService.getAllCentertemp();
+		List<CenterVO> allcenter = mapService.getAllCenter(lat,lng);
 		return gson.toJson(allcenter);
 	}
 

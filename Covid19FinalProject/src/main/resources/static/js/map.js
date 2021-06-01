@@ -10,8 +10,9 @@ $(document).ready(function() {
 	var zipcode = [];
 	var facility_name = [];
 	var phone_number = [];
-	var locallat = 4.15;
-	var locallng = 3.14;
+	var locallat = 37.5666805
+	var locallng = 126.9784147;
+
 
 	var map = new naver.maps.Map('map_area', {
 		center: new naver.maps.LatLng(37.5666805, 126.9784147),
@@ -29,12 +30,13 @@ $(document).ready(function() {
 		getAllCenter();
 
 		map.setCenter(location);
-		map.setZoom(13);
+		map.setZoom(14);
 
 		infowindow1.setContent('<div style="padding:20px;">  현재 내 위치 </div>');
 		var marker1 = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
 			map: map
+		
 		});
 		infowindow1.open(map, location);
 		console.log('Coordinates: ' + location.toString());
@@ -56,11 +58,13 @@ $(document).ready(function() {
 	function getAllCenter() {
 		$.ajax({
 			url: "./map/getAllCentertemp",
+			data: { 'lat': locallat, 'lng': locallng },
 			dataType: "json",
 			success: function(allcenter) {
 				$.each(allcenter, function(key, value) {
 					lat.push(value.lat);
 					lng.push(value.lng);
+					console.log(value.lat+":"+value.lng);
 					city_name.push(value.location);
 					center_name.push(value.center_name);
 					address.push(value.address);
