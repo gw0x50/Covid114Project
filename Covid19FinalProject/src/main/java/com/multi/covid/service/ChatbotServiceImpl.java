@@ -33,9 +33,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 	private ChatbotMapper chatbotMapper;
 
 	
-	//조회 - 전체 기능 통합 / 지역 기능 통합  
 	
-	@Override //누적 확진자 조회(전체)
+	@Override // 실시간/누적 확진자 조회(전체)
 	public String getAllResult() {
 		
 		ResultVO vo = chatbotMapper.getOneResult("합계");
@@ -308,7 +307,6 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 
 
-	//selectAddTwo -Three 기능 통합시킬 것 
 	@Override//두 번째 지역 선택 바로가기버튼 생성 
 	public String selectAddrTwo(String location) {
 			
@@ -421,7 +419,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		//예외 2) 리스트 5개 이상, 세번째 주소 index가 없는 경우 리스트출력 (ex. 세종특별자치시 한누리대로)
 
 		if(center_count.size()<=5 || third_check) {
-			result_string = getAddrCenter(location, center_count.size());
+			result_string = getCenterUrl(location, center_count.size());
 		}
 		else {
 			
@@ -470,17 +468,18 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 	
 	
-	@Override//20개 초과 버튼 처리(주소 두번째, 세번째 둘 다 처리)
+	@Override//20개 초과 버튼 처리(selectAddrTwo, selectAddrThree)
 	public String selectAddrRemainder(String location) {
 		
 		boolean paramCheck = false;
 		String paramName = "";
-		if(location.contains("vaccine_center_location")) {
+		
+		if(location.contains("vaccine_center_location")) {//selectAddrTwo
 			paramName = "vaccine_center_location";
 			paramCheck = true;
 		}
 		else {
-			paramName = "vaccine_finde_two";
+			paramName = "vaccine_finde_two";//selectAddrThree
 		}
 		
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
@@ -488,7 +487,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get(paramName).getAsString();
 		
-		if(!paramCheck) {
+		if(!paramCheck) {//selectAddrThree
 			location = location.replace(" 더 찾기", "");
 		}
 
@@ -512,7 +511,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 				String[] addr_split = addr_list.get(i).split(" ");
 				addr_arr.add(addr_split[splitNum]); 
 			}
-			addr_arr.add("주소 직접 입력하기");	
+			addr_arr.add("주소 직접 입력하기");	//40개 초과
 		}	
 		else {
 			for(int i = 20; i < addr_list.size(); i++) {
@@ -563,8 +562,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 	
 	
 	
-	@Override//백신센터 지역별(시, 군, 구) + 주소링크 전부 처리
-	public String getAddrCenter(String location, int lengthNum) {	
+	@Override//주소 링크 반환 모두 처리 
+	public String getCenterUrl(String location, int lengthNum) {	
 		
 		//JSON으로 받아올 경우
 		if(location.contains(":")) {
@@ -576,6 +575,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 		//select
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
+		
 		//5개 미만, 5개 이상, 10개 이상, 15개 이상 처리
 		int endNum = 0;
 		int startNum = 0;
@@ -603,7 +603,6 @@ public class ChatbotServiceImpl implements ChatbotService{
 			endNum = 5;
 			overLength = true;
 			lengthNum = 5;
-
 		}
 		else {
 			startNum = 0;
@@ -611,18 +610,15 @@ public class ChatbotServiceImpl implements ChatbotService{
 			lengthNum = vo.size();
 		}
 		
-
-		
+		//get URL
 		JsonArray setItems_array = new JsonArray(); 
 		for(int i = startNum; i < endNum; i++) {
 			
-			//카카오 지도 ID 
-			String id = getKakaoAddress(location, vo.get(i).getCenter_name());
-			
-			
+			//카카오 지도 Id
+			String id = getKakaoAddress(vo.get(i).getCenter_name());
+					
 			//주소 링크 생성
-			String address_url = "https://map.kakao.com/link/map/" 
-			+ id;
+			String address_url = "https://map.kakao.com/link/map/" + id;
 			JsonObject web = new JsonObject();
 			web.addProperty("web", address_url);
 			
@@ -636,8 +632,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 		
 		
-		//리스트가 5-10개 초과일 경우, '더 보기' 버튼 생성/ 리스트가 15개 초과일 경우, '지역별 센터 리스트 보기'
-		//버튼 하나 더 생성 '한 번 더 보기'
+		//리스트가 5/10개 초과일 경우, '더 보기' 버튼 생성
+		//리스트가 15개 초과일 경우, '지역별 센터 리스트 보기'
 		String label = "";
 		String action_item = "";
 		String message = "";
@@ -647,11 +643,11 @@ public class ChatbotServiceImpl implements ChatbotService{
 			label = "더 보기";
 			action = "block";
 			if(lengthNum == 5) {
-				message = " 더 보기(1)";
+				message = " 더 보기";
 				action_item = "60b22434f6266b70b5289df6";
 			}
 			else {
-				message = " 더 보기(2)";
+				message = " 더 보기";
 				action_item = "60b2406f2c7d75439efba8a4";
 			}
 		}
@@ -718,7 +714,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 
 	@Override//리스트 5개 초과, 10개 초과
-	public String getAddrCenter_2(String location) {
+	public String getCenterUrl_over10(String location) {
 		
 		System.out.println(location);
 		
@@ -731,6 +727,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		int lengthNum = 0;
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
 		
+		//10 초과일 경우 lengthNum setting
 		if(vo.size()>10) {
 			lengthNum = 10;
 		}
@@ -738,27 +735,25 @@ public class ChatbotServiceImpl implements ChatbotService{
 			lengthNum = vo.size();
 		}
 		
-		return getAddrCenter(location, lengthNum);
+		return getCenterUrl(location, lengthNum);
 		
 	}
 
 
 
 	@Override//리스트 15개 초과
-	public String getAddrCenter_3(String location) {
-
-		//System.out.println(location);
+	public String getCenterUrl_over15(String location) {
 		
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get("vaccine_address_three").getAsString();
 
-		
+		//select
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
 		
 		int lengthNum = vo.size();
-		return getAddrCenter(location, lengthNum);
+		return getCenterUrl(location, lengthNum);
 		
 	}
 
@@ -780,37 +775,37 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 		String location = vo.getAddress();
 		
-		return getAddrCenter(location, 1);
+		return getCenterUrl(location, 1);
 		
 	}
 
 
 
-	@Override //카카오맵
-	public String getKakaoAddress(String address, String facility_name) {
+	@Override //카카오맵ID
+	public String getKakaoAddress(String facility_name) {
 		
 		 String apiKey = "649061c6abd5ffc886277e7f9a91a020";
 		 String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json";
 		 String jsonString = null;
 
-		    try {
-		       facility_name = URLEncoder.encode(facility_name, "UTF-8");
+		 try {
+		    facility_name = URLEncoder.encode(facility_name, "UTF-8");
 
-		      String addr = apiUrl + "?query=" + facility_name;
+		    String addr = apiUrl + "?query=" + facility_name;
 
-		        URL url = new URL(addr);
-		        URLConnection conn = url.openConnection();
-		        conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
+		    URL url = new URL(addr);
+		    URLConnection conn = url.openConnection();
+		    conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
 
-		        BufferedReader rd = null;
-		        rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-		        StringBuffer docJson = new StringBuffer();
+		    BufferedReader rd = null;
+		    rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+		    StringBuffer docJson = new StringBuffer();
 
-		        String line;
+		    String line;
 
-		        while ((line=rd.readLine()) != null) {
-		            docJson.append(line);
-		        }
+		    while ((line=rd.readLine()) != null) {
+		    	docJson.append(line);
+		    }
 
 		        jsonString = docJson.toString();
 		        rd.close();
@@ -824,12 +819,12 @@ public class ChatbotServiceImpl implements ChatbotService{
 		    }
 		    
 		    
-			JsonObject jsonObj = (JsonObject) JsonParser.parseString(jsonString);
-			JsonArray documents = jsonObj.get("documents").getAsJsonArray();
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(jsonString);
+		JsonArray documents = jsonObj.get("documents").getAsJsonArray();
 			
-			String id = documents.get(0).getAsJsonObject().get("id").getAsString();
+		String id = documents.get(0).getAsJsonObject().get("id").getAsString();
 			
-		    return id;
+		return id;
 		    
 	}
 	

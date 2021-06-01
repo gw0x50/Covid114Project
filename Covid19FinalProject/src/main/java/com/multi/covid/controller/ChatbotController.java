@@ -83,22 +83,22 @@ public class ChatbotController {
 	//백신 센터 조회(지역 - 시/군별) + 링크
 	@RequestMapping(value="/vaccineaddr", method=RequestMethod.POST)
 	@ResponseBody
-	public String getAddrCenter(@RequestBody String location) {
-		return service.getAddrCenter(location, 1);		
+	public String getCenterUrl(@RequestBody String location) {
+		return service.getCenterUrl(location, 1);	
 	}
 	
 	//백신 센터 조회(지역 - 시/군별) + 링크 (5 초과 10 이하)
 	@RequestMapping(value="/vaccineaddr2", method=RequestMethod.POST)
 	@ResponseBody
 	public String getAddrCenter2(@RequestBody String location) {
-		return service.getAddrCenter_2(location);	
+		return service.getCenterUrl_over10(location);	
 	}
 	
 	//백신 센터 조회(지역 - 시/군별) + 링크 (15 이상)
 	@RequestMapping(value="/vaccineaddr3", method=RequestMethod.POST)
 	@ResponseBody
 	public String getAddrCenter3(@RequestBody String location) {
-		return service.getAddrCenter_3(location);	
+		return service.getCenterUrl_over15(location);	
 	}
 	
 	
