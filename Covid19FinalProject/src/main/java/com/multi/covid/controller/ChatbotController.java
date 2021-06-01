@@ -98,9 +98,14 @@ public class ChatbotController {
 	@RequestMapping(value="/vaccineaddr3", method=RequestMethod.POST)
 	@ResponseBody
 	public String getAddrCenter3(@RequestBody String location) {
-		return service.getAddrCenter_2(location);	
+		return service.getAddrCenter_3(location);	
 	}
 	
 	
+	@RequestMapping(value="/facility", method=RequestMethod.POST)
+	@ResponseBody
+	public String facilityCheck(@RequestBody String facility_name) {
+		return service.facilityCheck(facility_name);	
+	}
 	  
 }

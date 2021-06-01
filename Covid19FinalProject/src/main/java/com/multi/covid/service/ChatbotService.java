@@ -13,4 +13,6 @@ public interface ChatbotService {
 	String getAddrCenter(String location, int lengthNum);
 	String getAddrCenter_2(String location);
 	String getAddrCenter_3(String location);
+	String facilityCheck(String facility_name);
+	
 }
