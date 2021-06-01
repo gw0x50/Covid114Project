@@ -50,6 +50,7 @@ $(document).ready(function() {
 				});
 				if (chartLabels.length == 7) {
 					myChart = new Chart(ctx, {
+
 						type: 'bar',
 						data: {
 							labels: chartLabels,
@@ -68,6 +69,10 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
+							interaction: {
+								intersect: false,
+								mode: 'index'
+							},
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
@@ -77,7 +82,7 @@ $(document).ready(function() {
 									}
 								}]
 							}
-						}
+						},
 					});
 				}
 				else if (chartLabels.length == 4) {
@@ -102,7 +107,7 @@ $(document).ready(function() {
 									pointHoverBackgroundColor: '#80b6f4',
 									pointHoverBorderColor: '#80b6f4',
 									fill: false,
-									type: 'line',
+									type: 'line'
 								},
 								{
 									yAxisID: 'B',
@@ -118,6 +123,10 @@ $(document).ready(function() {
 							]
 						},
 						options: {
+							interaction: {
+								intersect: false,
+								mode: 'index'
+							},
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
@@ -139,7 +148,7 @@ $(document).ready(function() {
 									}
 								}
 							}
-						},
+						}
 					});
 				}
 				else if (chartLabels.length == 12) {
@@ -162,6 +171,10 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
+							interaction: {
+								intersect: false,
+								mode: 'index'
+							},
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
