@@ -56,6 +56,7 @@ $(document).ready(function() {
 	function getAllCenter() {
 		$.ajax({
 			url: "./map/getAllCentertemp",
+			data:{ 'lat':locallat,'lng':locallng },
 			dataType: "json",
 			success: function(allcenter) {
 				$.each(allcenter, function(key, value) {

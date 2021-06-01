@@ -25,12 +25,14 @@
 		WHERE live_date=#{date}
 	</select>
 	
-	<select id="getAllCenter" resultType="CenterVO">
+	<select id="getAllCenter" resultType="CenterVO" parameterType="double">
 		SELECT * FROM covid_vaccine_center
+		WHERE (LAT BETWEEN (#{param1}-0.045) AND (#{param1}+0.045)) AND (LNG BETWEEN (#{param2}-0.055) AND (#{param2}+0.055))
 	</select>
 	
-	<select id="getAllCentertemp" resultType="CenterVO">
+	<select id="getAllCentertemp" resultType="CenterVO" parameterType="double">
 		SELECT * FROM covid_vaccine_center_temp
+		WHERE (LAT BETWEEN (#{param1}-0.045) AND (#{param1}+0.045)) AND (LNG BETWEEN (#{param2}-0.055) AND (#{param2}+0.055))
 	</select>
 </mapper>
 

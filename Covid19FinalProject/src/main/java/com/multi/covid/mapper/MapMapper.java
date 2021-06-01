@@ -17,6 +17,6 @@ public interface MapMapper {
 	List<ResultVO> getBetweenResult(HashMap<String, String> map);
 	List<ResultVO> getAllResult();
 	LiveVO getOneLive(String date);
-	List<CenterVO> getAllCenter();
-	List<CenterVO> getAllCentertemp();
+	List<CenterVO> getAllCenter(Double lat,Double lng);
+	List<CenterVO> getAllCentertemp(Double lat,Double lng);
 }
