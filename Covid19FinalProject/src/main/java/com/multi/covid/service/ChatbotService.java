@@ -10,7 +10,9 @@ public interface ChatbotService {
 	String selectAddrTwo(String location);
 	String selectAddrRemainder(String location);
 	String selectAddrThree(String location);
-	String getAddrCenter(String facility_name);
-	String getAddrCenter_2(String facility_name);
+	String getAddrCenter(String location, int lengthNum);
+	String getAddrCenter_2(String location);
 	String getAddrCenter_3(String location);
+	String facilityCheck(String facility_name);
+	String getKakaoAddress(String phone, String facility_name);
 }
