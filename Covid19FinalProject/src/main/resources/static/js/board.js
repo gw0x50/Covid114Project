@@ -1,4 +1,5 @@
 $(document).ready(function() {
+$(':focus').blur();  
 	function onChange() {
 		console.log('test');
 		console.log($('#board_select_location').text());
@@ -32,11 +33,13 @@ $(document).ready(function() {
 
 	$(".board_select_box .dropdown img.flag").addClass("flagvisibility");
 
-	$(".board_select_box .dropdown dt a").click(function() {
+	$(".board_select_box .dropdown dt a").click(function(e) {
+		e.preventDefault();
 		$(".board_select_box .dropdown dd .board_dropdown_location").toggle();
 	});
 
-	$(".board_select_box .dropdown dd ul li a").click(function() {
+	$(".board_select_box .dropdown dd ul li a").click(function(e) {
+		e.preventDefault();
 		var text = $(this).html();
 		$(".board_select_box .dropdown dt a .board_select_location").html(text);
 		$(".board_select_box .dropdown dd .board_dropdown_location").hide();
@@ -47,7 +50,8 @@ $(document).ready(function() {
 		return $("#" + id).find("dt a #board_select_location.value").html();
 	}
 	
-	$(document).bind('click', function(e) {
+	$(document).on('click', function(e) {
+		e.preventDefault();
 		var $clicked = $(e.target);
 		if (!$clicked.parents().hasClass("board_select_box"))
 			$(".board_select_box .dropdown dd .board_dropdown_location").hide();

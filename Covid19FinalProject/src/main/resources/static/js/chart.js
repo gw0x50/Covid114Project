@@ -68,16 +68,60 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
+							interaction: {
+								intersect: false,
+								mode: 'index'
+							},
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
-								yAxes: [{
+								xAxes: {
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
+									}
+								},
+								yAxes: {
 									ticks: {
 										beginAtZero: true
+									},
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
 									}
-								}]
+								}
 							}
-						}
+						},
+						plugins: [{
+							afterDatasetsDraw: function(chart) {
+								var ctx = chart.ctx;
+								chart.data.datasets.forEach(function(dataset, i) {
+									var meta = chart.getDatasetMeta(i);
+									if (!meta.hidden) {
+										meta.data.forEach(function(element, index) {
+											// Draw the text in black, with the specified font
+											ctx.fillStyle = 'rgb(0, 0, 0)';
+											var fontSize = 15;
+											var fontStyle = 'normal';
+											var fontFamily = 'Helvetica Neue';
+											ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+											// Just naively convert to string for now
+											var dataString = dataset.data[index].toString();
+											// Make sure alignment settings are correct
+											ctx.textAlign = 'center';
+											ctx.textBaseline = 'middle';
+											var padding = 5;
+											var position = element.tooltipPosition();
+											ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+										});
+									}
+								});
+							}
+						}]
 					});
 				}
 				else if (chartLabels.length == 4) {
@@ -102,7 +146,7 @@ $(document).ready(function() {
 									pointHoverBackgroundColor: '#80b6f4',
 									pointHoverBorderColor: '#80b6f4',
 									fill: false,
-									type: 'line',
+									type: 'line'
 								},
 								{
 									yAxisID: 'B',
@@ -118,16 +162,34 @@ $(document).ready(function() {
 							]
 						},
 						options: {
+							interaction: {
+								intersect: false,
+								mode: 'index'
+							},
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
+								xAxes: {
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
+									}
+								},
 								'A': {
 									stacked: true,
 									type: 'linear',
 									position: 'right',
 									min: 0,
 									ticks: {
-										stepSize: 60
+										stepSize: 80
+									},
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
 									}
 								},
 								'B': {
@@ -136,10 +198,16 @@ $(document).ready(function() {
 									min: 0,
 									ticks: {
 										stepSize: 400
+									},
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
 									}
 								}
 							}
-						},
+						}
 					});
 				}
 				else if (chartLabels.length == 12) {
@@ -162,14 +230,24 @@ $(document).ready(function() {
 							}]
 						},
 						options: {
+							interaction: {
+								intersect: false,
+								mode: 'index'
+							},
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
-								yAxes: [{
+								yAxes: {
 									ticks: {
 										beginAtZero: true
+									},
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
 									}
-								}]
+								}
 							}
 						}
 					});
@@ -188,11 +266,13 @@ $(document).ready(function() {
 
 	$(".chart_select_category_box .dropdown img.flag").addClass("flagvisibility");
 
-	$(".chart_select_category_box .dropdown dt a").click(function() {
+	$(".chart_select_category_box .dropdown dt a").click(function(e) {
+		e.preventDefault();
 		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").toggle();
 	});
 
-	$(".chart_select_category_box .dropdown dd ul li a").click(function() {
+	$(".chart_select_category_box .dropdown dd ul li a").click(function(e) {
+		e.preventDefault();
 		var text = $(this).html();
 		$(".chart_select_category_box .dropdown dt a .chart_select_category").html(text);
 		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
@@ -204,6 +284,7 @@ $(document).ready(function() {
 	}
 
 	$(document).bind('click', function(e) {
+		e.preventDefault();
 		var $clicked = $(e.target);
 		if (!$clicked.parents().hasClass("chart_select_category_box"))
 			$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
@@ -218,11 +299,13 @@ $(document).ready(function() {
 
 	$(".chart_select_location_box .dropdown img.flag").addClass("flagvisibility");
 
-	$(".chart_select_location_box .dropdown dt a").click(function() {
+	$(".chart_select_location_box .dropdown dt a").click(function(e) {
+		e.preventDefault();
 		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").toggle();
 	});
 
-	$(".chart_select_location_box .dropdown dd ul li a").click(function() {
+	$(".chart_select_location_box .dropdown dd ul li a").click(function(e) {
+		e.preventDefault();
 		var text = $(this).html();
 		$(".chart_select_location_box .dropdown dt a .chart_select_location").html(text);
 		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").hide();
