@@ -127,7 +127,7 @@ $(document).ready(function() {
 				else if (chartLabels.length == 4) {
 					var secondChartData = [];
 					$.each(chartData, function(key, value) {
-						secondChartData.push(value / 7);
+						secondChartData.push(Math.round(value / 7));
 					});
 					myChart = new Chart(ctx, {
 						data: {
