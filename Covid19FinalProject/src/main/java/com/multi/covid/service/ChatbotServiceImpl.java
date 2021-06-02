@@ -736,6 +736,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 			String [] quick_message = {"집 근처 접종 센터 조회", "다시 검색해보기"};
 			String actionName = "block";
 			String [] action_item = {"60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62"};
+			
 			JsonObject buttons = new JsonObject();
 			buttons.addProperty("label", "처음으로 돌아가기");
 			buttons.addProperty("action", "block");
