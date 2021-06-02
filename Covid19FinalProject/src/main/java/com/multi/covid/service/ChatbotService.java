@@ -7,9 +7,8 @@ public interface ChatbotService {
 	String getAllLive();
 	String getLocLive(String location);
 	String getLocCenter(String location);
-	String selectAddrTwo(String location);
 	String selectAddrRemainder(String location);
-	String selectAddrThree(String location);
+	String selectAddr(String location);
 	String getCenterUrl(String location, int lengthNum);
 	String getCenterUrl_over10(String location);
 	String getCenterUrl_over15(String location);

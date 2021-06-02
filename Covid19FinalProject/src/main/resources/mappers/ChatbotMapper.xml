@@ -44,8 +44,13 @@
 		WHERE address LIKE CONCAT('%',#{address_three},'%')
 	</select>
 
-	<select id = "getFacilityName" resultType="CenterVO" parameterType="String">
+	<select id = "getFacility" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
+		WHERE facility_name = #{facility_name}
+	</select>
+	
+	<select id = "getFacilityName" resultType="String" parameterType="String">
+		SELECT facility_name FROM covid_vaccine_center 
 		WHERE facility_name = #{facility_name}
 	</select>
 	

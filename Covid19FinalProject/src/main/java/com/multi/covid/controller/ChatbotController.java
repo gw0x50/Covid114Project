@@ -58,19 +58,12 @@ public class ChatbotController {
 		return service.getLocCenter(location);
 	}
 	
-	//백신 센터 선택지 return 
-	@RequestMapping(value="/selectaddrtwo", method=RequestMethod.POST)
-	@ResponseBody
-	public String selectAddTwo(@RequestBody String location) {
-		return service.selectAddrTwo(location);		
-	}
-	
 
 	//백신 센터 선택지 return 
-	@RequestMapping(value="/selectaddrthree", method=RequestMethod.POST)
+	@RequestMapping(value="/selectaddr", method=RequestMethod.POST)
 	@ResponseBody
-	public String selectAddThree(@RequestBody String location) {
-		return service.selectAddrThree(location);		
+	public String selectAddr(@RequestBody String location) {
+		return service.selectAddr(location);		
 	}
 	
 	//백신 센터 나머지 선택지 return 
@@ -101,8 +94,8 @@ public class ChatbotController {
 		return service.getCenterUrl_over15(location);	
 	}
 	
-	
-	@RequestMapping(value="/facility", method=RequestMethod.POST)
+	//기관 이름 직접 조회(검색형) 
+	@RequestMapping(value="/facilitycheck", method=RequestMethod.POST)
 	@ResponseBody
 	public String facilityCheck(@RequestBody String facility_name) {
 		return service.facilityCheck(facility_name);	
