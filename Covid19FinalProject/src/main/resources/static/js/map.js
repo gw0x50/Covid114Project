@@ -13,14 +13,22 @@ $(document).ready(function() {
 	var locallat = 37.5666805
 	var locallng = 126.9784147;
 
+	var infoWindowlocal = new naver.maps.InfoWindow({
+		anchorSkew: true
+	});
+
 
 	var map = new naver.maps.Map('map_area', {
 		center: new naver.maps.LatLng(37.5666805, 126.9784147),
 		zoom: 10,
-		mapTypeId: naver.maps.MapTypeId.NORMAL
+		mapTypeId: naver.maps.MapTypeId.NORMAL,
+		mapTypeControl: true
 	})
 
 	var infowindow1 = new naver.maps.InfoWindow();
+
+
+	map.setCursor('pointer');
 
 	function onSuccessGeolocation(position) {
 		var location = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -36,7 +44,6 @@ $(document).ready(function() {
 		var marker1 = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
 			map: map
-		
 		});
 		infowindow1.open(map, location);
 		console.log('Coordinates: ' + location.toString());
@@ -57,14 +64,14 @@ $(document).ready(function() {
 
 	function getAllCenter() {
 		$.ajax({
-			url: "./map/getAllCentertemp",
+			url: "./map/getAllCenter",
 			data: { 'lat': locallat, 'lng': locallng },
 			dataType: "json",
 			success: function(allcenter) {
 				$.each(allcenter, function(key, value) {
 					lat.push(value.lat);
 					lng.push(value.lng);
-					console.log(value.lat+":"+value.lng);
+					console.log(value.lat + ":" + value.lng);
 					city_name.push(value.location);
 					center_name.push(value.center_name);
 					address.push(value.address);
@@ -101,11 +108,104 @@ $(document).ready(function() {
 		}); //ajax end
 	} //getallCenter end
 
+	function searchCoordinateToAddress(latlng) {
+
+		infoWindowlocal.close();
+
+		naver.maps.Service.reverseGeocode({
+			coords: latlng,
+			orders: [
+				naver.maps.Service.OrderType.ADDR,
+				naver.maps.Service.OrderType.ROAD_ADDR
+			].join(',')
+		}, function(status, response) {
+			if (status === naver.maps.Service.Status.ERROR) {
+				return alert('Something Wrong!');
+			}
+			
+			infoWindowlocal.setContent([
+            '<div style="padding:10px;min-width:200px;line-height:150%;">',
+            '<h4 style="margin-top:5px;">클릭하신 장소입니다.</h4><br />',
+            '</div>'
+        	].join('\n'));
+        	locallat = latlng.y;
+        	locallng = latlng.x;
+        	getAllCenter();
+
+
+			infoWindowlocal.open(map, latlng);
+		});
+	}
+
+	function searchAddressToCoordinate(address) {
+		naver.maps.Service.geocode({
+			query: address
+		}, function(status, response) {
+			if (status === naver.maps.Service.Status.ERROR) {
+				return alert('Something Wrong!');
+			}
+
+			if (response.v2.meta.totalCount === 0) {
+				return alert('지번주소 혹은 도로명 주소를 입력하세요');
+			}
+
+			var htmlAddresses = [],
+				item = response.v2.addresses[0],
+				point = new naver.maps.Point(item.x, item.y);
+				locallat = item.y;
+				locallng = item.x;
+				getAllCenter();
+			
+			if (item.roadAddress) {
+				htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
+			}
+
+			if (item.jibunAddress) {
+				htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
+			}
+
+			if (item.englishAddress) {
+				htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
+			}
+
+			infoWindowlocal.setContent([
+            '<div style="padding:10px;min-width:200px;line-height:150%;">',
+            '<h4 style="margin-top:5px;">검색하신 장소입니다.</h4><br />',
+            '</div>'
+        	].join('\n'));
+
+			map.setCenter(point);
+			infoWindowlocal.open(map, point);
+		});
+	}
+
+	
+
+		map.addListener('click', function(e) {
+			searchCoordinateToAddress(e.coord);
+			console.log(e.coord);
+		});
+
+		$('#map_address').on('keydown', function(e) {
+			var keyCode = e.which;
+
+			if (keyCode === 13) { // Enter Key
+				searchAddressToCoordinate($('#map_address').val());
+				
+			}
+		});
+
+		$('#map_submit').on('click', function(e) {
+			e.preventDefault();
+
+			searchAddressToCoordinate($('#map_address').val());
+			
+		});
+
 	function onErrorGeolocation() {
 		var center = map.getCenter();
-
-		infowindow1.setContent('<div style="padding:20px;">' +
-			'<h5 style="margin-bottom:5px;color:#f00;">Geolocation failed!</h5>' + "latitude: " + center.lat() + "<br />longitude: " + center.lng() + '</div>');
+		getAllCenter();
+		infowindow1.setContent('<div style="padding:20px;">  멀티캠퍼스 </div>');
 
 		infowindow1.open(map, center);
 	}
@@ -117,8 +217,14 @@ $(document).ready(function() {
 		}
 		else {
 			var center = map.getCenter();
-			infowindow1.setContent('<div style="padding:20px;"><h5 style="margin-bottom:5px;color:#f00;">Geolocation not supported</h5></div>');
+			getAllCenter();
+			infowindow1.setContent('<div style="padding:20px;">  멀티캠퍼스 </div>');
+
 			infowindow1.open(map, center);
 		}
 	});
+
+
+
+
 }); //ready 함수 end
