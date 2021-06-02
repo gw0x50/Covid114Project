@@ -20,7 +20,70 @@
 
 .board_count_box {
 	display: flex;
+	justify-content: center;
+	align-items: center;
 	text-align: center;
+}
+
+.board_count_box>div {
+	margin: 0 2%;
+	font-size: 12pt;
+}
+
+.board_count_box div div:nth-child(2) {
+	margin-bottom: 0px !important;
+}
+
+.board_live_count_box div {
+	font-size: 16pt;
+	color: #eb5374;
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+.board_live_title {
+	font-size: 12pt !important;
+	color: #464d52 !important;
+	font-weight: normal !important;
+}
+
+.board_total_count_box div {
+	font-size: 16pt;
+	color: #af8e00;
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+.board_total_title {
+	font-size: 12pt !important;
+	color: #464d52 !important;
+	font-weight: normal !important;
+}
+
+.board_clear_count_box div {
+	font-size: 16pt;
+	color: #178a17;
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+.board_clear_title {
+	font-size: 12pt !important;
+	color: #464d52 !important;
+	font-weight: normal !important;
+}
+
+.board_death_count_box div {
+	font-size: 16pt;
+	color: #000000;
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+.board_death_title {
+	font-size: 12pt !important;
+	color: #464d52 !important;
+	font-weight: normal !important;
 }
 
 .desc {
@@ -154,6 +217,10 @@
 	.board_count_box {
 		display: flex;
 		text-align: center;
+	}
+	.board_count_box>div {
+		margin: 0 6%;
+		font-size: 12pt;
 	}
 	.desc {
 		color: #e8e8e8;

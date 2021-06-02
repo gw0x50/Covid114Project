@@ -39,21 +39,21 @@
 	</div>
 	<div class="board_count_box">
 		<div class="board_live_count_box">
-			<div class="board_live_title">실시간 확진자</div>
+			<div class="board_live_title">실시간<br>확진자</div>
 			<div id="board_live_count" class="board_live_count">0</div>	
 		</div>
 		<div class="board_total_count_box">
-			<div class="board_total_title">누적 확진자</div>
+			<div class="board_total_title">확진자</div>
 			<div id="board_total_count" class="board_total_count">0</div>	
 			<div id="board_increment_count" class="board_increment_count">0</div>	
 		</div>
 		<div class="board_clear_count_box">
-			<div class="board_clear_title">누적 완치자</div>
+			<div class="board_clear_title">완치자</div>
 			<div id="board_clear_count" class="board_clear_count">0</div>
 			<div id="board_compare_clear_count" class="board_compare_clear_count">0</div>	
 		</div>
 		<div class="board_death_count_box">
-			<div class="board_death_title">누적 사망자</div>
+			<div class="board_death_title">사망자</div>
 			<div id="board_death_count" class="board_death_count">0</div>
 			<div id="board_compare_death_count" class="board_compare_death_count">0</div>
 		</div>	
