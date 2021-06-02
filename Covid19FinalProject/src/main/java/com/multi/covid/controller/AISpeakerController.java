@@ -1,10 +1,12 @@
 package com.multi.covid.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,32 +43,11 @@ public class AISpeakerController {
 		List<String> list = service.geolocation(r1, r2, r3);		
 		return list.get(0);
 	}
-
+	
 	@ResponseBody
-	@RequestMapping("/listtest")
-	public String listtest() {
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("startDate", "2020-05-01");
-		map.put("endDate", "2020-05-10");
-		List<ResultVO> resultList = mapper.getBetweenResult(map);
-		
-		JsonObject obj = new JsonObject();
-		obj.addProperty("title", "list");
-		
-		JsonArray array = new JsonArray();
-		for(ResultVO vo : resultList) {
-			JsonObject inObj = new JsonObject();
-			
-			inObj.addProperty("result_date", vo.getResult_date());
-			inObj.addProperty("location", vo.getLocation());
-			inObj.addProperty("increment_count", vo.getIncrement_count());
-			inObj.addProperty("total_count", vo.getTotal_count());
-			
-			array.add(inObj);
-		}
-		
-		obj.add("data", array);
-		
-		return obj.toString();
-	}
+	@RequestMapping("/weather") //특정 지역의 날씨정보
+	public String weather(String lat, String lon) throws IOException, ParseException {
+		//스피커 접속지역의 날씨정보를 반환한다		
+		return service.weather(lat, lon);
+	}	
 }
