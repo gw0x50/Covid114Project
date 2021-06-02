@@ -18,9 +18,10 @@ public class MapController {
 	@Autowired
 	private MapService mapService;
 
-	@RequestMapping(value = "/getAllCentertemp", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAllCenter", method = RequestMethod.GET)
 	@ResponseBody
 	public String getValues(String lat, String lng) {
+		
 		Gson gson = new Gson();
 		List<CenterVO> allcenter = mapService.getAllCenter(lat,lng);
 		return gson.toJson(allcenter);
