@@ -44,7 +44,7 @@ public class AISpeakerController {
 		return list.get(0);
 	}
 	
-	@ResponseBody
+	@ResponseBody //classpath 수정
 	@RequestMapping("/weather") //특정 지역의 날씨정보
 	public String weather(String lat, String lon) throws IOException, ParseException {
 		//스피커 접속지역의 날씨정보를 반환한다		
