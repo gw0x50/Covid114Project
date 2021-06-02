@@ -76,11 +76,25 @@ $(document).ready(function() {
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
-								yAxes: [{
+								xAxes: {
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
+									}
+								},
+								yAxes: {
 									ticks: {
 										beginAtZero: true
+									},
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
 									}
-								}]
+								}
 							}
 						},
 					});
@@ -130,6 +144,14 @@ $(document).ready(function() {
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
+								xAxes: {
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
+									}
+								},
 								'A': {
 									stacked: true,
 									type: 'linear',
@@ -137,6 +159,12 @@ $(document).ready(function() {
 									min: 0,
 									ticks: {
 										stepSize: 80
+									},
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
 									}
 								},
 								'B': {
@@ -145,6 +173,12 @@ $(document).ready(function() {
 									min: 0,
 									ticks: {
 										stepSize: 400
+									},
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
 									}
 								}
 							}
@@ -178,11 +212,17 @@ $(document).ready(function() {
 							responsive: true,
 							maintainAspectRatio: false,
 							scales: {
-								yAxes: [{
+								yAxes: {
 									ticks: {
 										beginAtZero: true
+									},
+									grid: {
+										display: false,
+										drawBorder: false,
+										drawOnChartArea: false,
+										drawTicks: false
 									}
-								}]
+								}
 							}
 						}
 					});
