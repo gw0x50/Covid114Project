@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 
 	var map = new naver.maps.Map('map_area', {
-		center: new naver.maps.LatLng(37.5666805, 126.9784147),
+		center: new naver.maps.LatLng(37.5012712, 127.0392959),
 		zoom: 10,
 		mapTypeId: naver.maps.MapTypeId.NORMAL,
 		mapTypeControl: true
@@ -71,7 +71,6 @@ $(document).ready(function() {
 				$.each(allcenter, function(key, value) {
 					lat.push(value.lat);
 					lng.push(value.lng);
-					console.log(value.lat + ":" + value.lng);
 					city_name.push(value.location);
 					center_name.push(value.center_name);
 					address.push(value.address);
@@ -183,7 +182,7 @@ $(document).ready(function() {
 
 	map.addListener('click', function(e) {
 		searchCoordinateToAddress(e.coord);
-
+		console.log(e.coord);
 	});
 
 	$('#map_address').on('keydown', function(e) {
@@ -209,7 +208,7 @@ $(document).ready(function() {
 	function onErrorGeolocation() {
 		var center = map.getCenter();
 		getAllCenter();
-		infowindow1.setContent('<div style="padding:20px;">  멀티캠퍼스 </div>');
+		infowindow1.setContent('<div style="padding:20px;">  기본 설정위치(역삼멀티캠퍼스) </div>');
 
 		infowindow1.open(map, center);
 	}
@@ -222,7 +221,7 @@ $(document).ready(function() {
 		else {
 			var center = map.getCenter();
 			getAllCenter();
-			infowindow1.setContent('<div style="padding:20px;">  멀티캠퍼스 </div>');
+			infowindow1.setContent('<div style="padding:20px;">  기본 설정위치(역삼멀티캠퍼스) </div>');
 
 			infowindow1.open(map, center);
 		}
