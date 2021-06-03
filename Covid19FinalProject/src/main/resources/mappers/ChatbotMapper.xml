@@ -39,6 +39,14 @@
 		WHERE address LIKE CONCAT('%',#{address_two},'%')
 	</select>
 	
+	<select id="getAddrFour" resultType="String" parameterType="String">
+		SELECT DISTINCT(SUBSTRING_INDEX(
+		(SELECT REGEXP_REPLACE(address,'[0-9]',' ')
+		), ' ', 4)) 
+		FROM covid_vaccine_center
+		WHERE address LIKE CONCAT('%',#{address_two},'%')
+	</select>
+	
 	<select id="getAddrCenter" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
 		WHERE address LIKE CONCAT('%',#{address_three},'%')

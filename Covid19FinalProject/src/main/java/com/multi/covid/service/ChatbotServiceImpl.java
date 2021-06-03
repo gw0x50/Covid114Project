@@ -154,8 +154,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 		String increment_count = String.format("%,d", vo.getIncrement_count());
 		
 		if(paramLoc_check) { //Result one
-			String title_message = result_date + " 기준 " + location + "지역의 누적 확진자 수는" + getTotal_count + "입니다.\n\n"
-								+ "확진자 수는 " + increment_count + " 명 입니다.";
+			String title_message = location + "지역 누적 확진자 수: " + getTotal_count + "\n\n"
+								+ result_date + " 확진자 수:" + increment_count + " 명";
 			String quick_message = location + " 실시간 확진자 조회";		
 		
 			//quickReplies
@@ -177,16 +177,16 @@ public class ChatbotServiceImpl implements ChatbotService{
 			for(int i = 0; i < location_array.length; i++) {
 				ResultVO one_vo = chatbotMapper.getOneResult(location_array[i]);
 				Arrays.sort(location_array);
-				
-				webhook_locResult.append(location_array[i] + " 지역 확진자 수: "
-						+ one_vo.getIncrement_count() + " \n");
+				String getTotal = String.format("%,d", one_vo.getTotal_count());
+				webhook_locResult.append(location_array[i] + " 지역: "
+						+ getTotal + " \n");
 			}
 			
-			
+
 			JsonObject result_count = new JsonObject();
-			result_count.addProperty("getTotal_count", vo.getTotal_count());
-			result_count.addProperty("increment_count", vo.getIncrement_count());
-			result_count.addProperty("locResult", webhook_locResult.toString().replaceAll(",", ""));
+			result_count.addProperty("locResult", webhook_locResult.toString().replaceAll("\n,", ""));
+			result_count.addProperty("getTotal_count", getTotal_count);
+			result_count.addProperty("increment_count", increment_count);
 			result_count.addProperty("result_date", result_date);
 			JsonObject result = new JsonObject();
 			result.addProperty("version", "2.0");
@@ -222,7 +222,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 		String[] eng_loc = {"gangwon", "gyeonggi", "gyeongnam", "gyeongbuk", "gwangju", "daegu", "daejeon", "busan", "seoul", 
 				"sejong", "ulsan", "incheon", "jeonnam", "jeonbuk", "jeju", "chungnam", "chungbuk"};
-		String[] kor_loc = {"강원도", "경기도", "경남", "경북", "광주", "대구", "대전", "부산", "서울", 
+		String[] kor_loc = {"강원", "경기", "경남", "경북", "광주", "대구", "대전", "부산", "서울", 
 				"세종", "울산", "인천", "전남", "전북", "제주", "충남", "충북"};
 		
 
@@ -323,8 +323,11 @@ public class ChatbotServiceImpl implements ChatbotService{
 			param = "vaccine_center_location";
 			paramCheck = true;
 		}
-		else {
+		else if(location.contains("vaccine_address_two")){
 			param = "vaccine_address_two";
+		}
+		else {
+			param = "vaccine_address_three";
 		}
 		
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
@@ -376,7 +379,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 		else {
 			//Json return
-			String title_message = location + " 을 선택하셨습니다. \n원하시는 지역을 선택하세요.";
+			String title_message = location + "을 선택하셨습니다. \n세부 주소를 선택해 주세요.";
 			
 			JsonArray quick_item_arr = new JsonArray();			
 			for(int i = 0; i < addr_arr.size(); i++) {
@@ -459,7 +462,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 
 		
-		String title_message = location + " 선택하셨습니다. \n세부 주소를 선택해 주세요.\n";
+		String title_message = location + " 지역의 세부 주소를 선택해 주세요.\n";
 		JsonArray quick_items_arr = new JsonArray();
 
 		for(int i = 0; i < addr_arr.size(); i++) {
@@ -510,8 +513,15 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 		boolean overLength = false;
 		boolean overLength15 = false;
-		
+		boolean length10 = false;
+		//10개 초과 15개 미만인 경우 
+		if(lengthNum == 100) {
+			lengthNum = 10;
+		}
 		if(lengthNum > 5 && lengthNum <= 10) {
+			if(lengthNum == 10) {//정확히 10개인 경우 
+				length10 = true;
+			}
 			startNum = 5;
 			endNum = lengthNum;
 			overLength = true;
@@ -568,7 +578,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		String message = "";
 		String action = "";
 		
-		if(endNum%5 == 0 && overLength) {
+		if(endNum%5 == 0 && overLength && !length10) {
 			label = "더 보기";
 			action = "block";
 			if(lengthNum == 5) {
@@ -625,9 +635,9 @@ public class ChatbotServiceImpl implements ChatbotService{
 		int lengthNum = 0;
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
 		
-		//10 초과일 경우 lengthNum 10으로 제한
-		if(vo.size()>10) {
-			lengthNum = 10;
+		//10 초과일 경우 lengthNum 100 (getCenterUrl - 100으로 넘겨온 것을 10으로 바꿈 처리) 
+		if(vo.size()>100) {
+			lengthNum = 100;
 		}
 		else {
 			lengthNum = vo.size();

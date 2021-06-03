@@ -20,6 +20,7 @@ public interface ChatbotMapper {
 	List<CenterVO> getLocCenter(String location);
 	List<String> getAddrTwo(String location);
 	List<String> getAddrThree(String address_two);
+	List<String> getAddrFour(String address_four);
 	List<CenterVO> getAddrCenter(String address_three);
 	List<CenterVO> getFacility(String facility_name);
 	List<String> getFacilityName(String facility_name);
