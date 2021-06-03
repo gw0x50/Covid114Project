@@ -3,9 +3,7 @@ package com.multi.covid.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -13,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -41,12 +38,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	@Override
 	public List<ResultVO> getOneResult(String date) {
 		return mapper.getOneResult(date);
-	}
-
-	@Override
-	public List<ResultVO> getBetweenResult(HashMap<String, String> map) {
-		return mapper.getBetweenResult(map);
-	}
+	}	
 
 	@Override
 	public List<ResultVO> getAllResult() {
@@ -64,7 +56,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	}
 
 	@Override
-	public String patient(String day, String location) {
+	public String getPatient(String day, String location) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		String date;
@@ -128,7 +120,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 				cal.add(Calendar.DATE, - 2);
 				date = format.format(cal.getTime());
 				System.out.println("그제: "+date);
-				list = mapper.getOneResult(date); //그제날짜 확진자수 받아오기
+				list = service.getOneResult(date); //그제날짜 확진자수 받아오기
 				for(ResultVO one : list) {		
 					if(one.getLocation().equals("합계")) {
 						System.out.println(one.getLocation());
@@ -147,10 +139,10 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	}		
 
 	@Override
-	public List<String> geolocation(String r1, String r2, String r3) {
+	public List<String> getGeolocation(String r1, String r2, String r3) {
 		
 		System.out.println("r1: "+r1+" r2: "+r2+" r3: "+r3);//ai스피커 접속지역
-		List<CenterVO> vo = mapper.getAllCenter();				
+		List<CenterVO> vo = service.getAllCenter();				
 		String si = (r1); //시
 		String gu = (r2); //구
 		String dong = (r3); //동
@@ -198,7 +190,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	}
 
 	@Override
-	public String weather(String lat, String lon) throws IOException, ParseException {
+	public String getWeather(String lat, String lon) throws IOException, ParseException {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		String date;
