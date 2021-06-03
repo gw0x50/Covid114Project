@@ -31,7 +31,7 @@ $(document).ready(function() {
 	});
 	$('.chart_area').attr('width', $('.chart_title').width());
 	$('.chart_area').attr('height', $('.chart_title').width());
-	function onChange() {
+	function chartOnChange() {
 		var chartLabels = [];
 		var chartData = [];
 		myChart.destroy();
@@ -255,13 +255,13 @@ $(document).ready(function() {
 			}
 		});
 	}
-	onChange();
+	chartOnChange();
 
 	$('#chart_category').on('change', function() {
-		onChange();
+		chartOnChange();
 	});
 	$('#chart_location').on('change', function() {
-		onChange();
+		chartOnChange();
 	});
 
 	$(".chart_select_category_box .dropdown img.flag").addClass("flagvisibility");
@@ -276,7 +276,7 @@ $(document).ready(function() {
 		var text = $(this).html();
 		$(".chart_select_category_box .dropdown dt a .chart_select_category").html(text);
 		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
-		onChange();
+		chartOnChange();
 	});
 
 	function getSelectedValue(id) {
@@ -293,7 +293,7 @@ $(document).ready(function() {
 	$(".chart_select_category_box .dropdown img.flag").toggleClass("flagvisibility");
 
 	$('#chart_select_category').on('change', function() {
-		onChange();
+		chartOnChange();
 	});
 
 
@@ -309,7 +309,7 @@ $(document).ready(function() {
 		var text = $(this).html();
 		$(".chart_select_location_box .dropdown dt a .chart_select_location").html(text);
 		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").hide();
-		onChange();
+		chartOnChange();
 	});
 
 	function getSelectedValue(id) {
@@ -325,6 +325,6 @@ $(document).ready(function() {
 	$(".chart_select_location_box .dropdown img.flag").toggleClass("flagvisibility");
 
 	$('#chart_select_location').on('change', function() {
-		onChange();
+		chartOnChange();
 	});
 });
