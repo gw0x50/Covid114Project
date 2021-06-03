@@ -1,8 +1,6 @@
 $(document).ready(function() {
 $(':focus').blur();  
-	function onChange() {
-		console.log('test');
-		console.log($('#board_select_location').text());
+	function boardOnChange() {
 		$.ajax({
 			url: './board/getLiveValue',
 			data: {
@@ -29,7 +27,7 @@ $(':focus').blur();
 			}
 		});
 	}
-	onChange();
+	boardOnChange();
 
 	$(".board_select_box .dropdown img.flag").addClass("flagvisibility");
 
@@ -43,7 +41,7 @@ $(':focus').blur();
 		var text = $(this).html();
 		$(".board_select_box .dropdown dt a .board_select_location").html(text);
 		$(".board_select_box .dropdown dd .board_dropdown_location").hide();
-		onChange();
+		boardOnChange();
 	});
 
 	function getSelectedValue(id) {
@@ -60,6 +58,6 @@ $(':focus').blur();
 	$(".board_select_box .dropdown img.flag").toggleClass("flagvisibility");
 
 	$('#board_select_location').on('change', function() {
-		onChange();
+		boardOnChange();
 	});
 });
