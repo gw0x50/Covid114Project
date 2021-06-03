@@ -7,7 +7,6 @@
 }
 
 .footer_wrap {
-	width: 490px;
 	padding: 10px 10px;
 }
 
@@ -17,8 +16,5 @@
 		border: 1px solid #9e9e9e;
 		border-radius: 8px;
 	}
-	.footer_wrap {
-		width: 490px;
-		padding: 10px 10px;
-	}
+
 }
