@@ -28,6 +28,7 @@
 .board_count_box>div {
 	margin: 0 2%;
 	font-size: 12pt;
+	width: 22%;
 }
 
 .board_count_box div div:nth-child(2) {
@@ -221,6 +222,7 @@
 	.board_count_box>div {
 		margin: 0 6%;
 		font-size: 12pt;
+		width: 12%;
 	}
 	.desc {
 		color: #e8e8e8;
