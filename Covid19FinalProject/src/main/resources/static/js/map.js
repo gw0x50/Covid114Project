@@ -41,7 +41,7 @@ $(document).ready(function() {
 		getAllCenter();
 		map.setCenter(location);
 		map.setZoom(14);
-		infowindow1.setContent('<div class="map_localwindow"><center><strong>현재 위치 주변 <br>백신센터를 표시하였습니다.</strong></center></div>');
+		infowindow1.setContent('<div class="map_local_window"><center><strong>현재 위치 주변 <br>백신센터를 표시하였습니다.</strong></center></div>');
 		marker1 = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
 			map: map,
@@ -86,7 +86,7 @@ $(document).ready(function() {
 					});
 
 					var contentStrings = [
-						'<div class="map_centerwindow">',
+						'<div class="map_center_window">',
 						'<center>',
 						'   <h3>' + value.center_name + '</h3>',
 						'<hr></center>',
@@ -124,7 +124,7 @@ $(document).ready(function() {
 				return alert('Something Wrong!');
 			}
 			infoWindowlocal.setContent([
-				'<div class="map_localwindow">',
+				'<div class="map_local_window">',
 				'<center><strong>선택한 장소 주변 <br>백신센터를 표시하였습니다.</strong></center>',
 				'</div>'
 			].join('\n'));
@@ -183,7 +183,7 @@ $(document).ready(function() {
 				htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
 			}
 			infoWindowlocal.setContent([
-				'<div class="map_localwindow">',
+				'<div class="map_local_window">',
 				'<center><strong>검색하신 주소 주변 <br>백신센터를 표시하였습니다.</strong></center>',
 				'</div>'
 			].join('\n'));
@@ -234,7 +234,7 @@ $(document).ready(function() {
 				anchor: new naver.maps.Point(11, 35)
 			}
 		});
-		infowindow1.setContent('<div class="localwindow">   기본 설정위치(역삼멀티캠퍼스) </div>');
+		infowindow1.setContent('<div class="map_local_window">   기본 설정위치(역삼멀티캠퍼스) </div>');
 		infowindow1.open(map, center);
 	}
 
@@ -257,7 +257,7 @@ $(document).ready(function() {
 					anchor: new naver.maps.Point(11, 35)
 				}
 			});
-			infowindow1.setContent('<div class="localwindow">  기본 설정위치(역삼멀티캠퍼스) </div>');
+			infowindow1.setContent('<div class="map_local_window">  기본 설정위치(역삼멀티캠퍼스) </div>');
 			infowindow1.open(map, center);
 		}
 	});
