@@ -21,11 +21,11 @@ $(':focus').blur();
 			dataType: 'json',
 			success: function(data) {
 				$('#board_total_count').html(data.total_count.toLocaleString('ko-KR'));
-				$('#board_increment_count').html(data.increment_count.toLocaleString('ko-KR'));
+				$('#board_increment_count').html(data.increment_count.toLocaleString('ko-KR') + "↑");
 				$('#board_clear_count').html(data.clear_count.toLocaleString('ko-KR'));
-				$('#board_compare_clear_count').html(data.compare_clear_count.toLocaleString('ko-KR'));
+				$('#board_compare_clear_count').html(data.compare_clear_count.toLocaleString('ko-KR') + "↑");
 				$('#board_death_count').html(data.death_count.toLocaleString('ko-KR'));
-				$('#board_compare_death_count').html(data.compare_death_count.toLocaleString('ko-KR'));
+				$('#board_compare_death_count').html(data.compare_death_count.toLocaleString('ko-KR') + "↑");
 			}
 		});
 	}
