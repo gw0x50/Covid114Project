@@ -21,56 +21,36 @@ public class ChatbotController {
 	/*http://61.102.5.133:9091/*/
 	/*http://49.142.68.213:9091*/
 	
-	//누적 확진자 전체 조회
-	@RequestMapping(value="/resultall", method=RequestMethod.POST)
-	@ResponseBody
-	public String getAllResult() {
-		return service.getAllResult();
-	}
 	
-	//누적 확진자 조회 (지역별)
+	//누적 확진자 조회
 	@RequestMapping(value="/result", method=RequestMethod.POST)
 	@ResponseBody
-	public String getOneResult(@RequestBody String location) {
-		System.out.println(service.getOneResult(location));
-		return service.getOneResult(location);	
-	}
+	public String getResult(@RequestBody String location) {
+		return service.getResult(location);	
+	}	
 	
-	//실시간 확진자 조회 (전체)
-	@RequestMapping(value="/liveall", method=RequestMethod.POST)
-	@ResponseBody
-	public String getAllLive() {
-		return service.getAllLive();
-	}
 	
-	//실시간 확진자 조회 (지역별)
-	@RequestMapping(value="/liveone", method=RequestMethod.POST)
+	//실시간 확진자 조회
+	@RequestMapping(value="/live", method=RequestMethod.POST)
 	@ResponseBody
-	public String getLocLive(@RequestBody String location) {
-		return service.getLocLive(location);
+	public String getLive(@RequestBody String location) {
+		return service.getLive(location);
 	}
 	
 	
-	//백신 센터 조회(지역별)
-	@RequestMapping(value="/vaccineloc", method=RequestMethod.POST)
+	//백신 센터 리스트 
+	@RequestMapping(value="/vaccinelist", method=RequestMethod.POST)
 	@ResponseBody
-	public String getLocCenter(@RequestBody String location) {	
-		return service.getLocCenter(location);
-	}
-	
-	//백신 센터 선택지 return 
-	@RequestMapping(value="/selectaddrtwo", method=RequestMethod.POST)
-	@ResponseBody
-	public String selectAddTwo(@RequestBody String location) {
-		return service.selectAddrTwo(location);		
+	public String getCenterList(@RequestBody String location) {	
+		return service.getCenterList(location);
 	}
 	
 
 	//백신 센터 선택지 return 
-	@RequestMapping(value="/selectaddrthree", method=RequestMethod.POST)
+	@RequestMapping(value="/selectaddr", method=RequestMethod.POST)
 	@ResponseBody
-	public String selectAddThree(@RequestBody String location) {
-		return service.selectAddrThree(location);		
+	public String selectAddr(@RequestBody String location) {
+		return service.selectAddr(location);		
 	}
 	
 	//백신 센터 나머지 선택지 return 
@@ -83,26 +63,26 @@ public class ChatbotController {
 	//백신 센터 조회(지역 - 시/군별) + 링크
 	@RequestMapping(value="/vaccineaddr", method=RequestMethod.POST)
 	@ResponseBody
-	public String getAddrCenter(@RequestBody String location) {
-		return service.getAddrCenter(location, 1);		
+	public String getCenterUrl(@RequestBody String address) {
+		return service.getCenterUrl(address, 1);	
 	}
 	
 	//백신 센터 조회(지역 - 시/군별) + 링크 (5 초과 10 이하)
 	@RequestMapping(value="/vaccineaddr2", method=RequestMethod.POST)
 	@ResponseBody
 	public String getAddrCenter2(@RequestBody String location) {
-		return service.getAddrCenter_2(location);	
+		return service.getCenterUrl_over10(location);	
 	}
 	
 	//백신 센터 조회(지역 - 시/군별) + 링크 (15 이상)
 	@RequestMapping(value="/vaccineaddr3", method=RequestMethod.POST)
 	@ResponseBody
 	public String getAddrCenter3(@RequestBody String location) {
-		return service.getAddrCenter_3(location);	
+		return service.getCenterUrl_over15(location);	
 	}
 	
-	
-	@RequestMapping(value="/facility", method=RequestMethod.POST)
+	//기관 이름 직접 조회(검색형) 
+	@RequestMapping(value="/facilitycheck", method=RequestMethod.POST)
 	@ResponseBody
 	public String facilityCheck(@RequestBody String facility_name) {
 		return service.facilityCheck(facility_name);	

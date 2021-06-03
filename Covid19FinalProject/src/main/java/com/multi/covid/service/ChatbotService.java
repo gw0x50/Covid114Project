@@ -1,18 +1,18 @@
 package com.multi.covid.service;
 
+import com.google.gson.JsonArray;
 
 public interface ChatbotService {
-	String getAllResult();
-	String getOneResult(String location);
-	String getAllLive();
-	String getLocLive(String location);
-	String getLocCenter(String location);
-	String selectAddrTwo(String location);
+	String getJsonString(JsonArray quick_array, String title_message);
+	String getJsonString(JsonArray quick_array, JsonArray setUrl_array, String cardTitle);
+	String getResult(String location);
+	String getLive(String location);
+	String getCenterList(String location);
 	String selectAddrRemainder(String location);
-	String selectAddrThree(String location);
-	String getAddrCenter(String location, int lengthNum);
-	String getAddrCenter_2(String location);
-	String getAddrCenter_3(String location);
+	String selectAddr(String location);
+	String getCenterUrl(String address, int lengthNum);
+	String getCenterUrl_over10(String location);
+	String getCenterUrl_over15(String location);
 	String facilityCheck(String facility_name);
-	String getKakaoAddress(String phone, String facility_name);
+	String getKakaoMapId(String facility_name);
 }
