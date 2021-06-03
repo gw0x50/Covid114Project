@@ -47,9 +47,9 @@ $(document).ready(function() {
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
 			map: map
 		});
-		
+
 		infowindow1.open(map, location);
-		console.log('Coordinates: ' + location.toString());
+		
 	} //onSuccessGeolocation end
 
 	function getClickHandler(seq) {
@@ -59,11 +59,11 @@ $(document).ready(function() {
 
 			if (infoWindow.getMap()) {
 				infoWindow.close();
-				
+
 			} else {
 				infoWindow.open(map, marker);
-				
-				seqnum=seq;
+
+				seqnum = seq;
 			}
 		}
 	} //getClickHandler end
@@ -73,6 +73,7 @@ $(document).ready(function() {
 			url: "./map/getAllCenter",
 			data: { 'lat': locallat, 'lng': locallng },
 			dataType: "json",
+			type: "post",
 			success: function(allcenter) {
 				$.each(allcenter, function(key, value) {
 					lat.push(value.lat);
@@ -93,13 +94,14 @@ $(document).ready(function() {
 						'<div class="iw_inner">',
 						'   <h3>' + value.center_name + '</h3>',
 						'   <h3>' + value.facility_name + '</h3>',
+						'<hr>',
 						'   <p>주소 : ' + value.address + '<br />',
 						'      전화번호 : ' + value.phone_number + '<br />',
 						'   </p>',
 						'</div>'
 					].join('');
 
-					 infoWindow = new naver.maps.InfoWindow({
+					infoWindow = new naver.maps.InfoWindow({
 						content: contentStrings
 					});
 
@@ -187,13 +189,13 @@ $(document).ready(function() {
 
 
 	map.addListener('click', function(e) {
-		
-		if(infoWindows[seqnum].getMap()){
+
+		if (infoWindows[seqnum].getMap()) {
 			infoWindows[seqnum].close();
-			
-		}else{
-		searchCoordinateToAddress(e.coord);
-		console.log(e.coord);}
+
+		} else {
+			searchCoordinateToAddress(e.coord);
+		}
 	});
 
 	$('#map_address').on('keydown', function(e) {
