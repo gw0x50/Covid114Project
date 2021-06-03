@@ -1,18 +1,12 @@
 $(document).ready(function() {
 	var markers = [];
 	var infoWindows = [];
-	var contentStrings = [];
-	var lat = [];
-	var lng = [];
-	var city_name = [];
-	var center_name = [];
-	var address = [];
-	var zipcode = [];
-	var facility_name = [];
-	var phone_number = [];
+	var infoWindow;
+	var seqnum;
+	var closenum=0;
 	var locallat = 37.5666805
 	var locallng = 126.9784147;
-
+	var marker1;
 	var infoWindowlocal = new naver.maps.InfoWindow({
 		anchorSkew: true
 	});
@@ -40,13 +34,22 @@ $(document).ready(function() {
 		map.setCenter(location);
 		map.setZoom(14);
 
-		infowindow1.setContent('<div style="padding:20px;">  현재 내 위치 </div>');
-		var marker1 = new naver.maps.Marker({
+		infowindow1.setContent('<div style="padding:20px;"><center><h4 >현재 위치 주변 <br>백신센터를 표시하였습니다.</h4></center><br /></div>');
+		 marker1 = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
-			map: map
+			map: map,
+			    icon: {
+        content: '<img src="resources/images/pin_default.png" alt="" ' +
+                 'style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; ' +
+                 '-webkit-user-select: none; position: absolute; width: 22px; height: 35px; left: 0px; top: 0px;">',
+        size: new naver.maps.Size(22, 35),
+        anchor: new naver.maps.Point(11, 35)
+    }
+			
 		});
+		
 		infowindow1.open(map, location);
-		console.log('Coordinates: ' + location.toString());
+		
 	} //onSuccessGeolocation end
 
 	function getClickHandler(seq) {
@@ -56,8 +59,11 @@ $(document).ready(function() {
 
 			if (infoWindow.getMap()) {
 				infoWindow.close();
+				closenum=0;
 			} else {
 				infoWindow.open(map, marker);
+				closenum=1;
+				seqnum = seq;
 			}
 		}
 	} //getClickHandler end
@@ -67,17 +73,10 @@ $(document).ready(function() {
 			url: "./map/getAllCenter",
 			data: { 'lat': locallat, 'lng': locallng },
 			dataType: "json",
+			type: "post",
 			success: function(allcenter) {
 				$.each(allcenter, function(key, value) {
-					lat.push(value.lat);
-					lng.push(value.lng);
-					city_name.push(value.location);
-					center_name.push(value.center_name);
-					address.push(value.address);
-					zipcode.push(value.zipcode);
-					facility_name.push(value.facility_name);
-					phone_number.push(value.phone_number);
-
+					
 					var marker = new naver.maps.Marker({
 						position: new naver.maps.LatLng(value.lat, value.lng),
 						map: map
@@ -85,15 +84,15 @@ $(document).ready(function() {
 
 					var contentStrings = [
 						'<div class="iw_inner">',
+						'<center>',
 						'   <h3>' + value.center_name + '</h3>',
-						'   <h3>' + value.facility_name + '</h3>',
-						'   <p>주소 : ' + value.address + '<br />',
-						'      전화번호 : ' + value.phone_number + '<br />',
-						'   </p>',
+						'<hr></center>',
+						'   <p><strong>주소</strong> : ' + value.address + '<br /></p>',
+						'      <strong>전화번호</strong> : ' + value.phone_number + '<br />',
 						'</div>'
 					].join('');
 
-					var infoWindow = new naver.maps.InfoWindow({
+					infoWindow = new naver.maps.InfoWindow({
 						content: contentStrings
 					});
 
@@ -123,8 +122,8 @@ $(document).ready(function() {
 			}
 
 			infoWindowlocal.setContent([
-				'<div style="padding:10px;min-width:200px;line-height:150%;">',
-				'<h4 style="margin-top:5px;">클릭하신 장소입니다.</h4><br />',
+				'<div style="padding:10px;">',
+				'<center><h4 >선택한 장소 주변 <br>백신센터를 표시하였습니다.</h4></center><br />',
 				'</div>'
 			].join('\n'));
 			locallat = latlng.y;
@@ -168,8 +167,8 @@ $(document).ready(function() {
 			}
 
 			infoWindowlocal.setContent([
-				'<div style="padding:10px;min-width:200px;line-height:150%;">',
-				'<h4 style="margin-top:5px;">검색하신 장소입니다.</h4><br />',
+				'<div style="padding:10px;">',
+				'<center><h4 >검색하신 주소 주변 <br>백신센터를 표시하였습니다.</h4></center><br />',
 				'</div>'
 			].join('\n'));
 
@@ -181,8 +180,15 @@ $(document).ready(function() {
 
 
 	map.addListener('click', function(e) {
-		searchCoordinateToAddress(e.coord);
-		console.log(e.coord);
+		console.log(closenum);
+		if (closenum==1) {
+			infoWindows[seqnum].close();
+			closenum=0;
+
+		} else {
+			searchCoordinateToAddress(e.coord);
+			
+		}
 	});
 
 	$('#map_address').on('keydown', function(e) {
@@ -193,7 +199,7 @@ $(document).ready(function() {
 			if ($('#map_address').val() != '') {
 				searchAddressToCoordinate($('#map_address').val());
 				$('#map_address').val('');
-			} else { return alert("지번주소 혹은 도로명 주소를 입력하세요"); }
+			} else { return alert("지번주소 혹은 도로명 주소를 정확히 입력하세요"); }
 		}
 	});
 
@@ -202,7 +208,7 @@ $(document).ready(function() {
 		if ($('#map_address').val() != '') {
 			searchAddressToCoordinate($('#map_address').val());
 			$('#map_address').val('');
-		} else { return alert("지번주소 혹은 도로명 주소를 입력하세요"); }
+		} else { return alert("지번주소 혹은 도로명 주소를 정확히 입력하세요"); }
 	});
 
 	function onErrorGeolocation() {
@@ -227,7 +233,7 @@ $(document).ready(function() {
 		}
 	});
 
-
+	
 
 
 }); //ready 함수 end
