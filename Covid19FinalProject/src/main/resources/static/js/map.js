@@ -1,6 +1,8 @@
 $(document).ready(function() {
 	var markers = [];
 	var infoWindows = [];
+	var infoWindow;
+	var seqnum;
 	var contentStrings = [];
 	var lat = [];
 	var lng = [];
@@ -45,6 +47,7 @@ $(document).ready(function() {
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
 			map: map
 		});
+		
 		infowindow1.open(map, location);
 		console.log('Coordinates: ' + location.toString());
 	} //onSuccessGeolocation end
@@ -56,8 +59,11 @@ $(document).ready(function() {
 
 			if (infoWindow.getMap()) {
 				infoWindow.close();
+				
 			} else {
 				infoWindow.open(map, marker);
+				
+				seqnum=seq;
 			}
 		}
 	} //getClickHandler end
@@ -93,7 +99,7 @@ $(document).ready(function() {
 						'</div>'
 					].join('');
 
-					var infoWindow = new naver.maps.InfoWindow({
+					 infoWindow = new naver.maps.InfoWindow({
 						content: contentStrings
 					});
 
@@ -181,8 +187,13 @@ $(document).ready(function() {
 
 
 	map.addListener('click', function(e) {
+		
+		if(infoWindows[seqnum].getMap()){
+			infoWindows[seqnum].close();
+			
+		}else{
 		searchCoordinateToAddress(e.coord);
-		console.log(e.coord);
+		console.log(e.coord);}
 	});
 
 	$('#map_address').on('keydown', function(e) {

@@ -26,5 +26,5 @@ public class MapController {
 		List<CenterVO> allcenter = mapService.getAllCenter(lat,lng);
 		return gson.toJson(allcenter);
 	}
-
+ 
 }
