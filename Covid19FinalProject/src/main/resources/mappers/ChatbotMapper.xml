@@ -46,7 +46,7 @@
 
 	<select id = "getFacility" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
-		WHERE facility_name = #{facility_name}
+		WHERE facility_name = #{facility_name} 
 	</select>
 	
 	<select id = "getFacilityName" resultType="String" parameterType="String">
