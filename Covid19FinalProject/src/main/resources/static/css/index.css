@@ -19,6 +19,20 @@ html {
 	overflow-x: hidden;
 }
 
+input, button {
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
+	-moz-appearance: none;
+	-moz-border-radius: 0;
+	-ms-appearance: none;
+	-ms-border-radius: 0;
+	appearance: none;
+}
+
+input:focus {
+	outline: none;
+}
+
 body {
 	background-color: #f6f6f6;
 	margin: 0;
@@ -50,6 +64,18 @@ body {
 		-moz-text-size-adjust: none;
 		-ms-text-size-adjust: none;
 		overflow-x: hidden;
+	}
+	input, button {
+		-webkit-appearance: none;
+		-webkit-border-radius: 0;
+		-moz-appearance: none;
+		-moz-border-radius: 0;
+		-ms-appearance: none;
+		-ms-border-radius: 0;
+		appearance: none;
+	}
+	input:focus {
+		outline: none;
 	}
 	body {
 		margin: 0;
