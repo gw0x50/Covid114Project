@@ -2,6 +2,24 @@
 .kakaoChatPc {
 	position: fixed;
 	z-index: 999;
-	right: 20px; /* 화면 오른쪽으로부터의 거리, 숫자만 입력 */
-	bottom: 20px; /* 화면 아래쪽으로부터의 거리, 숫자만 입력 */
+	right: 10px; /* 화면 오른쪽으로부터의 거리, 숫자만 입력 */
+	bottom: 10px; /* 화면 아래쪽으로부터의 거리, 숫자만 입력 */
+}
+
+.chatbot_img {
+	width: 60px;
+	height: 60px;
+}
+
+@media ( min-width : 768px) {
+	.kakaoChatPc {
+		position: fixed;
+		z-index: 999;
+		right: 20px; /* 화면 오른쪽으로부터의 거리, 숫자만 입력 */
+		bottom: 20px; /* 화면 아래쪽으로부터의 거리, 숫자만 입력 */
+	}
+	.chatbot_img {
+		width: 72px;
+		height: 72px;
+	}
 }
