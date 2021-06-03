@@ -10,7 +10,7 @@ $(':focus').blur();
 			},
 			dataType: 'json',
 			success: function(data) {
-				$('#board_live_count').html(data.live_count);
+				$('#board_live_count').html(data.live_count + "↑");
 			}
 		});
 		$.ajax({
