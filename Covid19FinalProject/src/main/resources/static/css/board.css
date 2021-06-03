@@ -53,6 +53,9 @@
 }
 
 .board_live_count {
+	padding-left: 7px;
+	border-radius: 20px;
+	background-color: rgba(215, 63, 96, 0.3);
 	margin-bottom: 4px !important;
 }
 
@@ -73,6 +76,12 @@
 	margin-bottom: 0px !important;
 }
 
+.board_increment_count {
+	padding-left: 7px; border-radius : 20px;
+	background-color: rgba(225, 192, 0, 0.8);
+	border-radius: 20px;
+}
+
 .board_clear_count_box div {
 	font-size: 16pt;
 	color: #178a17;
@@ -90,6 +99,12 @@
 	margin-bottom: 0px !important;
 }
 
+.board_compare_clear_count {
+	padding-left: 7px;
+	border-radius: 20px;
+	background-color: rgba(22, 171, 22, 0.7);
+}
+
 .board_death_count_box div {
 	font-size: 16pt;
 	color: #000000;
@@ -105,6 +120,12 @@
 
 .board_death_count {
 	margin-bottom: 0px !important;
+}
+
+.board_compare_death_count {
+	padding-left: 7px;
+	border-radius: 20px;
+	background-color: #e1e1e1;
 }
 
 .desc {
