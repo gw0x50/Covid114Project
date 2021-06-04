@@ -128,7 +128,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 		
 		//select
-		ResultVO vo = chatbotMapper.getOneResult(location);
+		ResultVO vo = chatbotMapper.getResult(location);
 		
 		//update date
 		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
@@ -175,7 +175,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 			StringBuffer webhook_locResult = new StringBuffer();
 			
 			for(int i = 0; i < location_array.length; i++) {
-				ResultVO one_vo = chatbotMapper.getOneResult(location_array[i]);
+				ResultVO one_vo = chatbotMapper.getResult(location_array[i]);
 				Arrays.sort(location_array);
 				String getTotal = String.format("%,d", one_vo.getTotal_count());
 				webhook_locResult.append(location_array[i] + " 지역: "
@@ -255,7 +255,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 			resultJson = getJsonString(quick_array, title_message);
 		}
 		else { // Live all(전체)
-			LiveVO vo = chatbotMapper.getOneLive(date);
+			LiveVO vo = chatbotMapper.getLive(date);
 			vo.calSum();
 			String getSum = String.format("%,d", vo.getSum()); 
 			
@@ -526,6 +526,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	@Override //센터주소 링크 리스트
 	public String getCenterUrl(String address, int lengthNum) {	
 
+		System.out.println("검색 값 확인 " + address);
 		if(address.contains(":")) { //POST로 받는 경우
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(address);
 			JsonElement action = jsonObj.get("action");
@@ -541,8 +542,16 @@ public class ChatbotServiceImpl implements ChatbotService{
 			address = address.replaceAll(" 전체", "");
 			addressFourNull_check = true;	
 		}
-		else if(address.contains(" ")) { //location	
+		if(address.contains(" ")) { //location	
 			vo = chatbotMapper.getAddrCenter(address);
+		}
+		else if(address.contains(",")) {
+			String[] facilityAndLoc = address.split(",");
+			HashMap <String, String> map = new HashMap<String, String>();
+			map.put("location", facilityAndLoc[0]);
+			map.put("facility_name", facilityAndLoc[1]);
+			
+			vo = chatbotMapper.getFacility_loc(map);
 		}
 		else { //facility_name
 			vo = chatbotMapper.getFacility(address);
@@ -797,45 +806,13 @@ public class ChatbotServiceImpl implements ChatbotService{
 				
 		}
 		else {
-			if(locationCheck) { //5개 초과한 데이터 지역값 + 시설이름 조회 > 링크 생성
-				
-				JsonArray setUrl_array = new JsonArray(); 		
-				for(int i = 0; i < vo.size(); i++) {
-					
-					if(vo.get(i).getAddress().contains(location)) {
-									
-						String id = getKakaoMapId(vo.get(i).getCenter_name());
-						String address_url = "https://map.kakao.com/link/map/" + id;
-						JsonObject web = new JsonObject();
-						web.addProperty("web", address_url);
-						
-						JsonObject items = new JsonObject();
-						items.addProperty("title", vo.get(i).getFacility_name());
-						items.addProperty("description", vo.get(i).getAddress());
-						items.add("link", web);
-						
-						setUrl_array.add(items);
-					
-					}				
-				}
-				
-				JsonArray quick_array = new JsonArray();
-
-				JsonObject quickReplies = new JsonObject();
-				quickReplies.addProperty("label", "다시 한 번 검색하기");
-				quickReplies.addProperty("action", "block");
-				quickReplies.addProperty("blockId", "60b09b759cf5b44e9f808a62");
-					
-				quick_array.add(quickReplies);
-				
-				
-				String cardTitle = facility_name + " 접종 센터";
-				resultJson = getJsonString(quick_array, setUrl_array, cardTitle);	
-				
+			if(locationCheck) { //5개 초과한 데이터 지역값 + 시설이름 조회 > 링크 생성	
+				resultJson = getCenterUrl(location + "," + facility_name, 1);			
 			}
 			else {
 				resultJson = getCenterUrl(facility_name, vo.size());
 			}
+			
 		}
 
 		return resultJson;
