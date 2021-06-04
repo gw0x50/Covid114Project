@@ -9,6 +9,7 @@ $(document).ready(function() {
 	var marker;
 	var marker1;
 	var marker_address;
+	
 	var infoWindowlocal = new naver.maps.InfoWindow({
 		borderWidth: 0,
 		disableAnchor: true,
@@ -87,11 +88,11 @@ $(document).ready(function() {
 
 					var contentStrings = [
 						'<div class="map_center_window">',
-						'<center>',
+						'<table class="map_center_table"><center>',
 						'   <h3>' + value.center_name + '</h3>',
 						'<hr></center>',
-						'   <p><strong>주소</strong> : ' + value.address + '<br /></p>',
-						'      <strong>전화번호</strong> : ' + value.phone_number + '<br />',
+						'<tr><td><strong>주소  </strong></td><td>' +value.address+ '</td></tr><br>',
+                  		' <tr><td><strong>전화번호</strong></td>  <td>' + value.phone_number + '</td></tr></table>',
 						'</div>'
 					].join('');
 					infoWindow = new naver.maps.InfoWindow({
