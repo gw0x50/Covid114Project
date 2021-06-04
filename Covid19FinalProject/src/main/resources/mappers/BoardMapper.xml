@@ -2,12 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.covid.mapper.BoardMapper">
+	<!-- 최근 실시간 확진자 정보 조회 -->
 	<select id="getRecentLive" resultType="LiveVO">
 		SELECT * FROM covid_live
 		ORDER BY live_date DESC
 		LIMIT 1
 	</select>
 	
+	<!-- 최근 이틀간 확진자 정보 조회 -->
 	<select id="getRecentTwoResult" resultType="ResultVO" parameterType="String">
 		SELECT * FROM covid_result
 		WHERE location = #{location}
