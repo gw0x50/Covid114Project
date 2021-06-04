@@ -89,7 +89,7 @@ $(document).ready(function() {
 					var contentStrings = [
 						'<div class="map_center_window">',
 						'<table class="map_center_table"><center>',
-						'   <strong>' + value.center_name + '</strong>',
+						'   <h3>' + value.center_name + '</h3>',
 						'<hr></center>',
 						'<tr><td><strong>주소  </strong></td><td>' +value.address+ '</td></tr><br>',
                   		' <tr><td><strong>전화번호</strong></td>  <td>' + value.phone_number + '</td></tr></table>',
