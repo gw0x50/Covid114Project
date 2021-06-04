@@ -42,7 +42,8 @@ $(document).ready(function() {
 				'type': $('#chart_select_category').text(),
 				'location': $('#chart_select_location').text()
 			},
-			dataType: 'json',
+			method: 'POST',
+			dataType: 'JSON',
 			success: function(data) {
 				$.each(data, function(key, value) {
 					chartLabels.push(value.result_date);

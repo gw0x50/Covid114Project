@@ -14,7 +14,7 @@ public class ChartController {
 	@Autowired
 	private ChartService service;
 
-	@RequestMapping(value = "/getValues", method = RequestMethod.GET)
+	@RequestMapping(value = "/getValues", method = RequestMethod.POST)
 	@ResponseBody
 	public String getValues(String type, String location) {
 		String result = "";
