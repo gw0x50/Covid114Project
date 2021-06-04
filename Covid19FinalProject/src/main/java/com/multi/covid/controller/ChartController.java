@@ -13,25 +13,26 @@ import com.multi.covid.service.ChartService;
 public class ChartController {
 	@Autowired
 	private ChartService service;
-
-	@RequestMapping(value = "/getValues", method = RequestMethod.POST)
+	
+	// 최근 7일간 확진자 정보 조회
+	@RequestMapping(value = "/get7DaysResult", method = RequestMethod.POST)
 	@ResponseBody
-	public String getValues(String type, String location) {
-		String result = "";
-		
-		if (location.equals("전체")) location = "합계";
-
-		if (type.equals("일일")) {
-			result = service.get7DaysResult(location);
-		}
-		else if (type.equals("주간")) {
-			result = service.get4WeeksResult(location);
-		}
-		else if (type.equals("월간")) {
-			result = service.get12MonthsResult(location);
-		}
-
-		return result;
+	public String get7DaysResult(String location) {
+		return service.get7DaysResult(location);
+	}
+	
+	// 최근 4주간 확진자 정보 조회
+	@RequestMapping(value = "/get4WeeksResult", method = RequestMethod.POST)
+	@ResponseBody
+	public String get4WeeksResult(String location) {
+		return service.get4WeeksResult(location);
+	}
+	
+	// 최근 12개월간 확진자 정보 조회
+	@RequestMapping(value = "/get12MonthsResult", method = RequestMethod.POST)
+	@ResponseBody
+	public String get12MonthsResult(String location) {
+		return service.get12MonthsResult(location);
 	}
 
 }

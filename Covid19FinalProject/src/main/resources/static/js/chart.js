@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	var ctx = document.getElementById('chart_area').getContext('2d');
+
+	// 영역을 잡기 위한 빈 차트 생성
 	var myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
@@ -29,27 +31,31 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	// chart_area 영역 크기 설정
 	$('.chart_area').attr('width', $('.chart_title').width());
 	$('.chart_area').attr('height', $('.chart_title').width());
+
+	// 확진자 차트 갱신 함수
 	function chartOnChange() {
 		var chartLabels = [];
 		var chartData = [];
-		myChart.destroy();
+		myChart.destroy(); // 기존 차트 초기화
 
-		$.ajax({
-			url: './chart/getValues',
-			data: {
-				'type': $('#chart_select_category').text(),
-				'location': $('#chart_select_location').text()
-			},
-			method: 'POST',
-			dataType: 'JSON',
-			success: function(data) {
-				$.each(data, function(key, value) {
-					chartLabels.push(value.result_date);
-					chartData.push(value.increment_count);
-				});
-				if (chartLabels.length == 7) {
+		var type = $('#chart_select_type').text();
+		if (type == '일일') {
+			$.ajax({
+				url: './chart/get7DaysResult',
+				data: {
+					'location': $('#chart_select_location').text()
+				},
+				method: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					$.each(data, function(key, value) {
+						chartLabels.push(value.result_date);
+						chartData.push(value.increment_count);
+					});
 					myChart = new Chart(ctx, {
 						type: 'bar',
 						data: {
@@ -125,7 +131,21 @@ $(document).ready(function() {
 						}]
 					});
 				}
-				else if (chartLabels.length == 4) {
+			});
+		}
+		else if (type == '주간') {
+			$.ajax({
+				url: './chart/get4WeeksResult',
+				data: {
+					'location': $('#chart_select_location').text()
+				},
+				method: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					$.each(data, function(key, value) {
+						chartLabels.push(value.result_date);
+						chartData.push(value.increment_count);
+					});
 					var secondChartData = [];
 					$.each(chartData, function(key, value) {
 						secondChartData.push(Math.round(value / 7));
@@ -211,7 +231,22 @@ $(document).ready(function() {
 						}
 					});
 				}
-				else if (chartLabels.length == 12) {
+			});
+		}
+		else if (type == '월간') {
+			$.ajax({
+				url: './chart/get12MonthsResult',
+				data: {
+					'location': $('#chart_select_location').text()
+				},
+				method: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					$.each(data, function(key, value) {
+						chartLabels.push(value.result_date);
+						chartData.push(value.increment_count);
+					});
+
 					myChart = new Chart(ctx, {
 						type: 'line',
 						data: {
@@ -253,78 +288,79 @@ $(document).ready(function() {
 						}
 					});
 				}
-			}
-		});
-	}
-	chartOnChange();
-
-	$('#chart_category').on('change', function() {
-		chartOnChange();
-	});
-	$('#chart_location').on('change', function() {
-		chartOnChange();
-	});
-
-	$(".chart_select_category_box .dropdown img.flag").addClass("flagvisibility");
-
-	$(".chart_select_category_box .dropdown dt a").click(function(e) {
-		e.preventDefault();
-		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").toggle();
-	});
-
-	$(".chart_select_category_box .dropdown dd ul li a").click(function(e) {
-		e.preventDefault();
-		var text = $(this).html();
-		$(".chart_select_category_box .dropdown dt a .chart_select_category").html(text);
-		$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
-		chartOnChange();
-	});
-
-	function getSelectedValue(id) {
-		return $("#" + id).find("dt a #chart_select_category.value").html();
+			});
+		}
 	}
 
+	chartOnChange(); // 페이지 로딩 후 최초 갱신
+
+	// type 관련 함수
+	$('.chart_select_type_box .dropdown img.flag').addClass('flagvisibility');
+
+	$('.chart_select_type_box .dropdown img.flag').toggleClass('flagvisibility');
+
+	// dropbox 클릭
+	$('.chart_select_type_box .dropdown dt a').click(function(e) {
+		e.preventDefault();
+		$('.chart_dropdown_type').toggle(); // 리스트 on/off
+	});
+
+	// dropbox list 클릭
+	$('.chart_select_type_box .dropdown dd ul li a').click(function(e) {
+		e.preventDefault();
+		var text = $(this).html(); // 선택한 리스트의 값
+		$('.chart_select_type').html(text); // 버튼 값 변경
+		$('.chart_dropdown_type').hide(); // 리스트 off
+		chartOnChange(); // 정보 갱신
+	});
+
+	// 페이지 클릭
 	$(document).bind('click', function(e) {
 		e.preventDefault();
 		var $clicked = $(e.target);
-		if (!$clicked.parents().hasClass("chart_select_category_box"))
-			$(".chart_select_category_box .dropdown dd .chart_dropdown_category").hide();
+		// 리스트를 클릭한 것이 아닐 경우 리스트 닫기
+		if (!$clicked.parents().hasClass('chart_select_type_box')) {
+			$('.chart_dropdown_type').hide();
+		}
 	});
 
-	$(".chart_select_category_box .dropdown img.flag").toggleClass("flagvisibility");
-
-	$('#chart_select_category').on('change', function() {
+	// 버튼의 값이 바뀌었을 경우 정보 갱신
+	$('#chart_select_type').on('change', function() {
 		chartOnChange();
 	});
 
 
-	$(".chart_select_location_box .dropdown img.flag").addClass("flagvisibility");
+	// location 관련 함수
+	$('.chart_select_location_box .dropdown img.flag').addClass('flagvisibility');
 
-	$(".chart_select_location_box .dropdown dt a").click(function(e) {
+	$('.chart_select_location_box .dropdown img.flag').toggleClass('flagvisibility');
+
+	// dropbox 클릭
+	$('.chart_select_location_box .dropdown dt a').click(function(e) {
 		e.preventDefault();
-		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").toggle();
+		$('.chart_dropdown_location').toggle();
 	});
 
-	$(".chart_select_location_box .dropdown dd ul li a").click(function(e) {
+	// dropbox list 클릭
+	$('.chart_select_location_box .dropdown dd ul li a').click(function(e) {
 		e.preventDefault();
 		var text = $(this).html();
-		$(".chart_select_location_box .dropdown dt a .chart_select_location").html(text);
-		$(".chart_select_location_box .dropdown dd .chart_dropdown_location").hide();
+		$('.chart_select_location').html(text);
+		$('.chart_dropdown_location').hide();
 		chartOnChange();
 	});
 
-	function getSelectedValue(id) {
-		return $("#" + id).find("dt a #chart_select_location.value").html();
-	}
-
+	// 페이지 클릭
 	$(document).bind('click', function(e) {
 		var $clicked = $(e.target);
-		if (!$clicked.parents().hasClass("chart_select_location_box"))
-			$(".chart_select_location_box .dropdown dd .chart_dropdown_location").hide();
+		// 리스트를 클릭한 것이 아닐 경우 리스트 닫기
+		if (!$clicked.parents().hasClass('chart_select_location_box')) {
+			$('.chart_select_location_box .dropdown dd .chart_dropdown_location').hide();
+		}
+
 	});
 
-	$(".chart_select_location_box .dropdown img.flag").toggleClass("flagvisibility");
-
+	// 버튼의 값이 바뀌었을 경우 정보 갱신
 	$('#chart_select_location').on('change', function() {
 		chartOnChange();
 	});
