@@ -108,7 +108,7 @@
 	background: #FFFFFF;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
-	font-size: 7pt;
+	font-size: 8pt;
 	border-radius: 20px 20px 20px 20px;
 	border: #CAE9FA solid 3px;
 	opacity: 0.98;
@@ -183,7 +183,7 @@
 		height: 674px;
 	}
 	.map_local_window {
-		font-size: 10pt;
+		font-size: 11pt;
 	}
 	.map_center_window {
 		font-size: 11pt;
