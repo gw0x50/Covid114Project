@@ -4,16 +4,16 @@
 	<div class="chart_title">
 		<div class="chart_title_text">확진자 차트</div>
 		<div class="chart_select_wrap">
-			<div class="chart_select_category_box">
+			<div class="chart_select_type_box">
 				<dl class="dropdown">
 					<dt>
 						<a href="#" style="padding-top:1px; padding-bottom:4px;">
 							<div class="text">기간</div>
-							<div class="chart_select_category" id="chart_select_category">일일</div>
+							<div class="chart_select_type" id="chart_select_type">일일</div>
 						</a>
 					</dt>
 					<dd>
-						<ul class="chart_dropdown_category">
+						<ul class="chart_dropdown_type">
 							<li><a href="#">일일</a></li>
 							<li><a href="#">주간</a></li>
 							<li><a href="#">월간</a></li>

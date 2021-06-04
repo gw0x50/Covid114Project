@@ -45,7 +45,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: './chart/getValues',
 			data: {
-				'type': $('#chart_select_category').text(),
+				'type': $('#chart_select_type').text(),
 				'location': $('#chart_select_location').text()
 			},
 			method: 'POST',
@@ -266,23 +266,23 @@ $(document).ready(function() {
 	chartOnChange(); // 페이지 로딩 후 최초 갱신
 	
 	
-	// category 관련 함수
-	$('.chart_select_category_box .dropdown img.flag').addClass('flagvisibility');
+	// type 관련 함수
+	$('.chart_select_type_box .dropdown img.flag').addClass('flagvisibility');
 
-	$('.chart_select_category_box .dropdown img.flag').toggleClass('flagvisibility');
+	$('.chart_select_type_box .dropdown img.flag').toggleClass('flagvisibility');
 
 	// dropbox 클릭
-	$('.chart_select_category_box .dropdown dt a').click(function(e) {
+	$('.chart_select_type_box .dropdown dt a').click(function(e) {
 		e.preventDefault();
-		$('.chart_dropdown_category').toggle(); // 리스트 on/off
+		$('.chart_dropdown_type').toggle(); // 리스트 on/off
 	});
 	
 	// dropbox list 클릭
-	$('.chart_select_category_box .dropdown dd ul li a').click(function(e) {
+	$('.chart_select_type_box .dropdown dd ul li a').click(function(e) {
 		e.preventDefault();
 		var text = $(this).html(); // 선택한 리스트의 값
-		$('.chart_select_category').html(text); // 버튼 값 변경
-		$('.chart_dropdown_category').hide(); // 리스트 off
+		$('.chart_select_type').html(text); // 버튼 값 변경
+		$('.chart_dropdown_type').hide(); // 리스트 off
 		chartOnChange(); // 정보 갱신
 	});
 
@@ -291,13 +291,13 @@ $(document).ready(function() {
 		e.preventDefault();
 		var $clicked = $(e.target);
 		// 리스트를 클릭한 것이 아닐 경우 리스트 닫기
-		if (!$clicked.parents().hasClass('chart_select_category_box')) {
-			$('.chart_dropdown_category').hide();
+		if (!$clicked.parents().hasClass('chart_select_type_box')) {
+			$('.chart_dropdown_type').hide();
 		}
 	});
 	
 	// 버튼의 값이 바뀌었을 경우 정보 갱신
-	$('#chart_select_category').on('change', function() {
+	$('#chart_select_type').on('change', function() {
 		chartOnChange();
 	});
 	
