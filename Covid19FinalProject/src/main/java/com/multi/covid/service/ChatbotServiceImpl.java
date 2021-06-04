@@ -318,37 +318,45 @@ public class ChatbotServiceImpl implements ChatbotService{
 	public String selectAddr(String location) {
 		
 		String param = "";
-		boolean paramCheck = false;
+		boolean paramCheck_one = false;
+		boolean paramCheck_two = false;
 		if(location.contains("vaccine_center_location")) {
 			param = "vaccine_center_location";
-			paramCheck = true;
+			paramCheck_one = true;
 		}
 		else if(location.contains("vaccine_address_two")){
 			param = "vaccine_address_two";
+			paramCheck_two = true;
 		}
-		else {
-			param = "vaccine_address_three";
-		}
+
 		
-		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
-		JsonElement action = jsonObj.get("action");
-		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-		location = params.getAsJsonObject().get(param).getAsString();
+		if(paramCheck_one || paramCheck_two) {			
+			JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
+			JsonElement action = jsonObj.get("action");
+			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
+			location = params.getAsJsonObject().get(param).getAsString();
+		}
 		
 		List<String> addr = null;
 		
 		int center_count = 20;
 		int splitNum = 0;
-		if(paramCheck) {
+		if(paramCheck_one) {
 			addr = chatbotMapper.getAddrTwo(location);
 			splitNum = 1;
-		}else {
+		}
+		else if(paramCheck_two) {
 			addr = chatbotMapper.getAddrThree(location);
 			center_count = chatbotMapper.getAddrCenter(location).size();
 			splitNum = 2;
 		}
+		else {
+			addr = chatbotMapper.getAddrFour(location);
+			splitNum = 3;
+		}
 		
 		ArrayList<String> addr_arr = new ArrayList<String>();
+		
 		
 		if(addr.size() > 20) {				
 			for(int i = 0; i < 19; i++) {
@@ -359,8 +367,13 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 		else {			
 			for(int i = 0; i < addr.size(); i++) {	
-				String[] addr_split = addr.get(i).split(" ");		
-				addr_arr.add(addr_split[splitNum]);
+				String[] addr_split = addr.get(i).split(" ");
+				try {
+					addr_arr.add(addr_split[splitNum]);					
+				}
+				catch(ArrayIndexOutOfBoundsException e) {
+					addr_arr.add(location + " 전체");
+				}
 			}				
 		}			
 
@@ -387,8 +400,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 				quickReplies.addProperty("label", addr_arr.get(i));
 				quickReplies.addProperty("action", "message");
 				quickReplies.addProperty("messageText", addr.get(i));
-				if(addr_arr.get(i).contains(location)) {				
-					if(!paramCheck) {
+				if(addr_arr.get(i).contains(location)) { //20개 초과인 경우 나머지 출력으로 블럭 이동 			
+					if(!paramCheck_one) { 
 						quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
 					}			
 					quickReplies.addProperty("messageText", addr_arr.get(i));
@@ -414,13 +427,13 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 		boolean paramCheck = false;
 		String paramName = "";
-		
+		System.out.println(location);
 		if(location.contains("vaccine_center_location")) {//selectAddrTwo
 			paramName = "vaccine_center_location";
 			paramCheck = true;
 		}
 		else {
-			paramName = "vaccine_finde_two";//selectAddrThree
+			paramName = "vaccine_find_more";//selectAddrThree
 		}
 		
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
@@ -428,14 +441,14 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get(paramName).getAsString();
 		
-		if(!paramCheck) {//selectAddrThree
+		if(!paramCheck) {
 			location = location.replace(" 더 찾기", "");
 		}
 
 
 		List<String> addr_list = null;
 		ArrayList<String> addr_arr = new ArrayList<String>();
-		
+
 		int splitNum = 0;
 		if(paramCheck) {
 			splitNum = 1;
@@ -445,7 +458,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 			splitNum = 2;
 			addr_list = chatbotMapper.getAddrThree(location);
 		}
-		
+
 			
 		if(addr_list.size() > 40) {
 			for(int i = 20; i < 39; i++) {
@@ -487,18 +500,23 @@ public class ChatbotServiceImpl implements ChatbotService{
 	
 	@Override//센터주소 링크 반환 
 	public String getCenterUrl(String address, int lengthNum) {	
-		
+
 		//JSON으로 받아올 경우
 		if(address.contains(":")) {
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(address);
 			JsonElement action = jsonObj.get("action");
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-			address = params.getAsJsonObject().get("vaccine_address_three").getAsString();
+			address = params.getAsJsonObject().get("vaccine_address").getAsString();
 		} 
 		
 		//select
 		List<CenterVO> vo = null;
 		boolean facility_check = false;
+		boolean addressFourNull_check = false;
+		if(address.contains(" 전체")) {
+			address = address.replaceAll(" 전체", "");
+			addressFourNull_check = true;
+		}
 		if(address.contains(" ")) { //location	
 			vo = chatbotMapper.getAddrCenter(address);
 		}
@@ -515,13 +533,13 @@ public class ChatbotServiceImpl implements ChatbotService{
 		boolean overLength15 = false;
 		boolean length10 = false;
 		//10개 초과 15개 미만인 경우 
+		if(lengthNum == 10) {//정확히 10개인 경우 
+			length10 = true;
+		}
 		if(lengthNum == 100) {
 			lengthNum = 10;
 		}
 		if(lengthNum > 5 && lengthNum <= 10) {
-			if(lengthNum == 10) {//정확히 10개인 경우 
-				length10 = true;
-			}
 			startNum = 5;
 			endNum = lengthNum;
 			overLength = true;
@@ -538,6 +556,9 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 		//외부에서 호출할 경우(lengthNum 할당)
 		else if(vo.size() > 5) {
+			if(vo.size() > 20 && chatbotMapper.getAddrFour(address).size() != 0 && !addressFourNull_check) {
+				return selectAddr(address);
+			}
 			startNum = 0;
 			endNum = 5;
 			overLength = true;
@@ -636,7 +657,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
 		
 		//10 초과일 경우 lengthNum 100 (getCenterUrl - 100으로 넘겨온 것을 10으로 바꿈 처리) 
-		if(vo.size()>100) {
+		if(vo.size()>10) {
 			lengthNum = 100;
 		}
 		else {
