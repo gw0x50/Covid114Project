@@ -13,7 +13,6 @@
 
 @media ( min-width : 768px) {
 	.footer_section {
-		background: #fff none repeat scroll 0 0;
 		border: 1px solid rgba(85, 85, 85, 0.082);
 		border-radius: 8px;
 	}
