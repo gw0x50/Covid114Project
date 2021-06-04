@@ -27,10 +27,10 @@
 	<!-- 최근 12개월간 확진자 정보 조회 -->
 	<select id="get12MonthsResult" resultType="ResultVO" parameterType="String">
 		SELECT * FROM (
-			SELECT left(result_date, 7) AS result_date, location, SUM(increment_count) AS increment_count, MAX(total_count) AS total_count
+			SELECT LEFT(result_date, 7) AS result_date, location, SUM(increment_count) AS increment_count, MAX(total_count) AS total_count
 			FROM covid_result
 			WHERE location = #{location} AND DATE(result_date)
-			GROUP BY location, left(result_date, 7)
+			GROUP BY location, LEFT(result_date, 7)
 			ORDER BY result_date DESC
 			LIMIT 12
 		) AS RESULT

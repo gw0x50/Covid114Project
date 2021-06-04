@@ -19,7 +19,9 @@ public class ChartServiceImpl implements ChartService {
 	@Override
 	public String get7DaysResult(String location) {
 		Gson gson = new Gson();
-
+		
+		if (location.equals("전체")) location = "합계"; // DB에서 사용되는 location 값으로 변경
+		
 		List<ResultVO> sqlResult = mapper.get7DaysResult(location); // sql 호출 및 응답 정보 저장
 
 		// 응답 정보 내부 데이터 변경
@@ -37,18 +39,20 @@ public class ChartServiceImpl implements ChartService {
 	@Override
 	public String get4WeeksResult(String location) {
 		Gson gson = new Gson();
-
+		
+		if (location.equals("전체")) location = "합계"; // DB에서 사용되는 location 값으로 변경
+		
 		List<ResultVO> sqlResult = mapper.get4WeeksResult(location); // sql 호출 및 응답 정보 저장
 
 		List<ResultVO> returnList = new ArrayList<ResultVO>();
 
 		// 28개의 데이터를 한 주 단위로 묶어서 총 4주의 데이터로 가공
-		// sqlResult의 맨 앞에 있는 값을 사용 후 remove하여 다음 값 호출
+		// sqlResult의 맨 앞의 값 사용 후 remove하여 다음 값 호출
 		// 한 주 단위 반복문
 		for (int i = 0; i < 4; i++) {
 			ResultVO temp = new ResultVO();
 
-			// 한 주의 시작 부분을 기준으로 날짜와 지역 정보 저장
+			// 한 주의 시작 부분 기준으로 날짜와 지역 정보 저장
 			temp.setResult_date(sqlResult.get(0).getResult_date().substring(5).replaceAll("-", "/")); // ex) 2021-06-04 -> 06/04
 			temp.setLocation(sqlResult.get(0).getLocation());
 
@@ -66,6 +70,8 @@ public class ChartServiceImpl implements ChartService {
 	@Override
 	public String get12MonthsResult(String location) {
 		Gson gson = new Gson();
+		
+		if (location.equals("전체")) location = "합계"; // DB에서 사용되는 location 값으로 변경
 		
 		List<ResultVO> sqlResult = mapper.get12MonthsResult(location); // sql 호출 및 응답 정보 저장
 

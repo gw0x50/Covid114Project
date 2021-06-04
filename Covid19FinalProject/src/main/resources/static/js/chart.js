@@ -42,20 +42,20 @@ $(document).ready(function() {
 		var chartData = [];
 		myChart.destroy(); // 기존 차트 초기화
 
-		$.ajax({
-			url: './chart/getValues',
-			data: {
-				'type': $('#chart_select_type').text(),
-				'location': $('#chart_select_location').text()
-			},
-			method: 'POST',
-			dataType: 'JSON',
-			success: function(data) {
-				$.each(data, function(key, value) {
-					chartLabels.push(value.result_date);
-					chartData.push(value.increment_count);
-				});
-				if (chartLabels.length == 7) {
+		var type = $('#chart_select_type').text();
+		if (type == '일일') {
+			$.ajax({
+				url: './chart/get7DaysResult',
+				data: {
+					'location': $('#chart_select_location').text()
+				},
+				method: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					$.each(data, function(key, value) {
+						chartLabels.push(value.result_date);
+						chartData.push(value.increment_count);
+					});
 					myChart = new Chart(ctx, {
 						type: 'bar',
 						data: {
@@ -131,7 +131,21 @@ $(document).ready(function() {
 						}]
 					});
 				}
-				else if (chartLabels.length == 4) {
+			});
+		}
+		else if (type == '주간') {
+			$.ajax({
+				url: './chart/get4WeeksResult',
+				data: {
+					'location': $('#chart_select_location').text()
+				},
+				method: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					$.each(data, function(key, value) {
+						chartLabels.push(value.result_date);
+						chartData.push(value.increment_count);
+					});
 					var secondChartData = [];
 					$.each(chartData, function(key, value) {
 						secondChartData.push(Math.round(value / 7));
@@ -217,7 +231,22 @@ $(document).ready(function() {
 						}
 					});
 				}
-				else if (chartLabels.length == 12) {
+			});
+		}
+		else if (type == '월간') {
+			$.ajax({
+				url: './chart/get12MonthsResult',
+				data: {
+					'location': $('#chart_select_location').text()
+				},
+				method: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					$.each(data, function(key, value) {
+						chartLabels.push(value.result_date);
+						chartData.push(value.increment_count);
+					});
+
 					myChart = new Chart(ctx, {
 						type: 'line',
 						data: {
@@ -259,13 +288,12 @@ $(document).ready(function() {
 						}
 					});
 				}
-			}
-		});
+			});
+		}
 	}
 
 	chartOnChange(); // 페이지 로딩 후 최초 갱신
-	
-	
+
 	// type 관련 함수
 	$('.chart_select_type_box .dropdown img.flag').addClass('flagvisibility');
 
@@ -276,7 +304,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		$('.chart_dropdown_type').toggle(); // 리스트 on/off
 	});
-	
+
 	// dropbox list 클릭
 	$('.chart_select_type_box .dropdown dd ul li a').click(function(e) {
 		e.preventDefault();
@@ -295,24 +323,24 @@ $(document).ready(function() {
 			$('.chart_dropdown_type').hide();
 		}
 	});
-	
+
 	// 버튼의 값이 바뀌었을 경우 정보 갱신
 	$('#chart_select_type').on('change', function() {
 		chartOnChange();
 	});
-	
-	
+
+
 	// location 관련 함수
 	$('.chart_select_location_box .dropdown img.flag').addClass('flagvisibility');
 
 	$('.chart_select_location_box .dropdown img.flag').toggleClass('flagvisibility');
-	
+
 	// dropbox 클릭
 	$('.chart_select_location_box .dropdown dt a').click(function(e) {
 		e.preventDefault();
 		$('.chart_dropdown_location').toggle();
 	});
-	
+
 	// dropbox list 클릭
 	$('.chart_select_location_box .dropdown dd ul li a').click(function(e) {
 		e.preventDefault();
@@ -321,7 +349,7 @@ $(document).ready(function() {
 		$('.chart_dropdown_location').hide();
 		chartOnChange();
 	});
-	
+
 	// 페이지 클릭
 	$(document).bind('click', function(e) {
 		var $clicked = $(e.target);
@@ -331,7 +359,7 @@ $(document).ready(function() {
 		}
 
 	});
-	
+
 	// 버튼의 값이 바뀌었을 경우 정보 갱신
 	$('#chart_select_location').on('change', function() {
 		chartOnChange();
