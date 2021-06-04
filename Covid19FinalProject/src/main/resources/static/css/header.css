@@ -15,13 +15,7 @@
 
 @media ( min-width : 768px) {
 	.header_section {
-		background: #000000 none repeat scroll 0 0;
 		border: 1px solid rgba(85, 85, 85, 0.082);
 		border-radius: 8px;
-		margin-bottom: 20px;
-	}
-	.header_logo img {
-		display: block;
-		margin: 0px auto;
 	}
 }
