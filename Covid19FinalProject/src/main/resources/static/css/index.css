@@ -59,28 +59,6 @@ body {
 }
 
 @media ( min-width : 768px) {
-	html {
-		-webkit-text-size-adjust: none;
-		-moz-text-size-adjust: none;
-		-ms-text-size-adjust: none;
-		overflow-x: hidden;
-	}
-	input, button {
-		-webkit-appearance: none;
-		-webkit-border-radius: 0;
-		-moz-appearance: none;
-		-moz-border-radius: 0;
-		-ms-appearance: none;
-		-ms-border-radius: 0;
-		appearance: none;
-	}
-	input:focus {
-		outline: none;
-	}
-	body {
-		margin: 0;
-		overflow-x: hidden;
-	}
 	.wrap {
 		padding: 20px 0;
 		width: 700px;
@@ -88,11 +66,5 @@ body {
 	}
 	.container {
 		width: 700px;
-	}
-	::-webkit-scrollbar {
-		width: 3px;
-	}
-	::-webkit-scrollbar-thumb {
-		background: #a9a9a9;
 	}
 }
