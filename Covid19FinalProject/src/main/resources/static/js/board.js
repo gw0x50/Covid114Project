@@ -46,10 +46,6 @@ $(':focus').blur();
 		boardOnChange();
 	});
 
-	function getSelectedValue(id) {
-		return $("#" + id).find("dt a #board_select_location.value").html();
-	}
-	
 	$(document).on('click', function(e) {
 		e.preventDefault();
 		var $clicked = $(e.target);
