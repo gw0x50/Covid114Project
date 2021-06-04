@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.covid.mapper.MapMapper">
+	<!-- 반경 5km 이내 백신센터 DB -->
 	<select id="getAllCenter" resultType="CenterVO" parameterType="double">
 		SELECT * FROM covid_vaccine_center
 		WHERE (LAT BETWEEN (#{param1}-0.02) AND (#{param1}+0.02)) AND (LNG BETWEEN (#{param2}-0.022) AND (#{param2}+0.022))

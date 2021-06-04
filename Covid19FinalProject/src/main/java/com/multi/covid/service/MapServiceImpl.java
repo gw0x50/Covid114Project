@@ -14,7 +14,7 @@ public class MapServiceImpl implements MapService{
 	private MapMapper mapMapper;
 
 	@Override
-	public List<CenterVO> getAllCenter(String lat,String lng) {
+	public List<CenterVO> getAllCenter(String lat,String lng) {//위도경도 주변 백신센터 DB받아오기
 		double lat1 = Double.parseDouble(lat);
 		double lng1 = Double.parseDouble(lng);
 		return mapMapper.getAllCenter(lat1,lng1);
