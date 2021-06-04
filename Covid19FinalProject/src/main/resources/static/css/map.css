@@ -102,7 +102,7 @@
 
 .map_center_window {
 	position: relative;
-	width: auto;
+	width: 80%;
 	height: auto;
 	padding: 5px 5px 10px 5px;
 	background: #FFFFFF;
@@ -173,7 +173,6 @@
 		font-size: 8pt;
 	}
 	.map_submit {
-		font-size: 9pt;
 		padding-left: 10px;
 		padding-right: 10px;
 		right: -7%;
