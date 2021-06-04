@@ -2,8 +2,9 @@
 
 .map_section {
 	background: #fff none repeat scroll 0 0;
-	border-top: 1px solid #9e9e9e;
-	border-bottom: 1px solid #9e9e9e;
+	border-top: 1px solid rgba(85, 85, 85, 0.082);
+	border-bottom: 1px solid rgba(85, 85, 85, 0.082);
+	box-shadow: rgba(0, 0, 0, 0.022) -1px 1px 1px;
 	margin-bottom: 20px;
 	padding: 12px 12px;
 }
@@ -55,7 +56,6 @@
 }
 
 .map_wrap {
-	border: 1px solid #9e9e9e;
 	width: 100%;
 	height: 100vw;
 }
@@ -126,7 +126,7 @@
 @media ( min-width : 768px) {
 	.map_section {
 		background: #fff none repeat scroll 0 0;
-		border: 1px solid #9e9e9e;
+		border: 1px solid rgba(85, 85, 85, 0.082);
 		border-radius: 8px;
 		margin-bottom: 20px;
 		padding: 12px 12px;
