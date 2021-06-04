@@ -2,39 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.covid.mapper.MapMapper">
-	<select id="getOneResult" resultType="ResultVO"
-		parameterType="String">
-		SELECT * FROM covid_result
-		WHERE result_date=#{date}
-	</select>
-
-	<select id="getBetweenResult" resultType="ResultVO"
-		parameterType="hashmap">
-		SELECT * FROM covid_result
-		WHERE DATE(result_date)
-		BETWEEN #{startDate} AND #{endDate}
-	</select>
-
-	<select id="getAllResult" resultType="ResultVO"
-		parameterType="String">
-		SELECT * FROM covid_result
-	</select>
-	
-	<select id="getOneLive" resultType="LiveVO" parameterType="String">
-		SELECT * FROM covid_live
-		WHERE live_date=#{date}
-	</select>
-	
+	<!-- 반경 5km 이내 백신센터 DB -->
 	<select id="getAllCenter" resultType="CenterVO" parameterType="double">
 		SELECT * FROM covid_vaccine_center
 		WHERE (LAT BETWEEN (#{param1}-0.02) AND (#{param1}+0.02)) AND (LNG BETWEEN (#{param2}-0.022) AND (#{param2}+0.022))
-	</select>
-	
-	
-	
-	<select id="getAllCentertemp" resultType="CenterVO" parameterType="double">
-		SELECT * FROM covid_vaccine_center_temp
-		WHERE (LAT BETWEEN (#{param1}-0.01) AND (#{param1}+0.01)) AND (LNG BETWEEN (#{param2}-0.013) AND (#{param2}+0.013))
 	</select>
 </mapper>
 
