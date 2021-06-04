@@ -166,24 +166,13 @@
 
 @media ( min-width : 768px) {
 	.chart_section {
-		background: #fff none repeat scroll 0 0;
 		border: 1px solid rgba(85, 85, 85, 0.082);
 		border-radius: 8px;
-		margin-bottom: 20px;
-		padding: 12px 12px;
-	}
-	.chart_title {
-		display: flex;
-		margin-bottom: 12px;
 	}
 	.chart_title_text {
 		position: absolute;
 		left: 50%;
 		margin-left: -55px;
-		font-size: 17pt;
-		text-align: center;
-		display: flex;
-		align-items: center;
 	}
 	.chart_select_wrap {
 		position: static;
@@ -200,115 +189,7 @@
 		height: 34px;
 	}
 	.chart_wrap {
-		overflow: hidden;
 		width: 674px;
 		height: 539.2px;
-	}
-	.desc {
-		color: #e8e8e8;
-	}
-	.desc a {
-		color: #515151;
-	}
-	.dropdown {
-		width: 104px;
-		height: 34px;
-		margin: 0px;
-	}
-	.dropdown dd, .dropdown dt, .dropdown ul {
-		margin: 0px;
-		padding: 0px;
-	}
-	.dropdown dd {
-		position: relative;
-	}
-	.dropdown a, .dropdown a:visited {
-		color: #3b3b3b;
-		text-decoration: none;
-		outline: none;
-	}
-	.dropdown a:hover {
-		color: #3b3b3b;
-	}
-	.dropdown dt a:hover {
-		color: #3b3b3b;
-		border: 1px solid #9e9e9e;
-	}
-	.dropdown dt a {
-		background: #fff url("/resources/images/arrow.png") no-repeat scroll right center;
-		display: block;
-		padding-right: 20px;
-		border: 1px solid #9e9e9e;
-		width: 82px;
-		height: 27px;
-	}
-	.dropdown dt a div {
-		padding-top: 1px;
-		font-size: 13px;
-		cursor: pointer;
-		line-height: 29px;
-		margin: 0;
-	}
-	.dropdown dt a div:first-child {
-		float: left;
-		width: 30px;
-		display: block;
-		padding-left: 18px;
-		width: 30px;
-	}
-	.dropdown dt a div:nth-child(2) {
-		display: inline-block;
-		display: block;
-	}
-	.dropdown dd ul:first-child {
-		background: #fff none repeat scroll 0 0;
-		border: 1px solid #9e9e9e;
-		border-radius: 8px;
-		color: #515151;
-		display: none;
-		left: 0px;
-		padding: 0px;
-		position: absolute;
-		top: -1px;
-		width: auto;
-		min-width: 102px;
-		list-style: none;
-		text-align: left;
-	}
-	.dropdown dd .chart_dropdown_location {
-		background: #fff none repeat scroll 0 0;
-		border: 1px solid #9e9e9e;
-		border-radius: 8px;
-		color: #515151;
-		display: none;
-		left: 0px;
-		padding: 0px;
-		position: absolute;
-		top: -1px;
-		width: auto;
-		min-width: 102px;
-		list-style: none;
-		text-align: left;
-		overflow: auto;
-		height: 145px;
-	}
-	.dropdown span.value {
-		display: none;
-	}
-	.dropdown dd ul li a {
-		padding: 5px;
-		display: block;
-		padding-left: 11px;
-	}
-	.dropdown dd ul li a:hover {
-		background-color: #e8e8e8;
-	}
-	.dropdown img.flag {
-		border: none;
-		vertical-align: middle;
-		padding: 11px;
-	}
-	.flagvisibility {
-		display: none;
 	}
 }
