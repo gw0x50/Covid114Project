@@ -6,6 +6,7 @@ $(':focus').blur();
 			data: {
 				'location': $('#board_select_location').text()
 			},
+			method: 'POST',
 			dataType: 'json',
 			success: function(data) {
 				$('#board_live_count').html(data.live_count + "↑");
@@ -16,6 +17,7 @@ $(':focus').blur();
 			data: {
 				'location': $('#board_select_location').text()
 			},
+			method: 'POST',
 			dataType: 'json',
 			success: function(data) {
 				$('#board_total_count').html(data.total_count.toLocaleString('ko-KR'));
