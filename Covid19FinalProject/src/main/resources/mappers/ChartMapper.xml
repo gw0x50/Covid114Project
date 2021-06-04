@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.covid.mapper.ChartMapper">
+	<!-- 최근 7일간 확진자 정보 조회 -->
 	<select id="get7DaysResult" resultType="ResultVO" parameterType="String">
 		SELECT * FROM (
 			SELECT * FROM covid_result
@@ -12,6 +13,7 @@
 		ORDER BY RESULT.result_date
 	</select>
 	
+	<!-- 최근 4주간 확진자 정보 조회 -->
 	<select id="get4WeeksResult" resultType="ResultVO" parameterType="String">
 		SELECT * FROM (
 			SELECT * FROM covid_result
@@ -22,6 +24,7 @@
 		ORDER BY RESULT.result_date
 	</select>
 	
+	<!-- 최근 12개월간 확진자 정보 조회 -->
 	<select id="get12MonthsResult" resultType="ResultVO" parameterType="String">
 		SELECT * FROM (
 			SELECT left(result_date, 7) AS result_date, location, SUM(increment_count) AS increment_count, MAX(total_count) AS total_count
