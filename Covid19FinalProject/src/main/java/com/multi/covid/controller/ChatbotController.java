@@ -17,10 +17,7 @@ import com.multi.covid.service.ChatbotService;
 @RequestMapping("/chatbot")
 public class ChatbotController {
 	@Autowired
-	private ChatbotService service;
-	/*http://61.102.5.133:9091/*/
-	/*http://49.142.68.213:9091*/
-	
+	private ChatbotService service;	
 	
 	//누적 확진자 조회
 	@RequestMapping(value="/result", method=RequestMethod.POST)
@@ -60,28 +57,28 @@ public class ChatbotController {
 		return service.selectAddrRemainder(location);		
 	}	
 				
-	//백신 센터 조회(지역 - 시/군별) + 링크
+	//백신 센터 조회(시 군 읍) + 링크
 	@RequestMapping(value="/vaccineaddr", method=RequestMethod.POST)
 	@ResponseBody
 	public String getCenterUrl(@RequestBody String address) {
 		return service.getCenterUrl(address, 1);	
 	}
 	
-	//백신 센터 조회(지역 - 시/군별) + 링크 (5 초과 10 이하)
+	//백신 센터 조회(시 군 읍) + 링크 (5 초과 10 이하)
 	@RequestMapping(value="/vaccineaddr2", method=RequestMethod.POST)
 	@ResponseBody
-	public String getAddrCenter2(@RequestBody String location) {
-		return service.getCenterUrl_over10(location);	
+	public String getAddrCenter2(@RequestBody String address) {
+		return service.getCenterUrl_over10(address);	
 	}
 	
-	//백신 센터 조회(지역 - 시/군별) + 링크 (15 이상)
+	//백신 센터 조회(시 군 읍) + 링크 (15 이상)
 	@RequestMapping(value="/vaccineaddr3", method=RequestMethod.POST)
 	@ResponseBody
-	public String getAddrCenter3(@RequestBody String location) {
-		return service.getCenterUrl_over15(location);	
+	public String getAddrCenter3(@RequestBody String address) {
+		return service.getCenterUrl_over15(address);	
 	}
 	
-	//기관 이름 직접 조회(검색형) 
+	//기관 이름 직접 조회(주소링크 retrun)
 	@RequestMapping(value="/facilitycheck", method=RequestMethod.POST)
 	@ResponseBody
 	public String facilityCheck(@RequestBody String facility_name) {
