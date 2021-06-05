@@ -19,8 +19,8 @@ $(document).ready(function() {
 
 
 	var map = new naver.maps.Map('map_area', {
-		center: new naver.maps.LatLng(37.5012712, 127.0392959),
-		zoom: 10,
+		center: new naver.maps.LatLng(locallat, locallng),
+		zoom: 14,
 		mapTypeId: naver.maps.MapTypeId.NORMAL,
 		mapTypeControl: true
 	}); //네이버 지도 초기값 설정
@@ -86,7 +86,7 @@ $(document).ready(function() {
 					var contentStrings = [
 						'<div class="map_center_window">',
 						'<table class="map_center_table"><center>',
-						'   <h3>' + value.facility_name + '</h3>',
+						'<div class="map_facility_name"><strong>' + value.facility_name + '</strong></div>',
 						'<hr></center>',
 						'<tr><td><strong>주소  </strong></td><td>' + value.address + '</td></tr><br>',
 						' <tr><td><strong>전화번호</strong></td>  <td>' + value.phone_number + '</td></tr></table>',
@@ -142,7 +142,7 @@ $(document).ready(function() {
 			getAllCenter();
 			infoWindowlocal.open(map, latlng);
 		});
-	}
+	}//searchCoordinateToAddress end
 
 	function searchAddressToCoordinate(address) { //입력한 주소 주변 백신센터 정보 받아와서 지도에 표시하는 함수
 		naver.maps.Service.geocode({
@@ -188,7 +188,7 @@ $(document).ready(function() {
 			map.setCenter(point);
 			infoWindowlocal.open(map, point);
 		});
-	}
+	}//searchAddressToCoordinate end
 
 	map.addListener('click', function(e) { //지도 클릭시 좌표알려주는 함수
 		console.log(closenum);
@@ -198,7 +198,7 @@ $(document).ready(function() {
 		} else {
 			searchCoordinateToAddress(e.coord);
 		}
-	});
+	});//map.addListener('click', function(e)) end
 
 	$('#map_address').on('keydown', function(e) { //주소 입력후 Enter입력시 입력주소 주변 백신센터 정보 지도에 표시하게 하는 함수 호출
 		var keyCode = e.which;
@@ -208,7 +208,7 @@ $(document).ready(function() {
 				$('#map_address').val('');
 			} else { return alert("지번주소 혹은 도로명 주소를 입력하세요"); }
 		}
-	});
+	});//$('#map_address').on('keydown', function(e)) end
 
 	$('#map_submit').on('click', function(e) { //주소 입력후 주소검색버튼 누를시 입력주소 주변 백신센터 정보 지도에 표시하게 하는 함수 호출
 		e.preventDefault();
@@ -216,13 +216,13 @@ $(document).ready(function() {
 			searchAddressToCoordinate($('#map_address').val());
 			$('#map_address').val('');
 		} else { return alert("지번주소 혹은 도로명 주소를 입력하세요"); }
-	});
+	});//$('#map_submit').on('click', function(e)) end
 
 	function onErrorGeolocation() {//현재 위치 못 찾을시 기본 설정값 (멀티캠퍼스) 주변 백신센터 정보 지도에 표시해주는 함수
 		var center = map.getCenter();
 		getAllCenter();
 		marker1 = new naver.maps.Marker({
-			position: new naver.maps.LatLng(37.5666805, 126.9784147),
+			position: new naver.maps.LatLng(locallat, locallng),
 			map: map,
 			icon: {
 				content: '<img src="resources/images/localpin.jpg" alt="" ' +
@@ -234,7 +234,7 @@ $(document).ready(function() {
 		});
 		infowindow1.setContent('<div class="map_local_window">   기본 설정위치(역삼멀티캠퍼스) </div>');
 		infowindow1.open(map, center);
-	}
+	}//onErrorGeolocation end
 
 	$(window).on("load", function() {
 		if (navigator.geolocation) {
@@ -245,7 +245,7 @@ $(document).ready(function() {
 			var center = map.getCenter();
 			getAllCenter();
 			marker1 = new naver.maps.Marker({
-				position: new naver.maps.LatLng(37.5666805, 126.9784147),
+				position: new naver.maps.LatLng(locallat, locallng),
 				map: map,
 				icon: {
 					content: '<img src="resources/images/localpin.jpg" alt="" ' +
@@ -258,5 +258,5 @@ $(document).ready(function() {
 			infowindow1.setContent('<div class="map_local_window">  기본 설정위치(역삼멀티캠퍼스) </div>');
 			infowindow1.open(map, center);
 		}
-	});
-}); //ready 함수 end
+	});//$(window).on("load", function()) end
+}); //$(document).ready(function()) end
