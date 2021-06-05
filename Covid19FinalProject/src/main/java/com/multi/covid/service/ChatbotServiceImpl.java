@@ -30,7 +30,7 @@ import com.multi.covid.mapper.ChatbotMapper;
 
 @Service
 public class ChatbotServiceImpl implements ChatbotService{
-	@Autowired
+	@Autowired 
 	private ChatbotMapper chatbotMapper;
 
 	// BasicCard형 JSON
@@ -97,8 +97,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 		today2.add(Calendar.DAY_OF_MONTH, -2);
 
 		String result_date = "";
-		
-		if(vo.getResult_date().equals(format.format(today1.getTime()))) {
+		//업데이트 날짜 확인 (당일 업데이트 전 -2, 업데이트 후 -1)
+		if(vo.getResult_date().equals(format.format(today1.getTime()))) { 
 			result_date = output_format.format(today1.getTime());
 		}
 		else {
@@ -110,7 +110,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		String getTotal_count = String.format("%,d", vo.getTotal_count());
 		String increment_count = String.format("%,d", vo.getIncrement_count());
 		
-		if(paramLoc_check) { // Result one(지역)
+		if(paramLoc_check) { // Result one(지역) 조회일 경우
 			String title_message = location + "지역 누적 확진자 수: " + getTotal_count + "\n\n"
 								+ result_date + " 확진자 수:" + increment_count + " 명";
 			String quick_message = location + " 실시간 확진자 조회";		
@@ -131,7 +131,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 					 "충남", "전북", "전남", "경북", "경남", "제주"};
 			StringBuffer webhook_locResult = new StringBuffer();
 			
-			for(int i = 0; i < location_array.length; i++) {
+			for(int i = 0; i < location_array.length; i++) { //지역 전체 값 출력
 				ResultVO one_vo = chatbotMapper.getResult(location_array[i]);
 				Arrays.sort(location_array);
 				String getTotal = String.format("%,d", one_vo.getTotal_count());
@@ -162,9 +162,9 @@ public class ChatbotServiceImpl implements ChatbotService{
 	public String getLive(String location) {
 		
 		String resultJson = null;
-		boolean paramLoc_check = false;
+		boolean paramLoc_check = false; //지역으로 조회 체크
 		
-		if(location.contains("live_location")) { 
+		if(location.contains("live_location")) { // 지역으로 조회할 경우 
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 			JsonElement action = jsonObj.get("action");
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
@@ -259,6 +259,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		// select
 		List<CenterVO> vo = chatbotMapper.getLocCenter(location);
 		
+		// 해당 지역 리스트 모두 출력
 		StringBuffer facility_name = new StringBuffer();		
 		for(int i = 0; i < vo.size(); i++) {
 			facility_name.append(vo.get(i).getFacility_name() + "\n");
@@ -282,33 +283,35 @@ public class ChatbotServiceImpl implements ChatbotService{
 	public String selectAddr(String location) {
 
 		String param = "";
-		int endNum = 20; // 반복문 제한 수 
-		int startNum = 0; // 반복문 시작 수 
+		int endNum = 20; // 반복문 제한 
+		int startNum = 0; // 반복문 시작 
+		// 요청 Parameter 체크 
 		boolean paramCheck_one = false;
 		boolean paramCheck_two = false;
-		boolean remainderCheck = false;
-		if(location.contains("2-2")) {// 20개 초과 버튼
-			remainderCheck = true; 
-			endNum = 40;
-			startNum = 20;
-		}
-		if(location.contains("vaccine_center_location")) { //주소값 한 개
-			param = "vaccine_center_location";
-			paramCheck_one = true;
-		}
-		else if(location.contains("vaccine_address_two")) { //주소값 두 개 
-			param = "vaccine_address_two";
-			paramCheck_two = true;
-		}
-		else if(location.contains("vaccine_find_more_two")) {
-			param = "vaccine_find_more_two";
-			paramCheck_two = true;
-		}
-		else {
-			param = "vaccine_find_more_three";
-		}
+		boolean remainderCheck = false;		
 		
-		if(paramCheck_one || paramCheck_two) { // POST로 받는 경우			
+		if(location.contains(":")) { // POST로 받는 경우			
+			if(location.contains("2-2")) {// 20개 초과 버튼 확인(" 더 찾기")
+				remainderCheck = true; 
+				endNum = 40;
+				startNum = 20;
+			}
+			
+			if(location.contains("vaccine_center_location")) { // 주소값 한 개
+				param = "vaccine_center_location";
+				paramCheck_one = true;
+			}
+			else if(location.contains("vaccine_address_two")) { // 주소값 두 개 
+				param = "vaccine_address_two";
+				paramCheck_two = true;
+			}
+			else if(location.contains("vaccine_find_more_two")) { // 20개 초과 - 주소값 두 개
+				param = "vaccine_find_more_two";
+				paramCheck_two = true;
+			}
+			else { // 20개 초과 - 주소값 세 개 
+				param = "vaccine_find_more_three";
+			}
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 			JsonElement action = jsonObj.get("action");
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
@@ -324,7 +327,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		int center_count = 20; // 예외 처리할 리스트 개수 확인(기본값 20)
 		int splitNum = 0; // 출력할 주소 index값  
 		
-		if(paramCheck_one) {
+		if(paramCheck_one) { 
 			addr = chatbotMapper.getAddrTwo(location);
 			splitNum = 1;
 		}
@@ -335,15 +338,14 @@ public class ChatbotServiceImpl implements ChatbotService{
 			}
 			splitNum = 2;
 		}
-		else if(!remainderCheck){
+		else{
 			addr = chatbotMapper.getAddrFour(location);
 			splitNum = 3;
 		}
-		
+	
 		ArrayList<String> addr_arr = new ArrayList<String>();	
-		
 		if(addr.size() > endNum) {	// 출력 20 초과			
-			for(int i = startNum; i < endNum-1; i++) {
+			for(int i = startNum; i < endNum-1; i++) { 
 				String[] addr_split = addr.get(i).split(" ");
 				try {
 					addr_arr.add(addr_split[splitNum]);					
@@ -352,15 +354,15 @@ public class ChatbotServiceImpl implements ChatbotService{
 					addr_arr.add(location + " 전체");
 				}
 			}
-			if(remainderCheck) {
+			if(remainderCheck) { // 40개 초과
 				addr_arr.add(location + "주소 직접 입력하기");
 			}
-			else {
+			else { // 20개 초과
 				addr_arr.add(location + " 더 찾기");				
 			}
 		}
 		else { // 출력 20 이하 
-			for(int i = startNum; i < addr.size(); i++) {	
+			for(int i = startNum; i < addr.size(); i++) { 
 				String[] addr_split = addr.get(i).split(" ");
 				try {
 					addr_arr.add(addr_split[splitNum]);					
@@ -371,12 +373,11 @@ public class ChatbotServiceImpl implements ChatbotService{
 			}				
 		}			
 
+		String result_string = null;	
+
 		/*아래 예외에서는 버튼 생성X, 바로 리스트 출력
 		 *예외 1) 두번째 주소까지 조회시 리스트 5개 이하
 		 *예외 2) 리스트 5개 이상, 세번째 주소 index가 없는 경우(= 숫자인 경우)*/	
-		String result_string = null;	
-		
-
 		if(center_count <=5 || (center_count < 15 && addr_arr.size() == 0)) {
 			result_string = getCenterUrl(location, center_count);
 		}			
@@ -386,20 +387,14 @@ public class ChatbotServiceImpl implements ChatbotService{
 			// quickReplies(지역 선택 버튼)
 			JsonArray quick_item_arr = new JsonArray();			
 			for(int i = 0; i < addr_arr.size(); i++) {
+				
 				JsonObject quickReplies = new JsonObject();
 				quickReplies.addProperty("label", addr_arr.get(i));
 				quickReplies.addProperty("action", "message");
-				if(remainderCheck) {
-					quickReplies.addProperty("messageText", location + " " + addr_arr.get(i));
-				}
-				else {
-					quickReplies.addProperty("messageText", addr.get(i));				
-				}
+				quickReplies.addProperty("messageText", addr.get(i));				
 				
-				if(!remainderCheck && addr_arr.get(i).contains(location)) {   	
-					if(!paramCheck_one) { // 20개를 초과한 경우
-						quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
-					}			
+				if(!remainderCheck && addr_arr.get(i).contains(location)) { // 주소값 두 개 선택지 이동 
+					quickReplies.addProperty("blockId", "60b077b398179667c00efdee");	
 					quickReplies.addProperty("messageText", addr_arr.get(i));
 				}
 				quick_item_arr.add(quickReplies);
@@ -418,22 +413,23 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 
 	
-	// 센터주소 링크 리스트
+	// 센터 주소 링크 리스트
 	@Override 
 	public String getCenterUrl(String address, int lengthNum) {	
+
+		// select
+		List<CenterVO> vo = null;
+		boolean facility_check = false;
+		boolean addressFourNull_check = false;
+		boolean facility_over5_check = false;
 
 		if(address.contains(":")) { // POST로 받는 경우
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(address);
 			JsonElement action = jsonObj.get("action");
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 			address = params.getAsJsonObject().get("vaccine_address").getAsString();
-		} 
+		}
 		
-		// select
-		List<CenterVO> vo = null;
-		boolean facility_check = false;
-		boolean addressFourNull_check = false;
-		boolean facility_over5_check = false;
 		if(address.contains(" 전체")) { // 4개 주소값 예외처리(네번째 값 null인 경우) 
 			address = address.replaceAll(" 전체", "");
 			addressFourNull_check = true;	
@@ -446,7 +442,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 			HashMap <String, String> map = new HashMap<String, String>();
 			map.put("location", facilityAndLoc[0]);
 			map.put("facility_name", facilityAndLoc[1]);
-			
+				
 			vo = chatbotMapper.getFacility_loc(map);
 			facility_over5_check = true;
 		}
@@ -455,18 +451,19 @@ public class ChatbotServiceImpl implements ChatbotService{
 			facility_check = true;
 		}
 
+
 		/* 링크 출력 최대 5개, 3번까지(총 15개) 반복
 		 * 5개 미만, 5개 이상, 10개 이상, 15개 이상 처리
 		 */
-		int endNum = 0;
-		int startNum = 0;
+		int endNum = 0; // 반복문 제한 
+		int startNum = 0; // 반복문 시작 
 
 		boolean overLength = false;
 		boolean overLength15 = false;
 		boolean length10 = false;
 		
 		if(lengthNum > 5) {
-			if(lengthNum == 10) {// 정확히 10개 
+			if(lengthNum == 10) {// 10개인 경우  
 				length10 = true;
 			}
 			else if(lengthNum == 100) {// 10개 초과 15개 미만
@@ -491,6 +488,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 		else if(vo.size() > 5) { // POST로 받는 경우 lengthNum 할당
 			// 네번째 주소 버튼 호출 후, 값이 없는 경우
+
 			if(vo.size() > 20 && chatbotMapper.getAddrFour(address).size() != 0 && !addressFourNull_check) {
 				return selectAddr(address);
 			}
@@ -618,7 +616,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 
 
-	// 리스트 5개 초과
+	// 센터 주소 링크 리스트 (리스트 5개 초과)
 	@Override
 	public String getCenterUrl_over(String address) {
 		
@@ -655,7 +653,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 	}
 
 
-	// 백신 센터 직접 검색 
+	// 백신 센터 직접 검색, 센터 주소 링크 리스트
 	@Override
 	public String facilityCheck(String facility_name) {
 		
@@ -736,7 +734,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 				
 		}
 		else {
-			if(locationCheck) { // 5개 초과해서 시설명 + 선택한 지역명 받아온 경우
+			if(locationCheck) { // 5개 초과 후 시설명 + 선택한 지역명 받아온 경우
 				if(locationOver) { // 시설명 + 지역명 리스트 5개 초과 
 					HashMap <String, String> map = new HashMap<String, String>();
 					map.put("location", location);
