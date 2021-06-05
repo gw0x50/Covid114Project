@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>최종 프로젝트</title>
+<title>코로나 114</title>
 <!-- js inport -->
 <jsp:include page="/WEB-INF/views/scripts.jsp"/>
 <!-- css import -->
@@ -19,8 +19,8 @@
 			<jsp:include page="/WEB-INF/views/section/chart.jsp"/>
 			<jsp:include page="/WEB-INF/views/section/map.jsp"/>
 			<jsp:include page="/WEB-INF/views/section/footer.jsp"/>
+			<jsp:include page="/WEB-INF/views/section/chatbot.jsp"/>
 		</div>
 	</div>	
-	<jsp:include page="/WEB-INF/views/section/chatbot.jsp"/>
 </body>
 </html>
