@@ -538,6 +538,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		List<CenterVO> vo = null;
 		boolean facility_check = false;
 		boolean addressFourNull_check = false;
+		boolean facility_over5_check = false;
 		if(address.contains(" 전체")) { //4개 주소값 변수( 네번째 값 null인 경우) 
 			address = address.replaceAll(" 전체", "");
 			addressFourNull_check = true;	
@@ -552,6 +553,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 			map.put("facility_name", facilityAndLoc[1]);
 			
 			vo = chatbotMapper.getFacility_loc(map);
+			facility_over5_check = true;
 		}
 		else { //facility_name
 			vo = chatbotMapper.getFacility(address);
@@ -638,7 +640,12 @@ public class ChatbotServiceImpl implements ChatbotService{
 			action = "block";
 			if(lengthNum == 5) { // 5개 초과 
 				message = " 더 보기";
-				action_item = "60b22434f6266b70b5289df6";
+				if(facility_over5_check) {
+					action_item = "60bacfb0cb6ae85c16a00f93";
+				}
+				else {
+					action_item = "60b22434f6266b70b5289df6";					
+				}
 			}
 			else { // 10개 초과 
 				message = " 더 보기";
@@ -681,7 +688,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 	@Override//리스트 5개 초과, 10개 초과
 	public String getCenterUrl_over10(String address) {
-		
+		System.out.println(address);
 		//get address
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(address);
 		JsonElement action = jsonObj.get("action");
@@ -735,11 +742,16 @@ public class ChatbotServiceImpl implements ChatbotService{
 		
 		String resultJson = "";
 		List<CenterVO> vo = null;
-		
+	    System.out.println("처음 값 확인"  + facility_name);
+	    
 		boolean locationCheck = false; // Check quickReplies
+		boolean locationOver = false; // Check over 5
 		String location = "";
 		if(facility_name.contains("vaccine_center_location")) {
 			locationCheck = true;
+			if(facility_name.contains("조회2-2")) {
+				locationOver = true;
+			}
 		}
 		
 		try {
@@ -807,7 +819,17 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 		else {
 			if(locationCheck) { //5개 초과한 데이터 지역값 + 시설이름 조회 > 링크 생성	
-				resultJson = getCenterUrl(location + "," + facility_name, 1);			
+				if(locationOver) {
+					HashMap <String, String> map = new HashMap<String, String>();
+					map.put("location", location);
+					map.put("facility_name", facility_name);
+					int center_length = chatbotMapper.getFacility_loc(map).size();
+					resultJson = getCenterUrl(location + "," + facility_name, center_length);
+					System.out.println("수 확인 "+center_length);
+				}
+				else {
+					resultJson = getCenterUrl(location + "," + facility_name, 1);								
+				}
 			}
 			else {
 				resultJson = getCenterUrl(facility_name, vo.size());
