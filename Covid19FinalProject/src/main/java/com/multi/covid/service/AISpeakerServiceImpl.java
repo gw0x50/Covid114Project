@@ -31,6 +31,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	@Autowired
 	private AISpeakerMapper mapper;
 
+	// 실시간 또는 누적확진자 현황을 조회한다
 	@Override
 	public String getPatient(String day, String location) {
 		Calendar cal = Calendar.getInstance();
@@ -41,6 +42,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		List<ResultVO> list = null;
 		int sum=0;
 		JsonObject obj = new JsonObject();
+		
 		//covid_live
 		String[] loc = {"seoul", "incheon", "gwangju", "daejeon", "daegu", "busan", "ulsan", "sejong",
 						"gyeonggi", "gangwon", "chungbuk", "chungnam", "jeonbuk", "jeonnam", "gyeongbuk", 
@@ -48,10 +50,12 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		//covid_result
 		String[] loc2 = {"서울", "인천", "광주", "대전", "대구", "부산", "울산", "세종", "경기", "강원", "충북", "충남", 
 						"전북", "전남", "경북", "경남", "제주"};
+		
+		//오늘 확진자수 조회
 		if(day.equals("today")) {
 			try {
 			date = format.format(cal.getTime());
-			System.out.println("오늘: "+date);			
+			//System.out.println("오늘: "+date);
 			vo = mapper.getOneLive(date); //오늘날짜 확진자수 받아오기
 			vo.calSum();
 			obj.addProperty("live_date", vo.getLive_date());
@@ -69,43 +73,48 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 				return "결과값이 없습니다";
 			}
 		}
+		//어제 확진자수 조회
 		else if(day.equals("yesterday")) {
 			try {
-			cal.add(Calendar.DATE, - 1);		
+			cal.add(Calendar.DATE, - 1);
 			date = format.format(cal.getTime());
-			System.out.println("어제: "+date);
+			//System.out.println("어제: "+date);
 			list = mapper.getOneResult(date); //어제날짜 확진자수 받아오기
 			System.out.println(list.get(0).getTotal_count());//데이터가 없으면 에러발생
 			
+			//모든지역 확진자수 합계 조회
 			if(location.equals("all")) {
 				for(ResultVO one : list) {
 					if(one.getLocation().equals("합계")) 
-						sum = one.getIncrement_count();//모든지역 확진자수				
+						sum = one.getIncrement_count();				
 				}
 			}
+			//특정지역 확진자수 합계 조회
 			else if(Arrays.asList(loc2).contains(location)) {
 				for(ResultVO one : list) {
-					if(one.getLocation().equals(location)) 
-						sum = one.getIncrement_count();//특정지역 확진자수				
+					if(one.getLocation().equals(location))
+						sum = one.getIncrement_count();//특정지역 확진자수 조회			
 				}
 			}
+			
 			obj.addProperty("result_date", date);
 			obj.addProperty("sum", sum);
+			
 			}catch(Exception e) {//전날 데이터가 아직 갱신되지 않은경우
 				System.out.println(e.toString());
 				cal.add(Calendar.DATE, - 2);
 				date = format.format(cal.getTime());
-				System.out.println("그제: "+date);
+				//System.out.println("그제: "+date);
 				list = mapper.getOneResult(date); //그제날짜 확진자수 받아오기
-				for(ResultVO one : list) {		
+				for(ResultVO one : list) {
 					if(one.getLocation().equals("합계")) {
-						System.out.println(one.getLocation());
+						//System.out.println(one.getLocation());
 						sum += one.getIncrement_count();
 					}
 				}
 				obj.addProperty("result_date", date);
-				obj.addProperty("sum", sum);					
-			}				
+				obj.addProperty("sum", sum);
+			}
 		}
 		else {
 			return "잘못된접근";
@@ -114,14 +123,12 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		return obj.toString();
 	}		
 
+	//현재 접속지역에서 가까운 백신센터를 반환해준다
 	@Override
-	public List<String> getGeolocation(String r1, String r2, String r3) {
+	public List<String> getVaccineCenter(String r1, String r2, String r3) {
 		
-		System.out.println("r1: "+r1+" r2: "+r2+" r3: "+r3);//ai스피커 접속지역
-		List<CenterVO> vo = mapper.getAllCenter();				
-		String si = (r1); //시
-		String gu = (r2); //구
-		String dong = (r3); //동
+		//System.out.println("r1: "+r1+" r2: "+r2+" r3: "+r3);//ai스피커 접속지역
+		List<CenterVO> vo = mapper.getAllCenter();						
 		String temp = "";
 		List<String> result = new ArrayList<String>();
 		boolean check = false;
@@ -129,7 +136,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		//가까운 선별진료소 파악
 		for(CenterVO one : vo) {
 			temp = one.getAddress();
-			if(temp.contains(dong)) { //동 단위로 파악
+			if(temp.contains(r3)) { //동 단위로 파악
 				check = true;
 				result.add(one.getFacility_name());
 			}
@@ -137,7 +144,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		if(!check) { //동에 선별진료소가 없는경우
 			for(CenterVO one : vo) {
 				temp = one.getAddress();
-				if(temp.contains(gu)) { //구 단위로 파악
+				if(temp.contains(r2)) { //구 단위로 파악
 					check = true;
 					result.add(one.getFacility_name());
 				}
@@ -146,9 +153,9 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		else if(!check) { //구에 선별진료소가 없는경우
 			for(CenterVO one : vo) {
 				temp = one.getAddress();
-				if(temp.contains(si)) { //시 단위로 파악
+				if(temp.contains(r1)) { //시 단위로 파악
 					check = true;
-					result.add(one.getFacility_name());					
+					result.add(one.getFacility_name());				
 				}
 			}
 		}
@@ -156,15 +163,17 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 			result.add("가까운 선별진료소가 없습니다");
 		}
 		
+		/*
 		System.out.println(check);
 		for(String one : result) {
 			System.out.println(one);
 		}
-		
+		*/
 		
 		return result;
 	}
 
+	// 현재 접속지역의 위도,경도를 기준으로 기상청 날씨를 알려준다
 	@Override
 	public String getWeather(String lat, String lon) throws IOException, ParseException {
 		Calendar cal = Calendar.getInstance();
@@ -173,7 +182,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		SimpleDateFormat format = new SimpleDateFormat ( "yyyyMMdd");
 		date = format.format(cal.getTime());
 		
-		//위도 경도 -> 기상청 격자
+		//위도 경도 -> 기상청 격자 데이터변환
 		LatXLngY tmp = convertGRID_GPS(TO_GRID, Double.parseDouble(lat), Double.parseDouble(lon));	    
 	    
 		String apiUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst"; // 홈페이지에서 받은 키
@@ -181,13 +190,14 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		String nx = Integer.toString((int)tmp.x);	//위도
 		String ny = Integer.toString((int)tmp.y);	//경도
 		
-		String pageNo = "1";
+		String pageNo = "1"; //조회할 페이지수
 		String numOfRows = "10"; //조회할 행개수
 		String baseDate = date;	//조회하고싶은 날짜
-		System.out.println("date: "+baseDate);
+		//System.out.println("date: "+baseDate);
 		String baseTime = "1100";	//조회하고싶은 시간
 		String type = "JSON";	//타입 xml, json 등등 ..
 		
+		//기상청에 get요청을 위한 urlBuilder
 		StringBuilder urlBuilder = new StringBuilder(apiUrl);
         
 		urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+serviceKey);
@@ -199,7 +209,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode(nx, "UTF-8")); //경도
         urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); //위도
         
-        System.out.println(urlBuilder.toString());
+        //System.out.println(urlBuilder.toString());
         
         
         /*
@@ -211,7 +221,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
-        System.out.println("Response code: " + conn.getResponseCode());
+        //System.out.println("Response code: " + conn.getResponseCode());
         BufferedReader rd;
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -226,7 +236,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
         rd.close();
         conn.disconnect();
         String result= sb.toString();
-        System.out.println(result);
+        //System.out.println(result);
         
         // Json parser를 만들어 만들어진 문자열 데이터를 객체화 
  		JSONParser parser = new JSONParser(); 
@@ -261,8 +271,9 @@ public class AISpeakerServiceImpl implements AISpeakerService {
  			}
  			if(!time.equals(fcstTime.toString())) {
  				time=fcstTime.toString();
- 				System.out.println(day+"  "+time);
+ 				//System.out.println(day+"  "+time);
  			}
+ 			// 하늘상태 파악
  			if(category.equals("SKY")){
  				int temp = Integer.parseInt(fcstValue.toString());
  				if(temp > 0 && temp < 3) {
@@ -274,12 +285,15 @@ public class AISpeakerServiceImpl implements AISpeakerService {
  				else if(temp == 4) {
  					SKY = "흐림";
  				}
+ 				/*
 	 			System.out.print("\tcategory : "+ category);
 	 			System.out.print(", fcst_Value : "+ fcstValue);
 	 			System.out.print(", fcstDate : "+ fcstDate);
 	 			System.out.println(", fcstTime : "+ fcstTime);
 	 			System.out.println("sky: "+SKY);
+	 			*/
  			}
+ 			// 강수상태 파악
  			if(category.equals("PTY")){
  				int temp = Integer.parseInt(fcstValue.toString());
  				switch(temp) {
@@ -308,7 +322,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
  						PTY = "눈날림";
  						break; 					
  				}	 			
-	 			System.out.println("pty: "+PTY);
+	 			//System.out.println("pty: "+PTY);
  			}
  		}
         if(SKY.equals("맑음")) {
@@ -359,6 +373,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	public static int TO_GRID = 0;
 	public static int TO_GPS = 1;
 
+	// 위도, 경도 -> 기상청 격자 단위로 변환
 	private LatXLngY convertGRID_GPS(int mode, double lat_X, double lng_Y )
 	{
 	    double RE = 6371.00877; // 지구 반경(km)
@@ -373,7 +388,6 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	    //
 	    // LCC DFS 좌표변환 ( code : "TO_GRID"(위경도->좌표, lat_X:위도,  lng_Y:경도), "TO_GPS"(좌표->위경도,  lat_X:x, lng_Y:y) )
 	    //
-
 
 	    double DEGRAD = Math.PI / 180.0;
 	    double RADDEG = 180.0 / Math.PI;
@@ -436,6 +450,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	    return rs;
 	}
 
+	//위도 경도 저장용 클래스
 	class LatXLngY
 	{
 	    public double lat;
