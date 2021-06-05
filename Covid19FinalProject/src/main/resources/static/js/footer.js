@@ -5,4 +5,4 @@ $(document).ready(function() {
 		var win = window.open('http://github.com/' + username, '_blank');
 		win.focus();
 	});
-});//ready End
+}); // ready End
