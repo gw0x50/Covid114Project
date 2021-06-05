@@ -2,30 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.covid.mapper.ChatbotMapper">
-
 	<!-- 누적 확진자 수 조회 -->
 	<select id="getResult" resultType="ResultVO" parameterType="String">
 		SELECT * FROM covid_result 
-		WHERE location=#{location} 
-		ORDER BY result_date DESC LIMIT 1
+		WHERE location = #{location} 
+		ORDER BY result_date DESC
+		LIMIT 1
 	</select>
 	
 	<!-- 실시간 확진자 수 조회 -->
 	<select id="getLive" resultType="LiveVO" parameterType="String">
 		SELECT * FROM covid_live
-		WHERE live_date=#{date}
+		WHERE live_date = #{date}
 	</select>
 	
 	<!-- 실시간 지역 확진자 수 조회 -->
 	<select id="getLocLive" resultType="int" parameterType="hashmap">
 		SELECT ${location} FROM covid_live 
-		WHERE live_date=#{date}
+		WHERE live_date = #{date}
 	</select>
 	
 	<!-- 실시간 지역 확진자 수 조회 -->
 	<select id="getLocCenter" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
-		WHERE address LIKE CONCAT('%',#{location},'%') 
+		WHERE address LIKE CONCAT('%', #{location}, '%') 
 		ORDER BY facility_name;
 	</select>
 	
@@ -38,17 +38,17 @@
 	
 	<!-- 주소 세 번째 값 조회 -->
 	<select id="getAddrThree" resultType="String" parameterType="String">
-		SELECT DISTINCT(SUBSTRING_INDEX(
-		(SELECT REGEXP_REPLACE(address,'[0-9]',' ')
+		SELECT DISTINCT(SUBSTRING_INDEX((
+			SELECT REGEXP_REPLACE(address, '[0-9]', ' ')
 		), ' ', 3)) 
 		FROM covid_vaccine_center
-		WHERE address LIKE CONCAT('%',#{address_two},'%')
+		WHERE address LIKE CONCAT('%', #{address_two}, '%')
 	</select>
 	
 	<!-- 주소 네 번째 값 조회 -->
 	<select id="getAddrFour" resultType="String" parameterType="String">
-		SELECT DISTINCT(SUBSTRING_INDEX(
-		(SELECT REGEXP_REPLACE(address,'[0-9]',' ')
+		SELECT DISTINCT(SUBSTRING_INDEX((
+			SELECT REGEXP_REPLACE(address,'[0-9]',' ')
 		), ' ', 4)) 
 		FROM covid_vaccine_center
 		WHERE address LIKE CONCAT('%',#{address_three},'%')
@@ -57,7 +57,7 @@
 	<!-- 주소로 백신 센터 조회 -->
 	<select id="getAddrCenter" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
-		WHERE address LIKE CONCAT('%',#{address_three},'%')
+		WHERE address LIKE CONCAT('%', #{address_three}, '%')
 	</select>
 	
 	<!-- 시설 이름으로 백신 센터 조회 -->
@@ -72,9 +72,4 @@
 		WHERE facility_name = #{facility_name}
 		AND location = #{location}
 	</select>
-	
 </mapper>
-
-
-
-
