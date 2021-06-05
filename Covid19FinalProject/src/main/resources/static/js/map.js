@@ -38,7 +38,7 @@ $(window).on('load', function() {
 		}
 	}
 
-	// 현재 위도경도 기준으로 백신센터 정보를 받아와서 지도에 표시하는 함수
+	// 현재 위도, 경도 기준으로 백신센터 정보를 받아와서 지도에 표시하는 함수
 	function getLocalCenter(lat, lng) {
 		$.ajax({
 			url: "./map/getLocalCenter",
@@ -79,7 +79,7 @@ $(window).on('load', function() {
 		}); // ajax end
 	}
 
-	// 클릭한 지점의 위도경도 기준으로 백신센터 정보를 받아와서 지도에 표시하는 함수
+	// 클릭한 지점의 위도, 경도 기준으로 백신센터 정보를 받아와서 지도에 표시하는 함수
 	function searchCoordinateToAddress(latlng) {
 		localInfoWindow.close(); // 열려있는 infowindow 종료
 		
@@ -114,7 +114,7 @@ $(window).on('load', function() {
 		});
 	}
 
-	// 입력한 주소의 위도경도 기준으로 백신센터 정보를 받아와서 지도에 표시하는 함수
+	// 입력한 주소의 위도, 경도 기준으로 백신센터 정보를 받아와서 지도에 표시하는 함수
 	function searchAddressToCoordinate(address) {
 		naver.maps.Service.geocode({
 			query: address
@@ -179,7 +179,7 @@ $(window).on('load', function() {
 		localInfoWindow.open(map, center);
 	}
 	
-	// 현재 위치의 위도경도 정보를 받아와서 지도에 설정
+	// 현재 위치의 위도, 경도 정보를 받아와서 지도에 설정
 	function onSuccessGeolocation(position) {
 		var location = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		getLocalCenter(position.coords.latitude, position.coords.longitude);
@@ -206,7 +206,7 @@ $(window).on('load', function() {
 		defaultLocation(); // 기본 설정값 적용
 	}
 	
-	// 브라우저 위도경도 데이터 유무에 따라서 지도에 정보를 출력하는 함수 
+	// 브라우저 위도, 경도 데이터 유무에 따라서 지도에 정보를 출력하는 함수 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
 	}
