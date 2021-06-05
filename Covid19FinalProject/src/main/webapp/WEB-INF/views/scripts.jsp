@@ -20,3 +20,5 @@
 <!-- chatbot 관련 script -->
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script src="/resources/js/chatbot.js"></script>
+<!-- map 관련 script -->
+<script src="/resources/js/footer.js"></script>
