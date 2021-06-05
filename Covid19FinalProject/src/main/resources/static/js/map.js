@@ -4,8 +4,8 @@ $(document).ready(function() {
 	var infoWindow;
 	var seqnum;
 	var closenum = 0;
-	var locallat = 37.5666805
-	var locallng = 126.9784147;
+	var locallat = 37.5012624;
+	var locallng = 127.0397024;
 	var marker;
 	var marker1;
 	var marker_address;
@@ -196,6 +196,7 @@ $(document).ready(function() {
 			infoWindows[seqnum].close();
 			closenum = 0;
 		} else {
+			console.log(e.coord);
 			searchCoordinateToAddress(e.coord);
 		}
 	});//map.addListener('click', function(e)) end
@@ -232,7 +233,7 @@ $(document).ready(function() {
 				anchor: new naver.maps.Point(11, 35)
 			}
 		});
-		infowindow1.setContent('<div class="map_local_window">   기본 설정위치(역삼멀티캠퍼스) </div>');
+		infowindow1.setContent('<div class="map_local_window">   기본 설정위치<br>(역삼멀티캠퍼스) </div>');
 		infowindow1.open(map, center);
 	}//onErrorGeolocation end
 
@@ -255,7 +256,7 @@ $(document).ready(function() {
 					anchor: new naver.maps.Point(11, 35)
 				}
 			});
-			infowindow1.setContent('<div class="map_local_window">  기본 설정위치(역삼멀티캠퍼스) </div>');
+			infowindow1.setContent('<div class="map_local_window">  기본 설정위치<br>(역삼멀티캠퍼스) </div>');
 			infowindow1.open(map, center);
 		}
 	});//$(window).on("load", function()) end
