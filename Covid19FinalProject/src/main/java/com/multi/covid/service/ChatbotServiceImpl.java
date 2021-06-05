@@ -33,8 +33,8 @@ public class ChatbotServiceImpl implements ChatbotService{
 	@Autowired
 	private ChatbotMapper chatbotMapper;
 
-	
-	@Override // BasicCard형 JSON
+	// BasicCard형 JSON
+	@Override
 	public String getJsonString(JsonArray quick_array, String title_message) {
 		
 		JsonObject buttons = new JsonObject();
@@ -55,7 +55,6 @@ public class ChatbotServiceImpl implements ChatbotService{
 		JsonArray outputs_array = new JsonArray();
 		outputs_array.add(basicCard);
 		
-
 		JsonObject template = new JsonObject();
 		template.add("outputs", outputs_array);
 		template.add("quickReplies", quick_array);
@@ -67,47 +66,6 @@ public class ChatbotServiceImpl implements ChatbotService{
 		return result.toString();
 	}
 
-	
-	@Override //listCard형 JSON
-	public String getJsonString(JsonArray quick_array, JsonArray setUrl_array, String cardTitle) {
-		
-		JsonArray items_array = new JsonArray();
-		for(int i = 0; i < setUrl_array.size(); i++) {
-			items_array.add(setUrl_array.get(i));
-		}
-	
-		JsonObject title = new JsonObject();
-		title.addProperty("title", cardTitle);
-		
-		JsonObject buttons = new JsonObject();
-		buttons.addProperty("label", "처음으로 돌아가기");
-		buttons.addProperty("action", "block");
-		buttons.addProperty("blockId", "60ade7ebe0891e661e4aad61");
-		
-		JsonArray buttons_array = new JsonArray();
-		buttons_array.add(buttons);
-		
-		JsonObject header = new JsonObject();
-		header.add("items", items_array);
-		header.add("header", title);
-		header.add("buttons", buttons_array);
-		
-		JsonObject listCard = new JsonObject();
-		listCard.add("listCard", header);
-		
-		JsonArray outputs_array = new JsonArray();
-		outputs_array.add(listCard);
-		
-		JsonObject template = new JsonObject();
-		template.add("outputs", outputs_array);		
-		template.add("quickReplies", quick_array);		
-		
-		JsonObject result = new JsonObject();
-		result.addProperty("version", "2.0");
-		result.add("template", template);
-
-		return result.toString();
-	}
 
 
 	@Override //누적 확진자 조회
@@ -680,8 +638,42 @@ public class ChatbotServiceImpl implements ChatbotService{
 
 		String cardTitle = address + " 백신 센터";
 		
-		//JSON listCard
-		return getJsonString(quick_array, setUrl_array, cardTitle);
+		JsonArray items_array = new JsonArray();
+		for(int i = 0; i < setUrl_array.size(); i++) {
+			items_array.add(setUrl_array.get(i));
+		}
+	
+		JsonObject title = new JsonObject();
+		title.addProperty("title", cardTitle);
+		
+		JsonObject buttons = new JsonObject();
+		buttons.addProperty("label", "처음으로 돌아가기");
+		buttons.addProperty("action", "block");
+		buttons.addProperty("blockId", "60ade7ebe0891e661e4aad61");
+		
+		JsonArray buttons_array = new JsonArray();
+		buttons_array.add(buttons);
+		
+		JsonObject header = new JsonObject();
+		header.add("items", items_array);
+		header.add("header", title);
+		header.add("buttons", buttons_array);
+		
+		JsonObject listCard = new JsonObject();
+		listCard.add("listCard", header);
+		
+		JsonArray outputs_array = new JsonArray();
+		outputs_array.add(listCard);
+		
+		JsonObject template = new JsonObject();
+		template.add("outputs", outputs_array);		
+		template.add("quickReplies", quick_array);		
+		
+		JsonObject result = new JsonObject();
+		result.addProperty("version", "2.0");
+		result.add("template", template);
+
+		return result.toString();
 	 	
 		}
 

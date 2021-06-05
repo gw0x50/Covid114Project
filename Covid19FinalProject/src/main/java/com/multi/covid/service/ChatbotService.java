@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 
 public interface ChatbotService {
 	String getJsonString(JsonArray quick_array, String title_message);
-	String getJsonString(JsonArray quick_array, JsonArray setUrl_array, String cardTitle);
 	String getResult(String location);
 	String getLive(String location);
 	String getCenterList(String location);
