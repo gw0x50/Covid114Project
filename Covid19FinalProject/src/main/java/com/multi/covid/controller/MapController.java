@@ -14,9 +14,9 @@ public class MapController {
 	@Autowired
 	private MapService service;
 	//위도,경도 주변 백신 접종 센터 정보 조회
-	@RequestMapping(value = "/getAllCenter", method = RequestMethod.POST)
+	@RequestMapping(value = "/getLocalCenter", method = RequestMethod.POST)
 	@ResponseBody
 	public String getValues(String lat, String lng) {
-		return service.getAllCenter(lat,lng);
+		return service.getLocalCenter(lat,lng);
 	}
 }

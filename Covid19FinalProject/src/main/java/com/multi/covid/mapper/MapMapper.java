@@ -10,5 +10,5 @@ import com.multi.covid.domain.CenterVO;
 @Mapper
 @Repository
 public interface MapMapper {
-	List<CenterVO> getAllCenter(Double lat,Double lng); //위도,경도 주변 백신 접종 센터 정보 조회
+	List<CenterVO> getLocalCenter(Double lat,Double lng); //위도,경도 주변 백신 접종 센터 정보 조회
 }
