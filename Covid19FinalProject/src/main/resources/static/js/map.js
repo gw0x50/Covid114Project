@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(window).on('load', function() {
 	var markers = [];
 	var infoWindows = [];
 	var infoWindow;
@@ -17,14 +17,14 @@ $(document).ready(function() {
 		pixelOffset: new naver.maps.Point(0, -35)
 	}); //백신센터 정보를 보여줄 정보창 초기값 설정
 
-
 	var map = new naver.maps.Map('map_area', {
 		center: new naver.maps.LatLng(locallat, locallng),
 		zoom: 14,
 		mapTypeId: naver.maps.MapTypeId.NORMAL,
-		mapTypeControl: true
+		mapTypeControl: true,
+		size: new naver.maps.Size($('.map_title').width(), $('.map_title').width())
 	}); //네이버 지도 초기값 설정
-
+	
 	var infowindow1 = new naver.maps.InfoWindow({
 		borderWidth: 0,
 		disableAnchor: true,
@@ -213,7 +213,7 @@ $(document).ready(function() {
 		} else { return alert("지번주소 혹은 도로명 주소를 입력하세요"); }
 	});//$('#map_submit').on('click', function(e)) end
 
-	function onErrorGeolocation() {//현재 위치 못 찾을시 기본 설정값 (멀티캠퍼스) 주변 백신센터 정보 지도에 표시해주는 함수
+	function defaultLocation() {
 		var center = map.getCenter();
 		getAllCenter();
 		marker1 = new naver.maps.Marker({
@@ -227,27 +227,17 @@ $(document).ready(function() {
 		});
 		infowindow1.setContent('<div class="map_local_window">   기본 설정위치<br>(역삼멀티캠퍼스) </div>');
 		infowindow1.open(map, center);
+	}
+
+	function onErrorGeolocation() {//현재 위치 못 찾을시 기본 설정값 (멀티캠퍼스) 주변 백신센터 정보 지도에 표시해주는 함수
+		defaultLocation();
 	}//onErrorGeolocation end
 
-	$(window).on("load", function() {
-		if (navigator.geolocation) {
-			map.setSize(new naver.maps.Size($('.map_title').width(), $('.map_title').width()));
-			navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
-		}
-		else {
-			var center = map.getCenter();
-			getAllCenter();
-			marker1 = new naver.maps.Marker({
-				position: new naver.maps.LatLng(locallat, locallng),
-				map: map,
-				icon: {
-					content: '<img src="resources/images/localpin.jpg" alt="" class="map_local_img">',
-					size: new naver.maps.Size(22, 35),
-					anchor: new naver.maps.Point(11, 35)
-				}
-			});
-			infowindow1.setContent('<div class="map_local_window">  기본 설정위치<br>(역삼멀티캠퍼스) </div>');
-			infowindow1.open(map, center);
-		}
-	});//$(window).on("load", function()) end
-}); //$(document).ready(function()) end
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
+	}
+	else {
+		defaultLocation();
+	}
+
+}); //window on load end
