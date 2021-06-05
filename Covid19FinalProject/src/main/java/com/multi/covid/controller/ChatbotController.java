@@ -42,13 +42,6 @@ public class ChatbotController {
 	public String selectAddr(@RequestBody String location) {
 		return service.selectAddr(location);		
 	}
-	
-	//백신 센터 주소 20번째부터 나머지 선택지 return 
-	@RequestMapping(value="/selectAddrRemainder", method=RequestMethod.POST)
-	@ResponseBody
-	public String selectAddrRemainder(@RequestBody String location) {
-		return service.selectAddrRemainder(location);		
-	}	
 				
 	//백신 센터 주소 링크 반환
 	@RequestMapping(value="/getCenterUrl", method=RequestMethod.POST)
