@@ -245,7 +245,7 @@ $(window).on('load', function() {
 		} else { return alert("지번주소 혹은 도로명 주소를 입력하세요."); }
 	});
 	
-	// 브라우저 사이즈에 따라 지도의 크기도 변경
+	// 브라우저 사이즈에 따라 지도 크기도 변경
 	$(window).resize(function() {
 		map.setSize(new naver.maps.Size($('.map_title').width(), $('.map_title').width()));
 	});
