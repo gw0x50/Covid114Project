@@ -68,7 +68,7 @@
 	background: #FFFFFF;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
-	font-size: 10pt;
+	font-size: 12px;
 	border-radius: 20px 20px 20px 20px;
 	border: #CAE9FA solid 3px;
 	opacity: 0.98;
@@ -98,6 +98,21 @@
 	z-index: 0;
 	bottom: -20px;
 	left: calc(50% - 8.6px);
+}
+
+.map_local_img {
+	margin: 0px;
+	padding: 0px;
+	border: 0px solid transparent;
+	display: block;
+	max-width: none;
+	max-height: none;
+	-webkit-user-select: none;
+	position: absolute;
+	width: 22px;
+	height: 35px;
+	left: 0px;
+	top: 0px;
 }
 
 .map_center_window {
@@ -186,7 +201,7 @@
 		height: 674px;
 	}
 	.map_local_window {
-		font-size: 11pt;
+		font-size: 15px;
 	}
 	.map_center_window {
 		font-size: 11pt;

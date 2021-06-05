@@ -44,9 +44,7 @@ $(document).ready(function() {
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
 			map: map,
 			icon: {
-				content: '<img src="resources/images/localpin.jpg" alt="" ' +
-					'style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; ' +
-					'-webkit-user-select: none; position: absolute; width: 22px; height: 35px; left: 0px; top: 0px;">',
+				content: '<img src="resources/images/localpin.jpg" alt="" class="map_local_img">',
 				size: new naver.maps.Size(22, 35),
 				anchor: new naver.maps.Point(11, 35)
 			}
@@ -75,8 +73,8 @@ $(document).ready(function() {
 			data: { 'lat': locallat, 'lng': locallng },
 			dataType: "json",
 			type: "post",
-			success: function(allcenter) {
-				$.each(allcenter, function(key, value) {
+			success: function(allCenter) {
+				$.each(allCenter, function(key, value) {
 
 					marker = new naver.maps.Marker({
 						position: new naver.maps.LatLng(value.lat, value.lng),
@@ -130,9 +128,7 @@ $(document).ready(function() {
 				position: new naver.maps.LatLng(latlng.y, latlng.x),
 				map: map,
 				icon: {
-					content: '<img src="resources/images/pin_default.png" alt="" ' +
-						'style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; ' +
-						'-webkit-user-select: none; position: absolute; width: 22px; height: 35px; left: 0px; top: 0px;">',
+					content: '<img src="resources/images/pin_default.png" alt="" class="map_local_img">',
 					size: new naver.maps.Size(22, 35),
 					anchor: new naver.maps.Point(11, 35)
 				}
@@ -161,9 +157,7 @@ $(document).ready(function() {
 				position: new naver.maps.LatLng(item.y, item.x),
 				map: map,
 				icon: {
-					content: '<img src="resources/images/pin_default.png" alt="" ' +
-						'style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; ' +
-						'-webkit-user-select: none; position: absolute; width: 22px; height: 35px; left: 0px; top: 0px;">',
+					content: '<img src="resources/images/pin_default.png" alt="" class="map_local_img">',
 					size: new naver.maps.Size(22, 35),
 					anchor: new naver.maps.Point(11, 35)
 				}
@@ -226,9 +220,7 @@ $(document).ready(function() {
 			position: new naver.maps.LatLng(locallat, locallng),
 			map: map,
 			icon: {
-				content: '<img src="resources/images/localpin.jpg" alt="" ' +
-					'style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; ' +
-					'-webkit-user-select: none; position: absolute; width: 22px; height: 35px; left: 0px; top: 0px;">',
+				content: '<img src="resources/images/localpin.jpg" alt="" class="map_local_img">',
 				size: new naver.maps.Size(22, 35),
 				anchor: new naver.maps.Point(11, 35)
 			}
@@ -249,9 +241,7 @@ $(document).ready(function() {
 				position: new naver.maps.LatLng(locallat, locallng),
 				map: map,
 				icon: {
-					content: '<img src="resources/images/localpin.jpg" alt="" ' +
-						'style="margin: 0px; padding: 0px; border: 0px solid transparent; display: block; max-width: none; max-height: none; ' +
-						'-webkit-user-select: none; position: absolute; width: 22px; height: 35px; left: 0px; top: 0px;">',
+					content: '<img src="resources/images/localpin.jpg" alt="" class="map_local_img">',
 					size: new naver.maps.Size(22, 35),
 					anchor: new naver.maps.Point(11, 35)
 				}
