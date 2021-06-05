@@ -31,6 +31,7 @@ $(document).ready(function() {
 			}
 		});
 	}
+	
 	boardOnChange(); // 페이지 로딩 후 최초 갱신
 
 	$(".board_select_box .dropdown img.flag").addClass("flagvisibility");
@@ -65,4 +66,4 @@ $(document).ready(function() {
 	$('#board_select_location').on('change', function() {
 		boardOnChange();
 	});
-});
+}); // ready end

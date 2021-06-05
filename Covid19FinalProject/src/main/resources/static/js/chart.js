@@ -364,4 +364,4 @@ $(document).ready(function() {
 	$('#chart_select_location').on('change', function() {
 		chartOnChange();
 	});
-});
+}); // ready end

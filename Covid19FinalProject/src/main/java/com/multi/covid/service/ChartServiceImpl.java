@@ -19,9 +19,9 @@ public class ChartServiceImpl implements ChartService {
 	@Override
 	public String get7DaysResult(String location) {
 		Gson gson = new Gson();
-		
+
 		if (location.equals("전체")) location = "합계"; // DB에서 사용되는 location 값으로 변경
-		
+
 		List<ResultVO> sqlResult = mapper.get7DaysResult(location); // sql 호출 및 응답 정보 저장
 
 		// 응답 정보 내부 데이터 변경
@@ -39,9 +39,9 @@ public class ChartServiceImpl implements ChartService {
 	@Override
 	public String get4WeeksResult(String location) {
 		Gson gson = new Gson();
-		
+
 		if (location.equals("전체")) location = "합계"; // DB에서 사용되는 location 값으로 변경
-		
+
 		List<ResultVO> sqlResult = mapper.get4WeeksResult(location); // sql 호출 및 응답 정보 저장
 
 		List<ResultVO> returnList = new ArrayList<ResultVO>();
@@ -70,13 +70,13 @@ public class ChartServiceImpl implements ChartService {
 	@Override
 	public String get12MonthsResult(String location) {
 		Gson gson = new Gson();
-		
+
 		if (location.equals("전체")) location = "합계"; // DB에서 사용되는 location 값으로 변경
-		
+
 		List<ResultVO> sqlResult = mapper.get12MonthsResult(location); // sql 호출 및 응답 정보 저장
 
 		List<ResultVO> returnList = new ArrayList<ResultVO>();
-		
+
 		// 12개월 단위 반복문
 		for (int i = 0; i < 12; i++) {
 			ResultVO temp = new ResultVO();

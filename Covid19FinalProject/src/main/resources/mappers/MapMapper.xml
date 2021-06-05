@@ -5,10 +5,7 @@
 	<!-- 반경 5km 이내 백신접종센터 DB 조회 -->
 	<select id="getLocalCenter" resultType="CenterVO" parameterType="double">
 		SELECT * FROM covid_vaccine_center
-		WHERE (LAT BETWEEN (#{param1}-0.02) AND (#{param1}+0.02)) AND (LNG BETWEEN (#{param2}-0.022) AND (#{param2}+0.022))
+		WHERE (lat BETWEEN (#{param1}-0.02) AND (#{param1}+0.02))
+		AND (lng BETWEEN (#{param2}-0.022) AND (#{param2}+0.022))
 	</select>
 </mapper>
-
-
-
-

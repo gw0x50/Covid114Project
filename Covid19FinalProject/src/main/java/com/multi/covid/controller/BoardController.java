@@ -13,7 +13,7 @@ import com.multi.covid.service.BoardService;
 public class BoardController {
 	@Autowired
 	private BoardService service;
-	
+
 	// 실시간 확진자 정보 조회
 	@RequestMapping(value = "/getLiveValue", method = RequestMethod.POST)
 	@ResponseBody
@@ -27,5 +27,4 @@ public class BoardController {
 	public String getResultValue(String location) {
 		return service.getRecentTwoResult(location);
 	}
-
 }

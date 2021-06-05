@@ -9,16 +9,14 @@
 <script type="text/javascript" src="/resources/js/jquery-3.2.1.min.js"></script>
 <!-- chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
-<!-- index 관련 script -->
-<script src="/resources/js/index.js"></script>
-<!-- board 관련 script -->
+<!-- board script -->
 <script src="/resources/js/board.js"></script>
-<!-- chart 관련 script -->
+<!-- chart script -->
 <script src="/resources/js/chart.js"></script>
-<!-- map 관련 script -->
+<!-- map script -->
 <script src="/resources/js/map.js"></script>
-<!-- chatbot 관련 script -->
+<!-- chatbot script -->
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script src="/resources/js/chatbot.js"></script>
-<!-- map 관련 script -->
+<!-- map script -->
 <script src="/resources/js/footer.js"></script>

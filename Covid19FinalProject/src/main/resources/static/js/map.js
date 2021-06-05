@@ -249,5 +249,4 @@ $(window).on('load', function() {
 	$(window).resize(function() {
 		map.setSize(new naver.maps.Size($('.map_title').width(), $('.map_title').width()));
 	});
-
-}); //window on load end
+}); // window on load end

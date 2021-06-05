@@ -83,5 +83,4 @@ public class ResultVO {
 		return "ResultVO [sequence=" + sequence + ", result_date=" + result_date + ", location=" + location + ", increment_count=" + increment_count
 				+ ", total_count=" + total_count + ", clear_count=" + clear_count + ", death_count=" + death_count + "]";
 	}
-
 }

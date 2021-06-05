@@ -62,5 +62,4 @@ public class ChatbotController {
 	public String facilityCheck(@RequestBody String facility_name) {
 		return service.facilityCheck(facility_name);
 	}
-
 }

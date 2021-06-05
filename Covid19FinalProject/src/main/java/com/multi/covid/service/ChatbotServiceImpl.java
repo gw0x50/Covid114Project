@@ -731,12 +731,12 @@ public class ChatbotServiceImpl implements ChatbotService {
 					resultJson = getCenterUrl(location + "," + facility_name, center_length);
 				}
 				else { // 시설명 + 지역명 리스트 5개 이하 
-					// JSON listCard
+						// JSON listCard
 					resultJson = getCenterUrl(location + "," + facility_name, 1);
 				}
 			}
 			else { // 시설명 리스트 5개 이하 
-				// JSON listCard 
+					// JSON listCard 
 				resultJson = getCenterUrl(facility_name, vo.size());
 			}
 		}

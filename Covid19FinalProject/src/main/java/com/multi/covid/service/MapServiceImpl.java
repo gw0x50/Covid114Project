@@ -18,13 +18,13 @@ public class MapServiceImpl implements MapService {
 	@Override
 	public String getLocalCenter(String lat, String lng) {
 		Gson gson = new Gson();
-		
+
 		// 받아온 위도, 경도 Type변경 (String -> double)
 		double doubleLat = Double.parseDouble(lat);
 		double doubleLng = Double.parseDouble(lng);
-		
+
 		List<CenterVO> allCenter = mapper.getLocalCenter(doubleLat, doubleLng);// sql 호출 및 응답 정보 저장
-		
+
 		return gson.toJson(allCenter);
 	}
 }
