@@ -6,7 +6,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class WebController {
-
 	@RequestMapping("/")
 	public ModelAndView main() {
 		ModelAndView mv = new ModelAndView();
