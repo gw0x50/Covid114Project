@@ -13,10 +13,11 @@ import com.multi.covid.service.MapService;
 public class MapController {
 	@Autowired
 	private MapService service;
-	//위도,경도 주변 백신 접종 센터 정보 조회
+
+	// 위도, 경도 주변의 백신 접종 센터 정보 조회
 	@RequestMapping(value = "/getLocalCenter", method = RequestMethod.POST)
 	@ResponseBody
-	public String getValues(String lat, String lng) {
-		return service.getLocalCenter(lat,lng);
+	public String getLocalCenter(String lat, String lng) {
+		return service.getLocalCenter(lat, lng);
 	}
 }
