@@ -203,6 +203,7 @@
 	}
 	.map_local_window {
 		font-size: 15px;
+		width: 200px;
 	}
 	.map_center_window {
 		font-size: 11pt;

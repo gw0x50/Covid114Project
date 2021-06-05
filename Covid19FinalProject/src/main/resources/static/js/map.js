@@ -187,7 +187,7 @@ $(window).on('load', function() {
 		map.setCenter(location);
 		map.setZoom(14);
 		
-		localInfoWindow.setContent('<div class="map_local_window"><center><strong>현재 위치 주변<br>백신센터를 표시했습니다.</strong></center></div>');
+		localInfoWindow.setContent('<div class="map_local_window"><center><strong>현재 위치 주변의<br>백신센터를 표시했습니다.</strong></center></div>');
 		
 		var marker = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
