@@ -57,18 +57,11 @@ public class ChatbotController {
 		return service.getCenterUrl(address, 1);	
 	}
 	
-	//백신 센터 주소 링크 반환(5 초과 10 이하)
-	@RequestMapping(value="/getCenterUrl10", method=RequestMethod.POST)
+	//백신 센터 주소 링크 반환(5 초과)
+	@RequestMapping(value="/getCenterUrlOver", method=RequestMethod.POST)
 	@ResponseBody
-	public String getCenterUrl10(@RequestBody String address) {
-		return service.getCenterUrl_over10(address);	
-	}
-	
-	//백신 센터 주소 링크 반환(15 이상)
-	@RequestMapping(value="/getCenterUrl15", method=RequestMethod.POST)
-	@ResponseBody
-	public String getCenterUrl15(@RequestBody String address) {
-		return service.getCenterUrl_over15(address);	
+	public String getCenterUrlOver(@RequestBody String address) {
+		return service.getCenterUrl_over(address);	
 	}
 	
 	//기관 이름 직접 조회(주소 링크 반환)

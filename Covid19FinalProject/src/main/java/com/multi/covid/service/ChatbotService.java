@@ -10,8 +10,7 @@ public interface ChatbotService {
 	String selectAddr(String location); // 지역 바로가기 버튼(최대 20)
 	String selectAddrRemainder(String location); // 20개 초과 지역 버튼 처리
 	String getCenterUrl(String address, int lengthNum); // 센터주소 링크 리스트
-	String getCenterUrl_over10(String address); // 리스트 5개 초과, 10개 초과
-	String getCenterUrl_over15(String address);	// 리스트 15개 초과
+	String getCenterUrl_over(String address); // 리스트 5개 초과
 	String facilityCheck(String facility_name); // 백신 센터 직접 검색 
 	String getKakaoMapId(String facility_name); // 카카오맵ID return
 }

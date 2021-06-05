@@ -66,6 +66,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 		return result.toString();
 	}
 
+	
 	// 누적 확진자 조회
 	@Override 
 	public String getResult(String location) {
@@ -533,7 +534,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 			if(lengthNum == 10) {// 정확히 10개 
 				length10 = true;
 			}
-			if(lengthNum == 100) {// 10개 초과 15개 미만
+			else if(lengthNum == 100) {// 10개 초과 15개 미만
 				lengthNum = 10;
 			}
 			
@@ -547,7 +548,7 @@ public class ChatbotServiceImpl implements ChatbotService{
 				endNum = lengthNum;
 				overLength = true;
 			}
-			else if(lengthNum > 15) {
+			else{
 				startNum = 10;
 				endNum = 15;
 				overLength15 = true;
@@ -682,10 +683,14 @@ public class ChatbotServiceImpl implements ChatbotService{
 		}
 
 
-	// 리스트 5개 초과, 10개 초과
+	// 리스트 5개 초과
 	@Override
-	public String getCenterUrl_over10(String address) {
-
+	public String getCenterUrl_over(String address) {
+		
+		boolean overTen_check = false;
+		if(address.contains("조회3")) {
+			overTen_check = true;
+		}
 		// get address
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(address);
 		JsonElement action = jsonObj.get("action");
@@ -695,42 +700,19 @@ public class ChatbotServiceImpl implements ChatbotService{
 		if(address.contains(" 전체")) { // 발화 파라미터값 처리 
 			address = address.replace(" 전체", "");
 		}
-		
 		// select
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(address);
-		
-		// 10 초과일 경우 lengthNum 100 (getCenterUrl에서 10으로 바꿈 처리) 
+				
 		int lengthNum = 0;
-
-		if(vo.size()>10) {
-			lengthNum = 100;
-		}
-		else {
+		if(overTen_check) { // 15개 초과
 			lengthNum = vo.size();
 		}
-		
-		// JSON listCard
-		return getCenterUrl(address, lengthNum);
-		
-	}
-
-
-	// 리스트 15개 초과
-	@Override
-	public String getCenterUrl_over15(String address) {
-		
-		// get address
-		JsonObject jsonObj = (JsonObject) JsonParser.parseString(address);
-		JsonElement action = jsonObj.get("action");
-		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-		address = params.getAsJsonObject().get("vaccine_address").getAsString();
-
-		if(address.contains(" 전체")) { // 발화 파라미터값 처리 
-			address = address.replace(" 전체", "");
+		else if(vo.size() <= 10) { // 10 이하
+			lengthNum = vo.size();
 		}
-		// select
-		List<CenterVO> vo = chatbotMapper.getAddrCenter(address);
-		int lengthNum = vo.size();
+		else {// 10 초과
+			lengthNum = 100;// 10일 경우와 분리
+		}
 		
 		// JSON listCard
 		return getCenterUrl(address, lengthNum);
