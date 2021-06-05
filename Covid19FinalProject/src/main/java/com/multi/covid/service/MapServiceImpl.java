@@ -18,10 +18,10 @@ public class MapServiceImpl implements MapService{
 	@Override
 	public String getAllCenter(String lat,String lng) {
 		//받아온 위도 경도 Type변경 (String -> double)
-		double lat1 = Double.parseDouble(lat);
-		double lng1 = Double.parseDouble(lng);
+		double doubleLat = Double.parseDouble(lat);
+		double doubleLng = Double.parseDouble(lng);
 		Gson gson = new Gson();
-		List<CenterVO> allcenter = mapper.getAllCenter(lat1, lng1);// sql 호출 및 응답 정보 저장
-		return gson.toJson(allcenter);
+		List<CenterVO> allCenter = mapper.getAllCenter(doubleLat, doubleLng);// sql 호출 및 응답 정보 저장
+		return gson.toJson(allCenter);
 	}
 }
