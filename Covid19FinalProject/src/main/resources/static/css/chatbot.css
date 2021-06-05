@@ -1,9 +1,10 @@
-/* PC 카카오톡 채널 버튼 위치 */
+@charset "UTF-8";
+
 .chatbot_a {
 	position: fixed;
 	z-index: 999;
-	right: 10px; /* 화면 오른쪽으로부터의 거리, 숫자만 입력 */
-	bottom: 10px; /* 화면 아래쪽으로부터의 거리, 숫자만 입력 */
+	right: 10px;
+	bottom: 10px;
 }
 
 .chatbot_img {
@@ -13,8 +14,8 @@
 
 @media ( min-width : 768px) {
 	.chatbot_a {
-		right: 20px; /* 화면 오른쪽으로부터의 거리, 숫자만 입력 */
-		bottom: 20px; /* 화면 아래쪽으로부터의 거리, 숫자만 입력 */
+		right: 20px;
+		bottom: 20px;
 	}
 	.chatbot_img {
 		width: 72px;
