@@ -1,15 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width; initial-scale=1.0; user-scalable=no;"/>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>코로나 114</title>
-<!-- js inport -->
-<jsp:include page="/WEB-INF/views/scripts.jsp"/>
-<!-- css import -->
-<link rel="stylesheet" href="/resources/css/index.css" type="text/css">
+	<meta charset="UTF-8">
+	<title>코로나 114</title>
+	<!-- js inport -->
+	<jsp:include page="/WEB-INF/views/scripts.jsp"/>
+	<!-- css import -->
+	<link rel="stylesheet" href="/resources/css/index.css" type="text/css">
 </head>
 <body>
 	<div class="wrap">
