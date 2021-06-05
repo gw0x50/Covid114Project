@@ -3,7 +3,7 @@
 <div class="chatbot_section">
 	<div class="chatbot_header">
 		<!-- PC 카카오톡 버튼 -->
-		<a href="javascript:void kakaoChatStart()" class="kakaoChatPc hidden-md hidden-sm hidden-xs">
+		<a href="#" class="chatbot_a">
 	    	<img src="/resources/images/kakao_logo.png" class="chatbot_img">
 		</a>
 	</div>
