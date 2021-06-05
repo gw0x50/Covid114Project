@@ -28,32 +28,8 @@ import com.multi.covid.domain.ResultVO;
 
 @Service
 public class AISpeakerServiceImpl implements AISpeakerService {	
-	
-	@Autowired
-	private AISpeakerService service;
-
 	@Autowired
 	private AISpeakerMapper mapper;
-	
-	@Override
-	public List<ResultVO> getOneResult(String date) {
-		return mapper.getOneResult(date);
-	}	
-
-	@Override
-	public List<ResultVO> getAllResult() {
-		return mapper.getAllResult();
-	}
-
-	@Override
-	public LiveVO getOneLive(String date) {
-		return mapper.getOneLive(date);
-	}
-
-	@Override
-	public List<CenterVO> getAllCenter() {
-		return mapper.getAllCenter();
-	}
 
 	@Override
 	public String getPatient(String day, String location) {
@@ -76,7 +52,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 			try {
 			date = format.format(cal.getTime());
 			System.out.println("오늘: "+date);			
-			vo = service.getOneLive(date); //오늘날짜 확진자수 받아오기
+			vo = mapper.getOneLive(date); //오늘날짜 확진자수 받아오기
 			vo.calSum();
 			obj.addProperty("live_date", vo.getLive_date());
 			if(location.equals("all")) { //전체지역 확진자								
@@ -98,7 +74,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 			cal.add(Calendar.DATE, - 1);		
 			date = format.format(cal.getTime());
 			System.out.println("어제: "+date);
-			list = service.getOneResult(date); //어제날짜 확진자수 받아오기
+			list = mapper.getOneResult(date); //어제날짜 확진자수 받아오기
 			System.out.println(list.get(0).getTotal_count());//데이터가 없으면 에러발생
 			
 			if(location.equals("all")) {
@@ -120,7 +96,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 				cal.add(Calendar.DATE, - 2);
 				date = format.format(cal.getTime());
 				System.out.println("그제: "+date);
-				list = service.getOneResult(date); //그제날짜 확진자수 받아오기
+				list = mapper.getOneResult(date); //그제날짜 확진자수 받아오기
 				for(ResultVO one : list) {		
 					if(one.getLocation().equals("합계")) {
 						System.out.println(one.getLocation());
@@ -142,7 +118,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	public List<String> getGeolocation(String r1, String r2, String r3) {
 		
 		System.out.println("r1: "+r1+" r2: "+r2+" r3: "+r3);//ai스피커 접속지역
-		List<CenterVO> vo = service.getAllCenter();				
+		List<CenterVO> vo = mapper.getAllCenter();				
 		String si = (r1); //시
 		String gu = (r2); //구
 		String dong = (r3); //동
