@@ -88,5 +88,4 @@ public class CenterVO {
 		return "CenterVO [center_name=" + center_name + ", facility_name=" + facility_name + ", phone_number=" + phone_number + ", location="
 				+ location + ", address=" + address + ", zip_code=" + zip_code + ", lat=" + lat + ", lng=" + lng + "]";
 	}
-
 }

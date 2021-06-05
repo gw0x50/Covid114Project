@@ -183,10 +183,11 @@ public class LiveVO {
 		this.sum = seoul + incheon + gwangju + daejeon + daegu + busan + ulsan + sejong + gyeonggi + gangwon + chungbuk + chungnam + jeonbuk + jeonnam
 				+ gyeongbuk + gyeongnam + jeju;
 	}
+
 	public int getLocation(String location) {
-		switch(location) {
+		switch (location) {
 			case "seoul":
-				return this.seoul;		
+				return this.seoul;
 			case "incheon":
 				return this.incheon;
 			case "gwangju":
@@ -219,11 +220,12 @@ public class LiveVO {
 				return this.gyeongnam;
 			case "jeju":
 				return this.jeju;
-				
-			default :
+
+			default:
 				return 0;
-		}		
+		}
 	}
+
 	public int getSum() {
 		return sum;
 	}
@@ -239,5 +241,4 @@ public class LiveVO {
 				+ gangwon + ", chungbuk=" + chungbuk + ", chungnam=" + chungnam + ", jeonbuk=" + jeonbuk + ", jeonnam=" + jeonnam + ", gyeongbuk="
 				+ gyeongbuk + ", gyeongnam=" + gyeongnam + ", jeju=" + jeju + ", sum=" + sum + "]";
 	}
-
 }
