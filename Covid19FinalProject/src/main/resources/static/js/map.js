@@ -19,8 +19,8 @@ $(document).ready(function() {
 
 
 	var map = new naver.maps.Map('map_area', {
-		center: new naver.maps.LatLng(37.5012712, 127.0392959),
-		zoom: 10,
+		center: new naver.maps.LatLng(locallat,locallng),
+		zoom: 14,
 		mapTypeId: naver.maps.MapTypeId.NORMAL,
 		mapTypeControl: true
 	}); //네이버 지도 초기값 설정
@@ -86,7 +86,7 @@ $(document).ready(function() {
 					var contentStrings = [
 						'<div class="map_center_window">',
 						'<table class="map_center_table"><center>',
-						'   <h3>' + value.facility_name + '</h3>',
+						'<div class="map_facility_name"><strong>' + value.facility_name + '</strong></div>',
 						'<hr></center>',
 						'<tr><td><strong>주소  </strong></td><td>' + value.address + '</td></tr><br>',
 						' <tr><td><strong>전화번호</strong></td>  <td>' + value.phone_number + '</td></tr></table>',
@@ -222,7 +222,7 @@ $(document).ready(function() {
 		var center = map.getCenter();
 		getAllCenter();
 		marker1 = new naver.maps.Marker({
-			position: new naver.maps.LatLng(37.5666805, 126.9784147),
+			position: new naver.maps.LatLng(locallat,locallng),
 			map: map,
 			icon: {
 				content: '<img src="resources/images/localpin.jpg" alt="" ' +
@@ -245,7 +245,7 @@ $(document).ready(function() {
 			var center = map.getCenter();
 			getAllCenter();
 			marker1 = new naver.maps.Marker({
-				position: new naver.maps.LatLng(37.5666805, 126.9784147),
+				position: new naver.maps.LatLng(locallat,locallng),
 				map: map,
 				icon: {
 					content: '<img src="resources/images/localpin.jpg" alt="" ' +
