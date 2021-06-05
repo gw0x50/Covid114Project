@@ -281,7 +281,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		boolean remainderCheck = false;
 
 		if (location.contains(":")) { // POST로 받는 경우			
-			if (location.contains("2-2")) {// 20개 초과 버튼 확인(" 더 찾기")
+			if (location.contains("SELECT2_over")) {// 20개 초과 버튼 확인(" 더 찾기")
 				remainderCheck = true;
 				endNum = 40;
 				startNum = 20;
@@ -312,7 +312,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			}
 		}
 
-		List<String> addr = null; //출력할 주소 
+		List<String> addr = null; // 출력할 주소 
 
 		int center_count = 20; // 예외 처리할 리스트 개수 확인(기본값 20)
 		int splitNum = 0; // 출력할 주소 index값  
@@ -611,7 +611,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 	public String getCenterUrl_over(String address) {
 
 		boolean overTen_check = false;
-		if (address.contains("조회3")) {
+		if (address.contains("over10")) {
 			overTen_check = true;
 		}
 		// get address
@@ -743,8 +743,9 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 		return resultJson;
 	}
-
-	@Override // 카카오맵ID
+	
+	// 카카오맵ID
+	@Override
 	public String getKakaoMapId(String facility_name) {
 
 		String apiKey = "649061c6abd5ffc886277e7f9a91a020";
