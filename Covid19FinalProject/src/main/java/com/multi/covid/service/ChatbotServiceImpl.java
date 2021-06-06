@@ -120,7 +120,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 			JsonArray quick_array = new JsonArray();
 			quick_array.add(quickReplies);
-
+			// JSON(basicCard)
 			resultJson = getJsonString(quick_array, title_message);
 		}
 		else { // Result all(전체)
@@ -248,7 +248,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		location = location.replace(" 지역 센터 리스트 전체", ""); // 발화 파라미터값 처리 
 
 		// select
-		List<CenterVO> vo = chatbotMapper.getLocCenter(location);
+		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
 
 		// 해당 지역 리스트 모두 출력
 		StringBuffer facility_name = new StringBuffer();
@@ -425,6 +425,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			address = address.replaceAll(" 전체", "");
 			addressFourNull_check = true;
 		}
+		
 		if (address.contains(" ")) { // 주소값으로 넘어온 경우
 			vo = chatbotMapper.getAddrCenter(address);
 		}
@@ -478,8 +479,8 @@ public class ChatbotServiceImpl implements ChatbotService {
 			}
 		}
 		else if (vo.size() > 5) { // POST로 받는 경우 lengthNum 할당
-			// 네번째 주소 버튼 호출 후, 값이 없는 경우
 
+			// 네번째 주소 버튼 호출 후, 값이 없는 경우 버튼 출력 
 			if (vo.size() > 20 && chatbotMapper.getAddrFour(address).size() != 0 && !addressFourNull_check) {
 				return selectAddr(address);
 			}
@@ -654,7 +655,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		String location = "";
 		if (facility_name.contains("vaccine_center_location")) {
 			locationCheck = true;
-			if (facility_name.contains("조회2-2")) {
+			if (facility_name.contains("over")) {
 				locationOver = true;
 			}
 		}
@@ -671,7 +672,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 			facility_name = params.getAsJsonObject().get("facility_name").getAsString();
 			facility_name = facility_name.replace(" ", ""); // 글자 사이 공백을 넣어 검색했을 경우	
-			vo = chatbotMapper.getFacility(facility_name);
+		 	vo = chatbotMapper.getFacility(facility_name);
 
 		}
 		catch (NullPointerException e) { // 입력한 진료소가 존재하지 않는 경우
