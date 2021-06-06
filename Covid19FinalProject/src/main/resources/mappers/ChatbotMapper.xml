@@ -22,13 +22,6 @@
 		WHERE live_date = #{date}
 	</select>
 	
-	<!-- 실시간 지역 확진자 수 조회 -->
-	<select id="getLocCenter" resultType="CenterVO" parameterType="String">
-		SELECT * FROM covid_vaccine_center 
-		WHERE address LIKE CONCAT('%', #{location}, '%') 
-		ORDER BY facility_name;
-	</select>
-	
 	<!-- 주소 두 번째 값 조회 -->
 	<select id="getAddrTwo" resultType="String" parameterType="String">
 		SELECT DISTINCT(SUBSTRING_INDEX(address, ' ', 2)) 
@@ -58,6 +51,7 @@
 	<select id="getAddrCenter" resultType="CenterVO" parameterType="String">
 		SELECT * FROM covid_vaccine_center 
 		WHERE address LIKE CONCAT('%', #{address_three}, '%')
+		ORDER BY facility_name;
 	</select>
 	
 	<!-- 시설 이름으로 백신 센터 조회 -->
