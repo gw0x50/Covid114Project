@@ -148,7 +148,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 		}
 
 		return resultJson;
-
 	}
 
 	// 실시간 확진자 조회(전체/지역) 
@@ -156,7 +155,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 	public String getLive(String location) {
 
 		String resultJson = null;
-		boolean paramLoc_check = false; //지역으로 조회 체크
+		boolean paramLoc_check = false; // 지역으로 조회 체크
 
 		if (location.contains("live_location")) { // 지역으로 조회할 경우 
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
@@ -182,7 +181,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			map.put("date", date);
 			int one_count = chatbotMapper.getLocLive(map);
 
-			// 지역명 한글로 출력(DB는 영어)
+			// 지역명 한글로 출력(DB 영어 -> 한글)
 			for (int i = 0; i < eng_loc.length; i++) {
 				if (location.equals(eng_loc[i])) {
 					location = kor_loc[i];
@@ -230,7 +229,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 			result.add("data", total_liveCount);
 
 			resultJson = result.toString();
-
 		}
 
 		return resultJson;
@@ -265,7 +263,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 		result.add("data", reg_center);
 
 		return reg_center.toString();
-
 	}
 
 	// 지역 바로가기 버튼
@@ -383,7 +380,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 				JsonObject quickReplies = new JsonObject();
 				quickReplies.addProperty("label", addr_arr.get(i));
 				quickReplies.addProperty("action", "message");
-				quickReplies.addProperty("messageText", location + " " + addr_arr.get(i)); // addr.get(i) 사용시 나머지 값까지 체크 X 
+				quickReplies.addProperty("messageText", location + " " + addr_arr.get(i)); // addr.get(i) 사용시 20개 초과버튼 값 0부터 초기화 
 
 				if (!remainderCheck && addr_arr.get(i).contains(location)) { // 주소값 두 개 선택지 이동 
 					quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
@@ -401,7 +398,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 		}
 
 		return result_string;
-
 	}
 
 	// 센터 주소 링크 리스트
@@ -419,12 +415,12 @@ public class ChatbotServiceImpl implements ChatbotService {
 			JsonElement action = jsonObj.get("action");
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 			address = params.getAsJsonObject().get("vaccine_address").getAsString();
+			if (address.contains(" 전체")) { // 4개 주소값 예외처리(네번째 값 null인 경우) 
+				address = address.replaceAll(" 전체", "");
+				addressFourNull_check = true;
+			}
 		}
 
-		if (address.contains(" 전체")) { // 4개 주소값 예외처리(네번째 값 null인 경우) 
-			address = address.replaceAll(" 전체", "");
-			addressFourNull_check = true;
-		}
 		
 		if (address.contains(" ")) { // 주소값으로 넘어온 경우
 			vo = chatbotMapper.getAddrCenter(address);
@@ -500,7 +496,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		for (int i = startNum; i < endNum; i++) {
 			
 			// Kakao map id
-			// 의료기관 DB 정보와 카카오 맵 업데이트 상황이 상이, 기관명이 조회되지 않을 경우 시설명으로 조회  
+			// 의료기관 DB 정보와 카카오 맵 업데이트 차이 있을 경우 시설명으로 조회  
 			String id = getKakaoMapId(vo.get(i).getCenter_name() + "," + vo.get(i).getFacility_name());
 
 			String address_url = "https://map.kakao.com/link/map/" + id;
@@ -605,7 +601,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 		result.add("template", template);
 
 		return result.toString();
-
 	}
 
 	// 센터 주소 링크 리스트 (리스트 5개 초과)
@@ -641,7 +636,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 		// JSON listCard
 		return getCenterUrl(address, lengthNum);
-
 	}
 
 	// 백신 센터 직접 검색, 센터 주소 링크 리스트
@@ -720,7 +714,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 			}
 
 			resultJson = getJsonString(quick_array, title_message);
-
 		}
 		else {
 			if (locationCheck) { // 5개 초과 후 시설명 + 선택한 지역명 받아온 경우
@@ -796,7 +789,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		try {
 			id = documents.get(0).getAsJsonObject().get("id").getAsString();
 		}
-		catch(IndexOutOfBoundsException e) { // 의료센터가 카카오 맵에 업데이트되지 않을 경우, 시설명으로 조회
+		catch (IndexOutOfBoundsException e) { // 의료센터가 카카오 맵에 업데이트되지 않았을 경우, 시설명으로 조회
 			id = getKakaoMapId(facility_name_arr[1] + "," + facility_name_arr[0]);
 		}
 		

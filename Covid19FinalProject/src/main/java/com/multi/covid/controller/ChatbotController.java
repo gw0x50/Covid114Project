@@ -35,7 +35,7 @@ public class ChatbotController {
 		return service.getCenterList(location);
 	}
 
-	//백신 센터 선택지 return 
+	//백신 센터 선택지 버튼 반환  
 	@RequestMapping(value = "/selectAddr", method = RequestMethod.POST)
 	@ResponseBody
 	public String selectAddr(@RequestBody String location) {
