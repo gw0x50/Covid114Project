@@ -15,9 +15,7 @@ public interface ChatbotMapper {
 
 	LiveVO getLive(String date); // 실시간 확진자 수 조회 
 
-	int getLocLive(HashMap<String, String> map); // 실시간 지역 확진자 수 조회 
-
-	List<CenterVO> getLocCenter(String location); // 지역별 센터 조회 
+	int getLocLive(HashMap<String, String> map); // 실시간 지역 확진자 수 조회  
 
 	List<String> getAddrTwo(String location); // 주소 두 번째 값 조회
 
@@ -29,5 +27,5 @@ public interface ChatbotMapper {
 
 	List<CenterVO> getFacility(String facility_name); // 시설 이름으로 백신 센터 조회
 
-	List<CenterVO> getFacility_loc(HashMap<String, String> map); //시설, 지역 이름으로 백신 센터 조회 
+	List<CenterVO> getFacility_loc(HashMap<String, String> map); // 시설, 지역 이름으로 백신 센터 조회 
 }
