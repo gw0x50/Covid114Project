@@ -500,7 +500,8 @@ public class ChatbotServiceImpl implements ChatbotService {
 		for (int i = startNum; i < endNum; i++) {
 			
 			// Kakao map id
-			String id = getKakaoMapId(vo.get(i).getCenter_name());
+			// 의료기관 DB 정보와 카카오 맵 업데이트 상황이 상이, 기관명이 조회되지 않을 경우 시설명으로 조회  
+			String id = getKakaoMapId(vo.get(i).getCenter_name() + "," + vo.get(i).getFacility_name());
 
 			String address_url = "https://map.kakao.com/link/map/" + id;
 			JsonObject web = new JsonObject();
@@ -752,8 +753,10 @@ public class ChatbotServiceImpl implements ChatbotService {
 		String apiKey = "649061c6abd5ffc886277e7f9a91a020";
 		String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json";
 		String jsonString = null;
-
+		String [] facility_name_arr = null;
 		try {
+			facility_name_arr = facility_name.split(",");
+			facility_name = facility_name_arr[0]; // 의료기관 이름
 			facility_name = URLEncoder.encode(facility_name, "UTF-8");
 
 			String addr = apiUrl + "?query=" + facility_name;
@@ -787,13 +790,17 @@ public class ChatbotServiceImpl implements ChatbotService {
 		}
 
 		// KakaoMap ID return
+		String id = "";
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(jsonString);
 		JsonArray documents = jsonObj.get("documents").getAsJsonArray();
-		System.out.println(jsonObj);
-		String id = documents.get(0).getAsJsonObject().get("id").getAsString();
-
+		try {
+			id = documents.get(0).getAsJsonObject().get("id").getAsString();
+		}
+		catch(IndexOutOfBoundsException e) { // 의료센터가 카카오 맵에 업데이트되지 않을 경우, 시설명으로 조회
+			id = getKakaoMapId(facility_name_arr[1] + "," + facility_name_arr[0]);
+		}
+		
 		return id;
-
 	}
 
 }
