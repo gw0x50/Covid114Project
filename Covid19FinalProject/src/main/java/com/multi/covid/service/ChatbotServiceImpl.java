@@ -35,7 +35,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 	// BasicCard형 JSON
 	@Override
-	public String getJsonString(JsonArray quick_array, String title_message) {
+	public String getCardJsonString(JsonArray quick_array, String title_message) {
 
 		JsonObject buttons = new JsonObject();
 		buttons.addProperty("label", "처음으로 돌아가기");
@@ -64,6 +64,30 @@ public class ChatbotServiceImpl implements ChatbotService {
 		result.add("template", template);
 
 		return result.toString();
+	}
+
+	// NullPointerException 발생 시 Text형 JSON return 	
+	@Override
+	public String getTextJsonString() {
+		
+		String title_message = "\n검색하신 진료소는 백신 접종 센터가 아닙니다.\n\n";
+		// 두 개의 quickReplies 출력
+		String[] quick_message = { "집 근처 접종 센터 조회", "다시 검색해보기" };
+		String actionName = "block";
+		String[] action_item = { "60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62" };
+
+		// quickReplies
+		JsonArray quick_array = new JsonArray();
+		for (int i = 0; i < 2; i++) {
+			JsonObject quickReplies = new JsonObject();
+			quickReplies.addProperty("label", quick_message[i]);
+			quickReplies.addProperty("action", actionName);
+			quickReplies.addProperty("blockId", action_item[i]);
+
+			quick_array.add(quickReplies);
+		}
+		// JSON basicCard
+		return getCardJsonString(quick_array, title_message);
 	}
 
 	// 누적 확진자 조회
@@ -121,7 +145,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			JsonArray quick_array = new JsonArray();
 			quick_array.add(quickReplies);
 			// JSON(basicCard)
-			resultJson = getJsonString(quick_array, title_message);
+			resultJson = getCardJsonString(quick_array, title_message);
 		}
 		else { // Result all(전체)
 			String[] location_array = { "서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주" };
@@ -201,7 +225,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			quick_array.add(quickReplies);
 
 			// JSON(BasicCard)
-			resultJson = getJsonString(quick_array, title_message);
+			resultJson = getCardJsonString(quick_array, title_message);
 		}
 		else { // Live all(전체)
 				// 전국(지역별 합산) 
@@ -342,7 +366,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 				}
 			}
 			if (remainderCheck) { // 40개 초과
-				addr_arr.add(location + "주소 직접 입력하기");
+				addr_arr.add(" 주소 직접 입력하기");
 			}
 			else { // 20개 초과
 				addr_arr.add(location + " 더 찾기");
@@ -394,7 +418,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 				quick_array.add(quick_item_arr.get(i));
 			}
 			// JSON basicCard
-			result_string = getJsonString(quick_array, title_message);
+			result_string = getCardJsonString(quick_array, title_message);
 		}
 
 		return result_string;
@@ -414,7 +438,13 @@ public class ChatbotServiceImpl implements ChatbotService {
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(address);
 			JsonElement action = jsonObj.get("action");
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-			address = params.getAsJsonObject().get("vaccine_address").getAsString();
+			try {				
+				address = params.getAsJsonObject().get("vaccine_address").getAsString();
+			} 
+			catch (NullPointerException e) { // 주소값 입력이 올바르지 않을 경우 
+				// JSON(text)
+				return getTextJsonString();
+			}
 			if (address.contains(" 전체")) { // 4개 주소값 예외처리(네번째 값 null인 경우) 
 				address = address.replaceAll(" 전체", "");
 				addressFourNull_check = true;
@@ -671,25 +701,8 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 		}
 		catch (NullPointerException e) { // 입력한 진료소가 존재하지 않는 경우
-
-			String title_message = "\n검색하신 진료소는 백신 접종 센터가 아닙니다.\n\n";
-			// 두 개의 quickReplies 출력
-			String[] quick_message = { "집 근처 접종 센터 조회", "다시 검색해보기" };
-			String actionName = "block";
-			String[] action_item = { "60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62" };
-
-			// quickReplies
-			JsonArray quick_array = new JsonArray();
-			for (int i = 0; i < 2; i++) {
-				JsonObject quickReplies = new JsonObject();
-				quickReplies.addProperty("label", quick_message[i]);
-				quickReplies.addProperty("action", actionName);
-				quickReplies.addProperty("blockId", action_item[i]);
-
-				quick_array.add(quickReplies);
-			}
-			// JSON basicCard
-			return getJsonString(quick_array, title_message);
+			// JSON(text)
+			return getTextJsonString();
 		}
 
 		TreeSet<String> getLoc_set = new TreeSet<String>();
@@ -713,7 +726,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 				quick_array.add(quickReplies);
 			}
 
-			resultJson = getJsonString(quick_array, title_message);
+			resultJson = getCardJsonString(quick_array, title_message);
 		}
 		else {
 			if (locationCheck) { // 5개 초과 후 시설명 + 선택한 지역명 받아온 경우

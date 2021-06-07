@@ -3,7 +3,9 @@ package com.multi.covid.service;
 import com.google.gson.JsonArray;
 
 public interface ChatbotService {
-	String getJsonString(JsonArray quick_array, String title_message); // BasicCard형 JSON return
+	String getCardJsonString(JsonArray quick_array, String title_message); // BasicCard형 JSON return
+	
+	String getTextJsonString(); // NullPointerException 발생 시 Text형 JSON return 
 
 	String getResult(String location); // 누적 확진자 조회
 
