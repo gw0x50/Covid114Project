@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.multi</groupId>
-	<artifactId>Covid19FinalProject</artifactId>
+	<artifactId>Covid114Project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Covid19FinalProject</name>
@@ -86,7 +86,6 @@
 			<artifactId>gson</artifactId>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -95,5 +94,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
