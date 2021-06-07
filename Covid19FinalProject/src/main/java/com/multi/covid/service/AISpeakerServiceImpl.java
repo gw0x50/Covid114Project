@@ -125,7 +125,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 
 	//현재 접속지역에서 가까운 백신센터를 반환해준다
 	@Override
-	public List<String> getVaccineCenter(String r1, String r2, String r3) {
+	public String getVaccineCenter(String r1, String r2, String r3) {
 		
 		//System.out.println("r1: "+r1+" r2: "+r2+" r3: "+r3);//ai스피커 접속지역
 		List<CenterVO> vo = mapper.getAllCenter();						
@@ -170,7 +170,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		}
 		*/
 		
-		return result;
+		return result.get(0);
 	}
 
 	// 현재 접속지역의 위도,경도를 기준으로 기상청 날씨를 알려준다
