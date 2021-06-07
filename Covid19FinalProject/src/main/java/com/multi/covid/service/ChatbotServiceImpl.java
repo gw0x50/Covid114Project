@@ -383,11 +383,11 @@ public class ChatbotServiceImpl implements ChatbotService {
 				JsonObject quickReplies = new JsonObject();
 				quickReplies.addProperty("label", addr_arr.get(i));
 				quickReplies.addProperty("action", "message");
-				quickReplies.addProperty("messageText", addr.get(i));
+				quickReplies.addProperty("messageText", location + " " + addr_arr.get(i)); // addr.get(i) 사용시 나머지 값까지 체크 X 
 
 				if (!remainderCheck && addr_arr.get(i).contains(location)) { // 주소값 두 개 선택지 이동 
 					quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
-					quickReplies.addProperty("messageText", addr_arr.get(i));
+					quickReplies.addProperty("messageText", addr_arr.get(i)); 
 				}
 				quick_item_arr.add(quickReplies);
 			}
@@ -498,7 +498,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		// 주소 링크 생성 
 		JsonArray setUrl_array = new JsonArray();
 		for (int i = startNum; i < endNum; i++) {
-
+			
 			// Kakao map id
 			String id = getKakaoMapId(vo.get(i).getCenter_name());
 
@@ -789,7 +789,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		// KakaoMap ID return
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(jsonString);
 		JsonArray documents = jsonObj.get("documents").getAsJsonArray();
-
+		System.out.println(jsonObj);
 		String id = documents.get(0).getAsJsonObject().get("id").getAsString();
 
 		return id;
