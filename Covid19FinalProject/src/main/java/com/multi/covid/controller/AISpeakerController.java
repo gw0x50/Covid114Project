@@ -15,24 +15,27 @@ import com.multi.covid.service.AISpeakerService;
 @RequestMapping("/speaker")
 public class AISpeakerController {
 	@Autowired
-	private AISpeakerService service;	
+	private AISpeakerService service;
 	
+	// 일일 확진자 및 누적 확진자 조회
+	@RequestMapping(value = "/getPatient", method = RequestMethod.POST)
 	@ResponseBody
-	@RequestMapping(value="/patient" ,method=RequestMethod.POST) //일일확진자 및 누적확진자 조회
-	public String patient(String day, String location) {
-		System.out.println("day: " + day + "location: "+ location);
+	public String getPatient(String day, String location) {
 		return service.getPatient(day, location);
 	}
 	
+	// 스피커 접속지역의 가까운 선별진료소 조회
+	@RequestMapping(value = "/getVaccineCenter", method = RequestMethod.POST)
 	@ResponseBody
-	@RequestMapping(value="/vaccine-center", method=RequestMethod.POST) //스피커 접속지역의 가까운 선별진료소 조회
-	public String vaccineCenter(String r1, String r2, String r3) { // r1 - 시, r2 - 구, r3 - 동		
+	public String getVaccineCenter(String r1, String r2, String r3) { 
+		// r1 - 시, r2 - 구, r3 - 동
 		return service.getVaccineCenter(r1, r2, r3);
 	}
 	
+	// 스피커 접속지역의 날씨 정보 조회
+	@RequestMapping(value = "/getWeather", method = RequestMethod.POST)
 	@ResponseBody
-	@RequestMapping(value="/weather", method=RequestMethod.POST) //스피커 접속지역의 날씨정보 조회
-	public String weather(String lat, String lon) throws IOException, ParseException {
+	public String getWeather(String lat, String lon) throws IOException, ParseException {
 		return service.getWeather(lat, lon);
-	}	
+	}
 }
