@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "com.multi.covid.service")
 @MapperScan(basePackages = "com.multi.covid.mapper")
 @SpringBootApplication
-public class Covid19FinalProjectApplication {
+public class Covid114Project {
 	public static void main(String[] args) {
-		SpringApplication.run(Covid19FinalProjectApplication.class, args);
+		SpringApplication.run(Covid114Project.class, args);
 	}
 }
