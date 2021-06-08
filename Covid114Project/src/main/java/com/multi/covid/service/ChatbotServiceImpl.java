@@ -302,37 +302,39 @@ public class ChatbotServiceImpl implements ChatbotService {
 		boolean remainderCheck = false;
 
 		if (location.contains(":")) { // POST로 받는 경우			
-			if (location.contains("SELECT2_over")) {// 20개 초과 버튼 확인(" 더 찾기")
+			if (location.contains("over")) {// 20개 초과 버튼 확인(" 더 찾기")
 				remainderCheck = true;
 				endNum = 40;
 				startNum = 20;
 			}
 
-			if (location.contains("vaccine_address_one")) { // 주소값 한 개
+			if (location.contains("60adf9082c7d75439efb91ca")) { // 주소값 한 개
 				param = "vaccine_address_one";
 				paramCheck_one = true;
 			}
-			else if (location.contains("vaccine_address_two")) { // 주소값 두 개 
+			else if (location.contains("60b077e098179667c00efdf7")) { // 주소값 두 개 
 				param = "vaccine_address_two";
 				paramCheck_two = true;
 			}
-			else if (location.contains("vaccine_find_more_two")) { // 20개 초과 - 주소값 두 개
-				param = "vaccine_find_more_two";
-				paramCheck_two = true;
-			}
-			else { // 20개 초과 - 주소값 세 개 
-				param = "vaccine_find_more_three";
+			else if (location.contains("60b077b398179667c00efdee")) { // 20개 초과 
+				if(location.contains("vaccine_address_one")) { // 주소값 한 개 
+					param = "vaccine_address_one";
+					paramCheck_one = true;
+				}
+				else if (location.contains("vaccine_find_more_two")) { // 주소값 두 개 
+					param = "vaccine_find_more_two";
+					paramCheck_two = true;					
+				}
+				else { // 주소값 세 개 
+					param = "vaccine_find_more_three";
+				}
 			}
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 			JsonElement action = jsonObj.get("action");
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 			location = params.getAsJsonObject().get(param).getAsString();
-
-			if (location.contains("더 찾기")) {
-				location = location.replace(" 더 찾기", "");
 			}
-		}
-
+		
 		List<String> addr = null; // 출력할 주소 
 
 		int center_count = 20; // 예외 처리할 리스트 개수 확인(기본값 20)
