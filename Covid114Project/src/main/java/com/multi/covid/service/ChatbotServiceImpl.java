@@ -280,7 +280,8 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 		// JSON(webhook)
 		JsonObject reg_center = new JsonObject();
-		reg_center.addProperty("r_facility_name", facility_name.toString().replaceAll(",", ""));
+		reg_center.addProperty("location", location);
+		reg_center.addProperty("facility_name", facility_name.toString().replaceAll(",", ""));
 		reg_center.addProperty("facility_count", vo.size());
 		JsonObject result = new JsonObject();
 		result.addProperty("version", "2.0");
