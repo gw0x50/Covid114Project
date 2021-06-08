@@ -70,22 +70,23 @@ public class ChatbotServiceImpl implements ChatbotService {
 	@Override
 	public String getTextJsonString() {
 		
-		String title_message = "\n검색하신 진료소는 백신 접종 센터가 아닙니다.\n\n";
+		String title_message = "\n검색하신 진료소(장소)에는 백신 접종 센터가 존재하지 않습니다.\n\n";
 		// 두 개의 quickReplies 출력
-		String[] quick_message = { "집 근처 접종 센터 조회", "다시 검색해보기" };
+		
+		String quick_message = "백신 접종 센터 조회 처음으로";
 		String actionName = "block";
-		String[] action_item = { "60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62" };
+		String action_item = "60a929eb9657424ac11d8d29";
 
 		// quickReplies
 		JsonArray quick_array = new JsonArray();
-		for (int i = 0; i < 2; i++) {
-			JsonObject quickReplies = new JsonObject();
-			quickReplies.addProperty("label", quick_message[i]);
-			quickReplies.addProperty("action", actionName);
-			quickReplies.addProperty("blockId", action_item[i]);
 
-			quick_array.add(quickReplies);
-		}
+		JsonObject quickReplies = new JsonObject();
+		quickReplies.addProperty("label", quick_message);
+		quickReplies.addProperty("action", actionName);
+		quickReplies.addProperty("blockId", action_item);
+
+		quick_array.add(quickReplies);
+		
 		// JSON basicCard
 		return getCardJsonString(quick_array, title_message);
 	}
@@ -266,8 +267,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-		location = params.getAsJsonObject().get("vaccine_center_result").getAsString();
-		location = location.replace(" 지역 센터 리스트 전체", ""); // 발화 파라미터값 처리 
+		location = params.getAsJsonObject().get("vaccine_address").getAsString();
 
 		// select
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
@@ -302,37 +302,39 @@ public class ChatbotServiceImpl implements ChatbotService {
 		boolean remainderCheck = false;
 
 		if (location.contains(":")) { // POST로 받는 경우			
-			if (location.contains("SELECT2_over")) {// 20개 초과 버튼 확인(" 더 찾기")
+			if (location.contains("over")) {// 20개 초과 버튼 확인(" 더 찾기")
 				remainderCheck = true;
 				endNum = 40;
 				startNum = 20;
 			}
 
-			if (location.contains("vaccine_center_location")) { // 주소값 한 개
-				param = "vaccine_center_location";
+			if (location.contains("60adf9082c7d75439efb91ca")) { // 주소값 한 개
+				param = "vaccine_address_one";
 				paramCheck_one = true;
 			}
-			else if (location.contains("vaccine_address_two")) { // 주소값 두 개 
+			else if (location.contains("60b077e098179667c00efdf7")) { // 주소값 두 개 
 				param = "vaccine_address_two";
 				paramCheck_two = true;
 			}
-			else if (location.contains("vaccine_find_more_two")) { // 20개 초과 - 주소값 두 개
-				param = "vaccine_find_more_two";
-				paramCheck_two = true;
-			}
-			else { // 20개 초과 - 주소값 세 개 
-				param = "vaccine_find_more_three";
+			else if (location.contains("60b077b398179667c00efdee")) { // 20개 초과 
+				if(location.contains("vaccine_address_one")) { // 주소값 한 개 
+					param = "vaccine_address_one";
+					paramCheck_one = true;
+				}
+				else if (location.contains("vaccine_find_more_two")) { // 주소값 두 개 
+					param = "vaccine_find_more_two";
+					paramCheck_two = true;					
+				}
+				else { // 주소값 세 개 
+					param = "vaccine_find_more_three";
+				}
 			}
 			JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 			JsonElement action = jsonObj.get("action");
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 			location = params.getAsJsonObject().get(param).getAsString();
-
-			if (location.contains("더 찾기")) {
-				location = location.replace(" 더 찾기", "");
 			}
-		}
-
+		
 		List<String> addr = null; // 출력할 주소 
 
 		int center_count = 20; // 예외 처리할 리스트 개수 확인(기본값 20)
@@ -547,14 +549,10 @@ public class ChatbotServiceImpl implements ChatbotService {
 		 */
 		String label = "";
 		String action_item = "";
-		String message = "";
-		String action = "";
 
 		if (endNum % 5 == 0 && overLength && !length10) {
 			label = "더 보기";
-			action = "block";
 			if (lengthNum == 5) { // 5개 초과 
-				message = " 더 보기";
 				if (facility_over5_check) { // facilityCheck값이 5개 초과인 경우의 블록
 					action_item = "60bacfb0cb6ae85c16a00f93";
 				}
@@ -563,17 +561,14 @@ public class ChatbotServiceImpl implements ChatbotService {
 				}
 			}
 			else { // 10개 초과 
-				message = " 더 보기";
 				action_item = "60b2406f2c7d75439efba8a4";
 			}
 		}
 		else if (overLength15) { // 15개 초과
-			action = "message";
 			label = address + " 지역 센터 리스트 전체 보기";
-			message = address + " 지역 센터 리스트 전체";
+			action_item = "60abb421b93ffe67f982acf2";
 		}
 		else { // 검색형
-			action = "block";
 			label = "다시 검색하기";
 			action_item = "60b09b759cf5b44e9f808a62";
 		}
@@ -585,11 +580,8 @@ public class ChatbotServiceImpl implements ChatbotService {
 			JsonObject quickReplies = new JsonObject();
 
 			quickReplies.addProperty("label", label);
-			quickReplies.addProperty("action", action);
-			quickReplies.addProperty("messageText", message);
-			if (overLength || facility_check) {
-				quickReplies.addProperty("blockId", action_item);
-			}
+			quickReplies.addProperty("action", "block");
+			quickReplies.addProperty("blockId", action_item);
 			quick_array.add(quickReplies);
 		}
 
@@ -678,7 +670,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		boolean locationCheck = false; // 5개 초과, 지역값과 함께 들어온 파라미터 확인
 		boolean locationOver = false; // 시설명 + 지역명 5개 초과 파라미터 확인 
 		String location = "";
-		if (facility_name.contains("vaccine_center_location")) {
+		if (facility_name.contains("vaccine_address_one")) {
 			locationCheck = true;
 			if (facility_name.contains("over")) {
 				locationOver = true;
@@ -692,7 +684,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 
 			if (locationCheck) {
-				location = params.getAsJsonObject().get("vaccine_center_location").getAsString();
+				location = params.getAsJsonObject().get("vaccine_address_one").getAsString();
 			}
 
 			facility_name = params.getAsJsonObject().get("facility_name").getAsString();
