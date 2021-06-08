@@ -70,23 +70,23 @@ public class ChatbotServiceImpl implements ChatbotService {
 	@Override
 	public String getTextJsonString() {
 		
-		String title_message = "\n검색하신 진료소는 백신 접종 센터가 아닙니다.\n\n";
+		String title_message = "\n검색하신 진료소(장소)에는 백신 접종 센터가 존재하지 않습니다.\n\n";
 		// 두 개의 quickReplies 출력
 		
-		String[] quick_message = { "집 근처 접종 센터 조회", "다시 검색해보기" };
+		String quick_message = "백신 접종 센터 조회 처음으로";
 		String actionName = "block";
-		String[] action_item = { "60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62" };
+		String action_item = "60a929eb9657424ac11d8d29";
 
 		// quickReplies
 		JsonArray quick_array = new JsonArray();
-		for (int i = 0; i < 2; i++) {
-			JsonObject quickReplies = new JsonObject();
-			quickReplies.addProperty("label", quick_message[i]);
-			quickReplies.addProperty("action", actionName);
-			quickReplies.addProperty("blockId", action_item[i]);
 
-			quick_array.add(quickReplies);
-		}
+		JsonObject quickReplies = new JsonObject();
+		quickReplies.addProperty("label", quick_message);
+		quickReplies.addProperty("action", actionName);
+		quickReplies.addProperty("blockId", action_item);
+
+		quick_array.add(quickReplies);
+		
 		// JSON basicCard
 		return getCardJsonString(quick_array, title_message);
 	}
