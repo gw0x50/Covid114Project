@@ -262,12 +262,16 @@ public class ChatbotServiceImpl implements ChatbotService {
 	// 백신센터 지역별(도, 시)  
 	@Override
 	public String getCenterList(String location) {
-
+		
 		// get val location 
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get("vaccine_address").getAsString();
+		
+		if (location.contains("전체")) {
+			location = location.replace(" 전체", "");
+		}
 
 		// select
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
