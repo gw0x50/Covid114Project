@@ -72,6 +72,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		
 		String title_message = "\n검색하신 진료소는 백신 접종 센터가 아닙니다.\n\n";
 		// 두 개의 quickReplies 출력
+		
 		String[] quick_message = { "집 근처 접종 센터 조회", "다시 검색해보기" };
 		String actionName = "block";
 		String[] action_item = { "60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62" };
@@ -266,7 +267,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-		location = params.getAsJsonObject().get("vaccine_center_result").getAsString();
+		location = params.getAsJsonObject().get("vaccine_address").getAsString();
 		location = location.replace(" 지역 센터 리스트 전체", ""); // 발화 파라미터값 처리 
 
 		// select
@@ -308,8 +309,8 @@ public class ChatbotServiceImpl implements ChatbotService {
 				startNum = 20;
 			}
 
-			if (location.contains("vaccine_center_location")) { // 주소값 한 개
-				param = "vaccine_center_location";
+			if (location.contains("vaccine_address_one")) { // 주소값 한 개
+				param = "vaccine_address_one";
 				paramCheck_one = true;
 			}
 			else if (location.contains("vaccine_address_two")) { // 주소값 두 개 
@@ -568,9 +569,9 @@ public class ChatbotServiceImpl implements ChatbotService {
 			}
 		}
 		else if (overLength15) { // 15개 초과
-			action = "message";
+			action = "block";
 			label = address + " 지역 센터 리스트 전체 보기";
-			message = address + " 지역 센터 리스트 전체";
+			action_item = address + "60ada25b97e00171aadc7b5b";
 		}
 		else { // 검색형
 			action = "block";
@@ -678,7 +679,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		boolean locationCheck = false; // 5개 초과, 지역값과 함께 들어온 파라미터 확인
 		boolean locationOver = false; // 시설명 + 지역명 5개 초과 파라미터 확인 
 		String location = "";
-		if (facility_name.contains("vaccine_center_location")) {
+		if (facility_name.contains("vaccine_address_one")) {
 			locationCheck = true;
 			if (facility_name.contains("over")) {
 				locationOver = true;
@@ -692,7 +693,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 
 			if (locationCheck) {
-				location = params.getAsJsonObject().get("vaccine_center_location").getAsString();
+				location = params.getAsJsonObject().get("vaccine_address_one").getAsString();
 			}
 
 			facility_name = params.getAsJsonObject().get("facility_name").getAsString();
