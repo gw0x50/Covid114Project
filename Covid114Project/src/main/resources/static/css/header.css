@@ -1,20 +1,25 @@
 @charset "UTF-8";
 
 .header_section {
-	background: #000000 none repeat scroll 0 0;
+	background: #fff none repeat scroll 0 0;
 	border-top: 1px solid rgba(85, 85, 85, 0.082);
 	border-bottom: 1px solid rgba(85, 85, 85, 0.082);
 	box-shadow: rgba(0, 0, 0, 0.022) -1px 1px 1px;
 	margin-bottom: 20px;
+	height: 5%;
 }
 
 .header_logo img {
 	display: block;
 	margin: 0px auto;
+	width: 50%;
+	margin-top: 2%;
+	margin-bottom: 2%;
 }
 
 @media ( min-width : 768px) {
 	.header_section {
+		height: 5%;
 		border: 1px solid rgba(85, 85, 85, 0.082);
 		border-radius: 8px;
 	}

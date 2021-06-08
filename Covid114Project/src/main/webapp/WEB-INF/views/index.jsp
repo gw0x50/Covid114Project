@@ -5,6 +5,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>코로나 114</title>
+	<link rel="shortcut icon" href="/resources/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/resources/favicon.ico" type="image/x-icon">
 	<!-- js inport -->
 	<jsp:include page="/WEB-INF/views/scripts.jsp"/>
 	<!-- css import -->
