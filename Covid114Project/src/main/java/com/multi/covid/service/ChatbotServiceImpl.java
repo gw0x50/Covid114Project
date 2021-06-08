@@ -268,7 +268,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get("vaccine_address").getAsString();
-		location = location.replace(" 지역 센터 리스트 전체", ""); // 발화 파라미터값 처리 
 
 		// select
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
@@ -548,14 +547,10 @@ public class ChatbotServiceImpl implements ChatbotService {
 		 */
 		String label = "";
 		String action_item = "";
-		String message = "";
-		String action = "";
 
 		if (endNum % 5 == 0 && overLength && !length10) {
 			label = "더 보기";
-			action = "block";
 			if (lengthNum == 5) { // 5개 초과 
-				message = " 더 보기";
 				if (facility_over5_check) { // facilityCheck값이 5개 초과인 경우의 블록
 					action_item = "60bacfb0cb6ae85c16a00f93";
 				}
@@ -564,17 +559,14 @@ public class ChatbotServiceImpl implements ChatbotService {
 				}
 			}
 			else { // 10개 초과 
-				message = " 더 보기";
 				action_item = "60b2406f2c7d75439efba8a4";
 			}
 		}
 		else if (overLength15) { // 15개 초과
-			action = "block";
 			label = address + " 지역 센터 리스트 전체 보기";
-			action_item = address + "60ada25b97e00171aadc7b5b";
+			action_item = "60abb421b93ffe67f982acf2";
 		}
 		else { // 검색형
-			action = "block";
 			label = "다시 검색하기";
 			action_item = "60b09b759cf5b44e9f808a62";
 		}
@@ -586,11 +578,8 @@ public class ChatbotServiceImpl implements ChatbotService {
 			JsonObject quickReplies = new JsonObject();
 
 			quickReplies.addProperty("label", label);
-			quickReplies.addProperty("action", action);
-			quickReplies.addProperty("messageText", message);
-			if (overLength || facility_check) {
-				quickReplies.addProperty("blockId", action_item);
-			}
+			quickReplies.addProperty("action", "block");
+			quickReplies.addProperty("blockId", action_item);
 			quick_array.add(quickReplies);
 		}
 
