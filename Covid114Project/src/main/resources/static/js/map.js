@@ -3,6 +3,7 @@ $(window).on('load', function() {
 	var infoWindows = [];
 	var seqnum;
 	var closenum = 0;
+	var markerslength = 0;
 
 	// 네이버 지도 초기값 설정
 	var map = new naver.maps.Map('map_area', {
@@ -12,7 +13,7 @@ $(window).on('load', function() {
 		mapTypeControl: true,
 		size: new naver.maps.Size($('.map_title').width(), $('.map_title').width())
 	});
-	
+
 	// 백신 센터 정보를 보여줄 infoWindow의 초기값 설정
 	var localInfoWindow = new naver.maps.InfoWindow({
 		borderWidth: 0,
@@ -25,15 +26,17 @@ $(window).on('load', function() {
 	function getClickHandler(seq) {
 		return function() {
 			var marker = markers[seq], infoWindow = infoWindows[seq];
-			
+
 			if (infoWindow.getMap()) {
 				infoWindow.close();
 				closenum = 0;
+				console.log('꺼짐');
 			}
 			else {
 				infoWindow.open(map, marker);
 				closenum = 1;
 				seqnum = seq;
+				console.log('켜짐');
 			}
 		}
 	}
@@ -61,7 +64,7 @@ $(window).on('load', function() {
 						' <tr><td><strong>전화번호</strong></td>  <td>' + value.phone_number + '</td></tr></table>',
 						'</div>'
 					].join('');
-					
+
 					var infoWindow = new naver.maps.InfoWindow({
 						content: contentStrings,
 						borderWidth: 0,
@@ -72,9 +75,10 @@ $(window).on('load', function() {
 					markers.push(marker);
 					infoWindows.push(infoWindow);
 				});
-				for (var i = 0, ii = markers.length; i < ii; i++) {
+				for (var i = markerslength, ii = markers.length; i < ii; i++) {
 					naver.maps.Event.addListener(markers[i], 'click', getClickHandler(i));
 				}
+				markerslength = markers.length;
 			}
 		}); // ajax end
 	}
@@ -82,7 +86,7 @@ $(window).on('load', function() {
 	// 클릭한 지점의 위도, 경도 기준으로 백신센터 정보를 받아와서 지도에 표시하는 함수
 	function searchCoordinateToAddress(latlng) {
 		localInfoWindow.close(); // 열려있는 infowindow 종료
-		
+
 		naver.maps.Service.reverseGeocode({
 			coords: latlng,
 			orders: [
@@ -93,13 +97,13 @@ $(window).on('load', function() {
 			if (status === naver.maps.Service.Status.ERROR) {
 				return alert('Something Wrong!');
 			}
-			
+
 			localInfoWindow.setContent([
 				'<div class="map_local_window">',
 				'<center><strong>선택한 장소 주변의<br>백신센터를 표시했습니다.</strong></center>',
 				'</div>'
 			].join('\n'));
-			
+
 			var marker = new naver.maps.Marker({
 				position: new naver.maps.LatLng(latlng.y, latlng.x),
 				map: map,
@@ -125,11 +129,11 @@ $(window).on('load', function() {
 			if (response.v2.meta.totalCount === 0) { // 잘못된 주소 입력 시 오류 처리
 				return alert('지번 주소 혹은 도로명 주소를 정확히 입력하세요.');
 			}
-			
+
 			var htmlAddresses = [],
 				item = response.v2.addresses[0],
 				point = new naver.maps.Point(item.x, item.y);
-				
+
 			var marker = new naver.maps.Marker({
 				position: new naver.maps.LatLng(item.y, item.x),
 				map: map,
@@ -140,7 +144,7 @@ $(window).on('load', function() {
 				}
 			});
 			getLocalCenter(item.y, item.x);
-			
+
 			if (item.roadAddress) {
 				htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
 			}
@@ -155,17 +159,17 @@ $(window).on('load', function() {
 				'<center><strong>검색하신 주소 주변의<br>백신센터를 표시했습니다.</strong></center>',
 				'</div>'
 			].join('\n'));
-			
+
 			map.setCenter(point);
 			localInfoWindow.open(map, point);
 		});
 	}
-	
+
 	// 지도 기본 위치 설정(멀티캠퍼스 역삼)
 	function defaultLocation() {
 		var center = map.getCenter();
 		getLocalCenter(37.5012624, 127.0397024);
-		
+
 		var marker = new naver.maps.Marker({
 			position: new naver.maps.LatLng(37.5012624, 127.0397024), //지도 기본 위치 설정(멀티캠퍼스 역삼)
 			map: map,
@@ -178,17 +182,17 @@ $(window).on('load', function() {
 		localInfoWindow.setContent('<div class="map_local_window"><strong>기본 설정 위치<br>(멀티캠퍼스 역삼)</strong></div>');
 		localInfoWindow.open(map, center);
 	}
-	
+
 	// 현재 위치의 위도, 경도 정보를 받아와서 지도에 설정
 	function onSuccessGeolocation(position) {
 		var location = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		getLocalCenter(position.coords.latitude, position.coords.longitude);
-		
+
 		map.setCenter(location);
 		map.setZoom(14);
-		
+
 		localInfoWindow.setContent('<div class="map_local_window"><center><strong>현재 위치 주변의<br>백신센터를 표시했습니다.</strong></center></div>');
-		
+
 		var marker = new naver.maps.Marker({
 			position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
 			map: map,
@@ -200,12 +204,12 @@ $(window).on('load', function() {
 		});
 		localInfoWindow.open(map, location);
 	}
-	
+
 	// 현재 위치를 못 찾을 경우 실행되는 함수
 	function onErrorGeolocation() {
 		defaultLocation(); // 기본 설정값 적용
 	}
-	
+
 	// 브라우저 위도, 경도 데이터 유무에 따라서 지도에 정보를 출력하는 함수 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
@@ -213,7 +217,7 @@ $(window).on('load', function() {
 	else {
 		defaultLocation();
 	}
-	
+
 	// 지도 클릭 시 클릭 지점 좌표 값을 받아오는 listener
 	map.addListener('click', function(e) {
 		if (closenum == 1) { //정보창이 떠있을 경우 정보창 종료
@@ -222,9 +226,10 @@ $(window).on('load', function() {
 		}
 		else {
 			searchCoordinateToAddress(e.coord);
+
 		}
 	});
-	
+
 	// 주소 입력 후 Enter 입력 시 searchAddressTocoordinate() 호출
 	$('#map_address').on('keydown', function(e) {
 		var keyCode = e.which;
@@ -244,7 +249,7 @@ $(window).on('load', function() {
 			$('#map_address').val('');
 		} else { return alert("지번주소 혹은 도로명 주소를 입력하세요."); }
 	});
-	
+
 	// 브라우저 사이즈에 따라 지도 크기도 변경
 	$(window).resize(function() {
 		map.setSize(new naver.maps.Size($('.map_title').width(), $('.map_title').width()));
