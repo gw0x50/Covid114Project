@@ -66,7 +66,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		return result.toString();
 	}
 
-	// NullPointerException 발생 시 Text형 JSON return 	
+	// 조회값 null 발생 시 Text형 JSON return 	
 	@Override
 	public String getTextJsonString() {
 		
@@ -262,12 +262,16 @@ public class ChatbotServiceImpl implements ChatbotService {
 	// 백신센터 지역별(도, 시)  
 	@Override
 	public String getCenterList(String location) {
-
+		
 		// get val location 
 		JsonObject jsonObj = (JsonObject) JsonParser.parseString(location);
 		JsonElement action = jsonObj.get("action");
 		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 		location = params.getAsJsonObject().get("vaccine_address").getAsString();
+		
+		if (location.contains("전체")) {
+			location = location.replace(" 전체", "");
+		}
 
 		// select
 		List<CenterVO> vo = chatbotMapper.getAddrCenter(location);
@@ -280,7 +284,8 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 		// JSON(webhook)
 		JsonObject reg_center = new JsonObject();
-		reg_center.addProperty("r_facility_name", facility_name.toString().replaceAll(",", ""));
+		reg_center.addProperty("location", location);
+		reg_center.addProperty("facility_name", facility_name.toString().replaceAll(",", ""));
 		reg_center.addProperty("facility_count", vo.size());
 		JsonObject result = new JsonObject();
 		result.addProperty("version", "2.0");
@@ -307,7 +312,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 				endNum = 40;
 				startNum = 20;
 			}
-
+			// context로 연결되어 있기 때문에 블록의 고유값으로 파라미터 구분
 			if (location.contains("60adf9082c7d75439efb91ca")) { // 주소값 한 개
 				param = "vaccine_address_one";
 				paramCheck_one = true;
@@ -676,23 +681,21 @@ public class ChatbotServiceImpl implements ChatbotService {
 				locationOver = true;
 			}
 		}
+		
+		// get location, facility_name
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(facility_name);
+		JsonElement action = jsonObj.get("action");
+		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 
-		try {
-			// get location, facility_name
-			JsonObject jsonObj = (JsonObject) JsonParser.parseString(facility_name);
-			JsonElement action = jsonObj.get("action");
-			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-
-			if (locationCheck) {
-				location = params.getAsJsonObject().get("vaccine_address_one").getAsString();
-			}
-
-			facility_name = params.getAsJsonObject().get("facility_name").getAsString();
-			facility_name = facility_name.replace(" ", ""); // 글자 사이 공백을 넣어 검색했을 경우	
-		 	vo = chatbotMapper.getFacility(facility_name);
-
+		if (locationCheck) {
+			location = params.getAsJsonObject().get("vaccine_address_one").getAsString();
 		}
-		catch (NullPointerException e) { // 입력한 진료소가 존재하지 않는 경우
+		
+		facility_name = params.getAsJsonObject().get("facility_name").getAsString();
+		facility_name = facility_name.replace(" ", ""); // 글자 사이 공백을 넣어 검색했을 경우	
+	 	vo = chatbotMapper.getFacility(facility_name);
+
+		if (vo.size() == 0) { // 입력한 진료소가 존재하지 않는 경우
 			// JSON(text)
 			return getTextJsonString();
 		}
