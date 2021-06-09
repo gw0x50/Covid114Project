@@ -681,23 +681,21 @@ public class ChatbotServiceImpl implements ChatbotService {
 				locationOver = true;
 			}
 		}
+		
+		// get location, facility_name
+		JsonObject jsonObj = (JsonObject) JsonParser.parseString(facility_name);
+		JsonElement action = jsonObj.get("action");
+		JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
 
-		try {
-			// get location, facility_name
-			JsonObject jsonObj = (JsonObject) JsonParser.parseString(facility_name);
-			JsonElement action = jsonObj.get("action");
-			JsonObject params = action.getAsJsonObject().get("params").getAsJsonObject();
-
-			if (locationCheck) {
-				location = params.getAsJsonObject().get("vaccine_address_one").getAsString();
-			}
-
-			facility_name = params.getAsJsonObject().get("facility_name").getAsString();
-			facility_name = facility_name.replace(" ", ""); // 글자 사이 공백을 넣어 검색했을 경우	
-		 	vo = chatbotMapper.getFacility(facility_name);
-
+		if (locationCheck) {
+			location = params.getAsJsonObject().get("vaccine_address_one").getAsString();
 		}
-		catch (NullPointerException e) { // 입력한 진료소가 존재하지 않는 경우
+		
+		facility_name = params.getAsJsonObject().get("facility_name").getAsString();
+		facility_name = facility_name.replace(" ", ""); // 글자 사이 공백을 넣어 검색했을 경우	
+	 	vo = chatbotMapper.getFacility(facility_name);
+
+		if (vo.size() == 0) { // 입력한 진료소가 존재하지 않는 경우
 			// JSON(text)
 			return getTextJsonString();
 		}
