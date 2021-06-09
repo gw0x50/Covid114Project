@@ -66,7 +66,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		return result.toString();
 	}
 
-	// NullPointerException 발생 시 Text형 JSON return 	
+	// 조회값 null 발생 시 Text형 JSON return 	
 	@Override
 	public String getTextJsonString() {
 		
@@ -312,7 +312,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 				endNum = 40;
 				startNum = 20;
 			}
-
+			// context로 연결되어 있기 때문에 블록의 고유값으로 파라미터 구분
 			if (location.contains("60adf9082c7d75439efb91ca")) { // 주소값 한 개
 				param = "vaccine_address_one";
 				paramCheck_one = true;
