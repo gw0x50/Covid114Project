@@ -30,13 +30,11 @@ $(window).on('load', function() {
 			if (infoWindow.getMap()) {
 				infoWindow.close();
 				closenum = 0;
-				console.log('꺼짐');
 			}
 			else {
 				infoWindow.open(map, marker);
 				closenum = 1;
 				seqnum = seq;
-				console.log('켜짐');
 			}
 		}
 	}
