@@ -52,8 +52,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		// 오늘 확진자 수 조회
 		if (day.equals("today")) {
 			try {
-				date = format.format(cal.getTime());
-				// System.out.println("오늘: "+date);
+				date = format.format(cal.getTime());				
 				vo = mapper.getOneLive(date); // 오늘 날짜 확진자 수 받아오기
 				vo.calSum();
 				obj.addProperty("live_date", vo.getLive_date());
@@ -67,8 +66,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 					obj.addProperty("sum", "잘못된 접근");
 				}
 			}
-			catch (Exception e) {
-				// System.out.println(e.toString());
+			catch (Exception e) {				
 				return "결과값이 없습니다";
 			}
 		}
@@ -76,10 +74,9 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		else if (day.equals("yesterday")) {
 			try {
 				cal.add(Calendar.DATE, -1);
-				date = format.format(cal.getTime());
-				// System.out.println("어제: "+date);
+				date = format.format(cal.getTime());				
 				list = mapper.getOneResult(date); // 어제 날짜 확진자 수 받아오기
-				// System.out.println(list.get(0).getTotal_count());// 데이터가 없으면 에러 발생
+				list.get(0).getTotal_count();// 데이터가 없으면 에러 발생
 
 				// 모든 지역 확진자 수 합계 조회
 				if (location.equals("all")) {
@@ -97,15 +94,12 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 				obj.addProperty("result_date", date);
 				obj.addProperty("sum", sum);
 			}
-			catch (Exception e) {// 전날 데이터가 아직 갱신되지 않은 경우
-				// System.out.println(e.toString());
+			catch (Exception e) {// 전날 데이터가 아직 갱신되지 않은 경우				
 				cal.add(Calendar.DATE, -2);
 				date = format.format(cal.getTime());
-				// System.out.println("그제: "+date);
 				list = mapper.getOneResult(date); // 그제 날짜 확진자 수 받아오기
 				for (ResultVO one : list) {
 					if (one.getLocation().equals("합계")) {
-						// System.out.println(one.getLocation());
 						sum += one.getIncrement_count();
 					}
 				}
@@ -122,53 +116,52 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 	}
 
 	// 현재 접속지역에서 가까운 백신센터를 반환
-	@Override
-	public String getVaccineCenter(String r1, String r2, String r3) {
-		// System.out.println("r1: "+r1+" r2: "+r2+" r3: "+r3);//ai스피커 접속지역
-		List<CenterVO> vo = mapper.getAllCenter();
-		String temp = "";
-		List<String> result = new ArrayList<String>();
-		boolean check = false;
-
-		// 가까운 백신센터 파악
-		for (CenterVO one : vo) {
-			temp = one.getAddress();
-			if (temp.contains(r3)) { // 동 단위로 파악
-				check = true;
-				result.add(one.getFacility_name());
-			}
-		}
-		if (!check) { // 동에 선별진료소가 없는 경우
+		@Override
+		public String getVaccineCenter(String r1, String r2, String r3) {			
+			List<CenterVO> vo = mapper.getAllCenter();
+			String temp = "";
+			List<String> result = new ArrayList<String>();
+			boolean check = false;
+			JsonObject obj = new JsonObject();
+			// 가까운 백신센터 파악
 			for (CenterVO one : vo) {
-				temp = one.getAddress();
-				if (temp.contains(r2)) { // 구 단위로 파악
-					check = true;
-					result.add(one.getFacility_name());
+				temp = one.getAddress();						
+				if (temp.contains(r3)) { // 동 단위로 파악
+					check = true;					
+					obj.addProperty("Facility", one.getFacility_name());
+					obj.addProperty("Address", one.getAddress());
+					break;
 				}
 			}
-		}
-		else if (!check) { // 구에 선별진료소가 없는 경우
-			for (CenterVO one : vo) {
-				temp = one.getAddress();
-				if (temp.contains(r1)) { // 시 단위로 파악
-					check = true;
-					result.add(one.getFacility_name());
+			if (!check) { // 동에 선별진료소가 없는 경우
+				for (CenterVO one : vo) {
+					temp = one.getAddress();
+					if (temp.contains(r2)) { // 구 단위로 파악
+						check = true;						
+						obj.addProperty("Facility", one.getFacility_name());
+						obj.addProperty("Address", one.getAddress());
+						break;
+					}
 				}
 			}
-		}
-		else { // 주변에 선별진료소가 없는경우
-			result.add("가까운 선별진료소가 없습니다");
+			else if (!check) { // 구에 선별진료소가 없는 경우
+				for (CenterVO one : vo) {
+					temp = one.getAddress();				
+					if (temp.contains(r1)) { // 시 단위로 파악
+						check = true;						
+						obj.addProperty("Facility", one.getFacility_name());
+						obj.addProperty("Address", one.getAddress());
+						break;
+					}
+				}
+			}
+			else { // 주변에 선별진료소가 없는경우
+				result.add("가까운 선별진료소가 없습니다");
+			}			
+
+			return obj.toString();
 		}
 
-		/*
-		System.out.println(check);
-		for(String one : result) {
-			System.out.println(one);
-		}
-		*/
-
-		return result.get(0);
-	}
 
 	// 현재 접속지역의 위도, 경도를 기준으로 기상청 날씨 정보 반환
 	@Override
@@ -190,7 +183,6 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		String pageNo = "1"; // 조회할 페이지수
 		String numOfRows = "10"; // 조회할 행 개수
 		String baseDate = date; // 조회하고 싶은 날짜
-		// System.out.println("date: "+baseDate);
 		String baseTime = "1100"; // 조회하고 싶은 시간
 		String type = "JSON"; // 응답 데이터 타입 XML, JSON
 
@@ -206,16 +198,13 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(nx, "UTF-8")); // 경도
 		urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); // 위도
 
-		// System.out.println(urlBuilder.toString());
 
 		// GET방식으로 전송해서 파라미터 받아오기
 		URL url = new URL(urlBuilder.toString());
 		// 어떻게 넘어가는지 확인하고 싶으면 아래 출력분 주석 해제
-		// System.out.println(url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Content-type", "application/json");
-		// System.out.println("Response code: " + conn.getResponseCode());
 		BufferedReader rd;
 		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -234,7 +223,6 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		conn.disconnect();
 		
 		String result = sb.toString();
-		// System.out.println(result);
 
 		// Json parser를 만들어 문자열 데이터를 객체화 
 		JSONParser parser = new JSONParser();
@@ -271,7 +259,6 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 			}
 			if (!time.equals(fcstTime.toString())) {
 				time = fcstTime.toString();
-				// System.out.println(day+"  "+time);
 			}
 			
 			// 하늘 상태 파악
@@ -286,13 +273,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 				else if (temp == 4) {
 					sky = "흐림";
 				}
-				/*
-				System.out.print("\tcategory : "+ category);
-				System.out.print(", fcst_Value : "+ fcstValue);
-				System.out.print(", fcstDate : "+ fcstDate);
-				System.out.println(", fcstTime : "+ fcstTime);
-				System.out.println("sky: "+SKY);
-				*/
+				
 			}
 		
 			// 강수 상태 파악
@@ -323,8 +304,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 					case 7:
 						pty = "눈날림";
 						break;
-				}
-				// System.out.println("pty: "+PTY);
+				}				
 			}
 		}
 		if (sky.equals("맑음")) {
