@@ -11,10 +11,10 @@
 	</parent>
 	<groupId>com.multi</groupId>
 	<artifactId>Covid114Project</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>war</packaging>
-	<name>Covid19FinalProject</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Covid114Project</name>
+	<description>Covid114Project</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
