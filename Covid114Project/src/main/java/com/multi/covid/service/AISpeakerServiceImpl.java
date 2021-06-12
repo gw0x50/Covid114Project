@@ -66,8 +66,7 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 					obj.addProperty("sum", "잘못된 접근");
 				}
 			}
-			catch (Exception e) {
-				System.out.println(e.toString());
+			catch (Exception e) {				
 				return "결과값이 없습니다";
 			}
 		}
@@ -95,15 +94,12 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 				obj.addProperty("result_date", date);
 				obj.addProperty("sum", sum);
 			}
-			catch (Exception e) {// 전날 데이터가 아직 갱신되지 않은 경우
-				// System.out.println(e.toString());
+			catch (Exception e) {// 전날 데이터가 아직 갱신되지 않은 경우				
 				cal.add(Calendar.DATE, -2);
 				date = format.format(cal.getTime());
-				// System.out.println("그제: "+date);
 				list = mapper.getOneResult(date); // 그제 날짜 확진자 수 받아오기
 				for (ResultVO one : list) {
 					if (one.getLocation().equals("합계")) {
-						// System.out.println(one.getLocation());
 						sum += one.getIncrement_count();
 					}
 				}
@@ -187,7 +183,6 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		String pageNo = "1"; // 조회할 페이지수
 		String numOfRows = "10"; // 조회할 행 개수
 		String baseDate = date; // 조회하고 싶은 날짜
-		// System.out.println("date: "+baseDate);
 		String baseTime = "1100"; // 조회하고 싶은 시간
 		String type = "JSON"; // 응답 데이터 타입 XML, JSON
 
@@ -203,16 +198,13 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(nx, "UTF-8")); // 경도
 		urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); // 위도
 
-		// System.out.println(urlBuilder.toString());
 
 		// GET방식으로 전송해서 파라미터 받아오기
 		URL url = new URL(urlBuilder.toString());
 		// 어떻게 넘어가는지 확인하고 싶으면 아래 출력분 주석 해제
-		// System.out.println(url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Content-type", "application/json");
-		// System.out.println("Response code: " + conn.getResponseCode());
 		BufferedReader rd;
 		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -231,7 +223,6 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 		conn.disconnect();
 		
 		String result = sb.toString();
-		// System.out.println(result);
 
 		// Json parser를 만들어 문자열 데이터를 객체화 
 		JSONParser parser = new JSONParser();
@@ -268,7 +259,6 @@ public class AISpeakerServiceImpl implements AISpeakerService {
 			}
 			if (!time.equals(fcstTime.toString())) {
 				time = fcstTime.toString();
-				// System.out.println(day+"  "+time);
 			}
 			
 			// 하늘 상태 파악
