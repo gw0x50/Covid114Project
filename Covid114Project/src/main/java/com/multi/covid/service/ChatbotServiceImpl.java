@@ -134,7 +134,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		String increment_count = String.format("%,d", vo.getIncrement_count());
 
 		if (paramLoc_check) { // Result one(지역) 조회일 경우
-			String title_message = location + "지역 누적 확진자 수: " + getTotal_count + "\n\n" + result_date + " 확진자 수:" + increment_count + " 명";
+			String title_message = location + "지역 누적 확진자 수: " + getTotal_count + "\n\n" + result_date + " 확진자 수: " + increment_count + " 명";
 			String quick_message = location + " 실시간 확진자 조회";
 
 			// quickReplies
@@ -213,7 +213,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 				}
 			}
 
-			String title_message = location + " 지역 오늘 확진자 수는" + one_count + " 명 입니다.";
+			String title_message = location + " 지역 오늘 확진자 수는 " + one_count + " 명 입니다.";
 			String quick_message = location + " 누적 확진자 조회";
 
 			// quickReplies 
