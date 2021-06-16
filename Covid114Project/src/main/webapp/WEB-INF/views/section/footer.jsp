@@ -11,6 +11,6 @@
 			<a href="#" class="footer_a">2damlee</a>,
 			<a href="#" class="footer_a">Jooahru</a>
 		</div>
-		<div class="footer_thanks">Thanks to ㅇㅇㅇ, ㅇㅇㅇ, multicampus</div>
+		<div class="footer_thanks">Thanks to multicampus</div>
 	</div>
 </div>
