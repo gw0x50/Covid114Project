@@ -296,7 +296,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 	// 지역 바로가기 버튼
 	@Override
 	public String selectAddr(String location) {
-
+		
 		String param = "";
 		int endNum = 20; // 반복문 제한 
 		int startNum = 0; // 반복문 시작 
@@ -414,7 +414,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 				if (!remainderCheck && addr_arr.get(i).contains(location)) { // 주소값 두 개 선택지 이동 
 					quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
-					quickReplies.addProperty("messageText", addr_arr.get(i)); 
+					quickReplies.addProperty("action", "block"); 
 				}
 				quick_item_arr.add(quickReplies);
 			}
@@ -663,7 +663,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 	// 백신 센터 직접 검색, 센터 주소 링크 리스트
 	@Override
 	public String facilityCheck(String facility_name) {
-
+	System.out.println(facility_name);
 		String resultJson = "";
 		List<CenterVO> vo = null;
 
@@ -674,7 +674,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			locationCheck = true;
 			if (facility_name.contains("over")) {
 				locationOver = true;
-			}
+			} 
 		}
 		
 		// get location, facility_name
