@@ -467,7 +467,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			map.put("location", facilityAndLoc[0]);
 			map.put("facility_name", facilityAndLoc[1]);
 
-			vo = chatbotMapper.getFacility_loc(map);
+			vo = chatbotMapper.getFacilityLoc(map);
 			facility_over5_check = true;
 		}
 		else { // facilityCheck에서 넘어온 경우
@@ -724,7 +724,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 					HashMap<String, String> map = new HashMap<String, String>();
 					map.put("location", location);
 					map.put("facility_name", facility_name);
-					int center_length = chatbotMapper.getFacility_loc(map).size();
+					int center_length = chatbotMapper.getFacilityLoc(map).size();
 					// JSON listCard
 					resultJson = getCenterUrl(location + "," + facility_name, center_length);
 				}
