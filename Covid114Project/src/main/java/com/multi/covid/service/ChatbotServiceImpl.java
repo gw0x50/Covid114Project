@@ -413,8 +413,9 @@ public class ChatbotServiceImpl implements ChatbotService {
 				quickReplies.addProperty("messageText", location + " " + addr_arr.get(i)); // addr.get(i) 사용시 20개 초과버튼 값 0부터 초기화 
 
 				if (!remainderCheck && addr_arr.get(i).contains(location)) { // 주소값 두 개 선택지 이동 
-					quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
 					quickReplies.addProperty("messageText", addr_arr.get(i)); 
+					quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
+					quickReplies.addProperty("action", "block"); 
 				}
 				quick_item_arr.add(quickReplies);
 			}
@@ -663,7 +664,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 	// 백신 센터 직접 검색, 센터 주소 링크 리스트
 	@Override
 	public String facilityCheck(String facility_name) {
-
+	
 		String resultJson = "";
 		List<CenterVO> vo = null;
 
@@ -674,7 +675,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			locationCheck = true;
 			if (facility_name.contains("over")) {
 				locationOver = true;
-			}
+			} 
 		}
 		
 		// get location, facility_name
