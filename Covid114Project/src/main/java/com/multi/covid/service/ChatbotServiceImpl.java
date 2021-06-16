@@ -68,24 +68,23 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 	// 조회값 null 발생 시 Text형 JSON return 	
 	@Override
-	public String getTextJsonString() {
+	public String getTextJsonString(int endNum) {
 		
-		String title_message = "\n검색하신 진료소(장소)에는 백신 접종 센터가 존재하지 않습니다.\n\n";
-		// 두 개의 quickReplies 출력
-		
-		String quick_message = "백신 접종 센터 조회 처음으로";
+		String title_message = "\n검색하신 진료소는 백신 접종 센터가 아닙니다.\n\n";
+		String [] quick_message = {"백신 접종 센터 조회 처음으로", "다시 검색해보기"};
 		String actionName = "block";
-		String action_item = "60a929eb9657424ac11d8d29";
-
-		// quickReplies
+		String [] action_item = {"60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62"};
+		
+		//quickReplies
 		JsonArray quick_array = new JsonArray();
-
-		JsonObject quickReplies = new JsonObject();
-		quickReplies.addProperty("label", quick_message);
-		quickReplies.addProperty("action", actionName);
-		quickReplies.addProperty("blockId", action_item);
-
-		quick_array.add(quickReplies);
+		for(int i = 0; i < endNum; i ++) {
+			JsonObject quickReplies = new JsonObject();
+			quickReplies.addProperty("label", quick_message[i]);
+			quickReplies.addProperty("action", actionName);
+			quickReplies.addProperty("blockId", action_item[i]);
+			
+			quick_array.add(quickReplies);
+		}
 		
 		// JSON basicCard
 		return getCardJsonString(quick_array, title_message);
@@ -450,7 +449,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			} 
 			catch (NullPointerException e) { // 주소값 입력이 올바르지 않을 경우 
 				// JSON(text)
-				return getTextJsonString();
+				return getTextJsonString(1);
 			}
 			if (address.contains(" 전체")) { // 4개 주소값 예외처리(네번째 값 null인 경우) 
 				address = address.replaceAll(" 전체", "");
@@ -697,7 +696,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 		if (vo.size() == 0) { // 입력한 진료소가 존재하지 않는 경우
 			// JSON(text)
-			return getTextJsonString();
+			return getTextJsonString(2);
 		}
 
 		TreeSet<String> getLoc_set = new TreeSet<String>();
