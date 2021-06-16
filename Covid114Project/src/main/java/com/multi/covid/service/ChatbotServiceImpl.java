@@ -71,7 +71,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 	public String getTextJsonString(int endNum) {
 		
 		String title_message = "\n검색하신 진료소는 백신 접종 센터가 아닙니다.\n\n";
-		String [] quick_message = {"백신 접종 센터 조회 처음으로", "다시 검색해보기"};
+		String [] quick_message = {"집 근처 백신 센터 조회하기", "다시 검색해보기"};
 		String actionName = "block";
 		String [] action_item = {"60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62"};
 		
