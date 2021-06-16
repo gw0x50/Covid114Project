@@ -77,7 +77,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		
 		//quickReplies
 		JsonArray quick_array = new JsonArray();
-		for(int i = 0; i < endNum; i ++) {
+		for (int i = 0; i < endNum; i ++) {
 			JsonObject quickReplies = new JsonObject();
 			quickReplies.addProperty("label", quick_message[i]);
 			quickReplies.addProperty("action", actionName);
@@ -572,7 +572,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			label = address + " 지역 센터 리스트 전체 보기";
 			action_item = "60abb421b93ffe67f982acf2";
 		}
-		else { // 검색형
+		else if (!length10) { // 검색형
 			label = "다시 검색하기";
 			action_item = "60b09b759cf5b44e9f808a62";
 		}
