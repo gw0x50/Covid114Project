@@ -61,7 +61,7 @@
 	</select>
 	
 	<!-- 시설, 지역 이름으로 백신 센터 조회 -->
-	<select id = "getFacility_loc" resultType="CenterVO" parameterType="hashmap">
+	<select id = "getFacilityLoc" resultType="CenterVO" parameterType="hashmap">
 		SELECT * FROM covid_vaccine_center 
 		WHERE facility_name = #{facility_name}
 		AND location = #{location}
