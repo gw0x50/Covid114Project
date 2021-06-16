@@ -23,7 +23,7 @@
 * API 키 변경
   * AISPeakerServiceImpl.java : line 179
   * chatbot.js : line 1
-  * ChatbotServiceImpl.java : line 754
+  * ChatbotServiceImpl.java : line 749
   * scripts.jsp : line 6
   * 크롤링 코드 API KEY
 

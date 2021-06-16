@@ -71,13 +71,13 @@ public class ChatbotServiceImpl implements ChatbotService {
 	public String getTextJsonString(int endNum) {
 		
 		String title_message = "\n검색하신 진료소는 백신 접종 센터가 아닙니다.\n\n";
-		String [] quick_message = {"백신 접종 센터 조회 처음으로", "다시 검색해보기"};
+		String [] quick_message = {"집 근처 백신 센터 조회하기", "다시 검색해보기"};
 		String actionName = "block";
 		String [] action_item = {"60adefb82c7d75439efb9114", "60b09b759cf5b44e9f808a62"};
 		
 		//quickReplies
 		JsonArray quick_array = new JsonArray();
-		for(int i = 0; i < endNum; i ++) {
+		for (int i = 0; i < endNum; i ++) {
 			JsonObject quickReplies = new JsonObject();
 			quickReplies.addProperty("label", quick_message[i]);
 			quickReplies.addProperty("action", actionName);
@@ -467,7 +467,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			map.put("location", facilityAndLoc[0]);
 			map.put("facility_name", facilityAndLoc[1]);
 
-			vo = chatbotMapper.getFacility_loc(map);
+			vo = chatbotMapper.getFacilityLoc(map);
 			facility_over5_check = true;
 		}
 		else { // facilityCheck에서 넘어온 경우
@@ -571,10 +571,6 @@ public class ChatbotServiceImpl implements ChatbotService {
 		else if (overLength15) { // 15개 초과
 			label = address + " 지역 센터 리스트 전체 보기";
 			action_item = "60abb421b93ffe67f982acf2";
-		}
-		else { // 검색형
-			label = "다시 검색하기";
-			action_item = "60b09b759cf5b44e9f808a62";
 		}
 
 		// JSON listCard
@@ -728,7 +724,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 					HashMap<String, String> map = new HashMap<String, String>();
 					map.put("location", location);
 					map.put("facility_name", facility_name);
-					int center_length = chatbotMapper.getFacility_loc(map).size();
+					int center_length = chatbotMapper.getFacilityLoc(map).size();
 					// JSON listCard
 					resultJson = getCenterUrl(location + "," + facility_name, center_length);
 				}

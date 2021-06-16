@@ -27,5 +27,5 @@ public interface ChatbotMapper {
 
 	List<CenterVO> getFacility(String facility_name); // 시설 이름으로 백신 센터 조회
 
-	List<CenterVO> getFacility_loc(HashMap<String, String> map); // 시설, 지역 이름으로 백신 센터 조회 
+	List<CenterVO> getFacilityLoc(HashMap<String, String> map); // 시설, 지역 이름으로 백신 센터 조회 
 }
