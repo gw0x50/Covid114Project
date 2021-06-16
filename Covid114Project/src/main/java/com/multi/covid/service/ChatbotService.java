@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 public interface ChatbotService {
 	String getCardJsonString(JsonArray quick_array, String title_message); // BasicCard형 JSON return
 	
-	String getTextJsonString(); // 조회값 null 발생 시 Text형 JSON return 
+	String getTextJsonString(int endNum); // 조회값 null 발생 시 Text형 JSON return 
 
 	String getResult(String location); // 누적 확진자 조회
 
