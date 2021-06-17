@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+.chatbot_a {
+	position: fixed;
+	z-index: 999;
+	right: 10px;
+	bottom: 10px;
+}
+
+.chatbot_img {
+	width: 60px;
+	height: 60px;
+}
+
+@media ( min-width : 768px) {
+	.chatbot_a {
+		right: 20px;
+		bottom: 20px;
+	}
+	.chatbot_img {
+		width: 72px;
+		height: 72px;
+	}
+}
