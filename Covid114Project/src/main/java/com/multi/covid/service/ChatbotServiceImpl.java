@@ -414,8 +414,10 @@ public class ChatbotServiceImpl implements ChatbotService {
 
 				if (!remainderCheck && addr_arr.get(i).contains(location)) { // 주소값 두 개 선택지 이동 
 					quickReplies.addProperty("messageText", addr_arr.get(i)); 
-					quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
-					quickReplies.addProperty("action", "block"); 
+					if (!addr_arr.get(i).contains("전체")) {
+						quickReplies.addProperty("blockId", "60b077b398179667c00efdee");
+						quickReplies.addProperty("action", "block");
+					}	
 				}
 				quick_item_arr.add(quickReplies);
 			}
