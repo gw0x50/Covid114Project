@@ -33,7 +33,7 @@
 
 ## 개발자
 
-[melonbottle](https://github.com/melonbottle), [Jooahru](https://github.com/Jooahru/), [2damlee](https://github.com/2damlee), [louis-25](https://github.com/louis-25)
+[gw0x50](https://github.com/gw0x50), [Jooahru](https://github.com/Jooahru/), [2damlee](https://github.com/2damlee), [louis-25](https://github.com/louis-25)
 
 ## 참조
 
